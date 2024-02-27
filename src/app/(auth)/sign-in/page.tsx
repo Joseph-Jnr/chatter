@@ -11,7 +11,6 @@ import {
   Anchor,
 } from '@mantine/core'
 import classes from '@/styles/AuthStyle.module.css'
-import { nprogress } from '@mantine/nprogress'
 import { useRouter } from 'next/navigation'
 import Logo from '@/components/Logo'
 
