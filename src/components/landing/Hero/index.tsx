@@ -65,9 +65,7 @@ const Hero = () => {
               <Button radius='xl' size='md' color='#543EE0'>
                 Get started
               </Button>
-              <Button variant='filled' color='lime'>
-                Button
-              </Button>
+
               <Button variant='default' radius='xl' size='md'>
                 Community
               </Button>

@@ -1,12 +1,10 @@
 'use client'
 
-import { AboutImg, Dots, Dots2, HeroIllustration2, Moi } from '@/assets'
+import { Dots, Dots2 } from '@/assets'
 import { Avatar, Box, Button, Paper, Text } from '@mantine/core'
 import Image from 'next/image'
-import UserImg from '@/assets/jpg/WhatsApp Image 2023-08-12 at 15.15.58.jpg'
 
 const Testimonial = () => {
-  const UserImageUrl = String(UserImg)
   return (
     <>
       <Box className='section--padding'>
