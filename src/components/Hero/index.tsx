@@ -1,0 +1,84 @@
+'use client'
+import { HeroIllustration2 } from '@/assets'
+import {
+  Box,
+  Title,
+  Button,
+  Group,
+  Text,
+  List,
+  ThemeIcon,
+  rem,
+  Flex,
+} from '@mantine/core'
+import { IconCheck } from '@tabler/icons-react'
+import Image from 'next/image'
+
+const Hero = () => {
+  return (
+    <>
+      <Box className='ch--container section--padding'>
+        <Flex
+          justify='space-between'
+          direction={{ base: 'column', sm: 'row' }}
+          align='center'
+          mt={{ base: 90, sm: 0 }}
+          gap={20}
+        >
+          <Box w={{ base: '100%', sm: '50%' }}>
+            <Title tt='capitalize'>
+              A <span>haven</span> for <br /> text-based content
+            </Title>
+            <Text c='dimmed' mt='md'>
+              Welcome to Chatter: A home for writers and readers. Unleash the
+              power of words, connect with like-minded readers and writers.
+            </Text>
+
+            <List
+              mt={30}
+              spacing='sm'
+              size='sm'
+              icon={
+                <ThemeIcon size={20} radius='xl' color='#543EE0'>
+                  <IconCheck
+                    style={{ width: rem(12), height: rem(12) }}
+                    stroke={1.5}
+                  />
+                </ThemeIcon>
+              }
+            >
+              <List.Item>
+                <b>Publish in secs</b> - share your thoughts, stories, and
+                creations in seconds
+              </List.Item>
+              <List.Item>
+                <b>Free for all writers</b> - enjoy the freedom to express
+                yourself without constraints or fee.
+              </List.Item>
+              <List.Item>
+                <b>Excellent community</b> - our community is a hub of diverse
+                voices, ideas, and perspectives
+              </List.Item>
+            </List>
+
+            <Group mt={30}>
+              <Button radius='xl' size='md' color='#543EE0'>
+                Get started
+              </Button>
+              <Button variant='default' radius='xl' size='md'>
+                Source code
+              </Button>
+            </Group>
+          </Box>
+          <Image
+            src={HeroIllustration2}
+            className='w-[500px]'
+            alt='illustration'
+          />
+        </Flex>
+      </Box>
+    </>
+  )
+}
+
+export default Hero
