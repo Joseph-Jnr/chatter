@@ -1,7 +1,7 @@
 'use client'
 
 import { AboutImg } from '@/assets'
-import { Box, Flex, Grid, Text, Title } from '@mantine/core'
+import { Box, Title } from '@mantine/core'
 import Image from 'next/image'
 
 const About = () => {
@@ -13,7 +13,7 @@ const About = () => {
           <p className='mt-5 text-slate-700'>
             Chatter is a multi-functional platform where authors and readers can
             have access to their own content. It aims to be a traditional
-            bookworm's heaven and a blog to get access to more text based
+            bookworm&apos;s heaven and a blog to get access to more text based
             content. Our vision is to foster an inclusive and vibrant community
             where diversity is celebrated. We encourage open-mindedness and
             respect for all individuals, regardless of their backgrounds or

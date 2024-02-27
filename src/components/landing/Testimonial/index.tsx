@@ -45,10 +45,11 @@ const Testimonial = () => {
             </Text>
             <div className='flex my-5'>
               <p className='w-full md:w-1/2 mx-auto text-center italic text-gray-500 text-sm'>
-                "Chatter has become an integral part of my online experience. As
-                a user of this incredible blogging platform, I have discovered a
-                vibrant community of individuals who are passionate about
-                sharing their ideas and engaging in thoughtful discussions.”
+                &quot;Chatter has become an integral part of my online
+                experience. As a user of this incredible blogging platform, I
+                have discovered a vibrant community of individuals who are
+                passionate about sharing their ideas and engaging in thoughtful
+                discussions.&quot;
               </p>
             </div>
 
