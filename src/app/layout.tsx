@@ -2,7 +2,9 @@ import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { Box, MantineProvider } from '@mantine/core'
+import { NavigationProgress } from '@mantine/nprogress'
 import '@mantine/core/styles.css'
+import '@mantine/nprogress/styles.css'
 import appTheme from '@/theme'
 
 const jakarta = Plus_Jakarta_Sans({
@@ -25,6 +27,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${jakarta.className}`}>
         <MantineProvider theme={appTheme}>
+          <NavigationProgress />
           <Box maw={1850} mx='auto'>
             {children}
           </Box>

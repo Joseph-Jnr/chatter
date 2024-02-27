@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Box, Button, Flex, Text } from '@mantine/core'
 import GradientButton from '../Button/GradientButton'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { LogoSvg } from '@/assets'
+import Logo from '../../Logo'
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)
@@ -21,6 +25,11 @@ const Navbar = () => {
     }
   }, [])
 
+  const router = useRouter()
+  const handleClick = () => {
+    router.push('/sign-in')
+  }
+
   return (
     <>
       <nav
@@ -35,11 +44,7 @@ const Navbar = () => {
             gap={30}
             className='px-3'
           >
-            <Link href='/' className='brand--logo'>
-              <Text fw='bolder' size='xl'>
-                Chatter
-              </Text>
-            </Link>
+            <Logo root='/' />
             <Box className='nav--links'>
               <ul className='flex'>
                 <Link href='/'>
@@ -55,7 +60,7 @@ const Navbar = () => {
             </Box>
 
             <Box className='nav--button relative'>
-              <GradientButton text='Sign in' />
+              <GradientButton onClick={handleClick} text='Sign in' />
             </Box>
           </Flex>
         </Box>

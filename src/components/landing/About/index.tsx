@@ -10,7 +10,7 @@ const About = () => {
       <div className='ch--container grid grid-cols-1 md:grid-cols-2 items-center gap-20'>
         <Box className='order-1 md:order-2'>
           <Title order={2}>About Chatter</Title>
-          <Text mt={15} className='text-red-500'>
+          <p className='mt-5 text-slate-700'>
             Chatter is a multi-functional platform where authors and readers can
             have access to their own content. It aims to be a traditional
             bookworm's heaven and a blog to get access to more text based
@@ -18,10 +18,10 @@ const About = () => {
             where diversity is celebrated. We encourage open-mindedness and
             respect for all individuals, regardless of their backgrounds or
             beliefs. By promoting dialogue and understanding, we strive.
-          </Text>
+          </p>
         </Box>
         <Box className='order-1'>
-          <Image src={AboutImg} alt='writer' />
+          <Image src={AboutImg} data-aos='fade-up' alt='writer' />
         </Box>
       </div>
     </Box>

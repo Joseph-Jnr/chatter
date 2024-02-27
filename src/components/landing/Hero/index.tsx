@@ -23,13 +23,13 @@ const Hero = () => {
           direction={{ base: 'column', sm: 'row' }}
           align='center'
           mt={{ base: 90, sm: 0 }}
-          gap={20}
+          gap={90}
         >
           <Box w={{ base: '100%', sm: '50%' }}>
-            <Title tt='capitalize'>
+            <Title tt='capitalize' data-aos='fade-down'>
               A <span>haven</span> for <br /> text-based content
             </Title>
-            <Text c='dimmed' mt='md'>
+            <Text c='dimmed' mt='md' data-aos='fade-down' data-aos-delay='200'>
               Welcome to Chatter: A home for writers and readers. Unleash the
               power of words, connect with like-minded readers and writers.
             </Text>
@@ -47,30 +47,31 @@ const Hero = () => {
                 </ThemeIcon>
               }
             >
-              <List.Item>
+              <List.Item data-aos='fade-right' data-aos-delay='400'>
                 <b>Publish in secs</b> - share your thoughts, stories, and
                 creations in seconds
               </List.Item>
-              <List.Item>
+              <List.Item data-aos='fade-right' data-aos-delay='600'>
                 <b>Free for all writers</b> - enjoy the freedom to express
                 yourself without constraints or fee.
               </List.Item>
-              <List.Item>
+              <List.Item data-aos='fade-right' data-aos-delay='800'>
                 <b>Excellent community</b> - our community is a hub of diverse
                 voices, ideas, and perspectives
               </List.Item>
             </List>
 
-            <Group mt={30}>
+            <Group mt={30} data-aos='fade-right' data-aos-delay='1000'>
               <Button radius='xl' size='md' color='#543EE0'>
                 Get started
               </Button>
               <Button variant='default' radius='xl' size='md'>
-                Source code
+                Community
               </Button>
             </Group>
           </Box>
           <Image
+            data-aos='zoom-in'
             src={HeroIllustration2}
             className='w-[500px]'
             alt='illustration'

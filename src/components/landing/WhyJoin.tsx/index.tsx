@@ -12,16 +12,19 @@ const whyCardData = [
     icon: <IconChartHistogram color='#543EE0' />,
     title: 'Analytics',
     desc: 'Analytics to track the number of views, likes and comment and also analyze the performance of your articles over a period of time',
+    delay: 200,
   },
   {
     icon: <IconUsersGroup color='#543EE0' />,
     title: 'Social interactions',
     desc: 'Users on the platform can interact with posts they like, comment and engage in discussions',
+    delay: 600,
   },
   {
     icon: <IconArticle color='#543EE0' />,
     title: 'Content creation',
     desc: 'Write nice and appealing with our in-built markdown, a rich text editor',
+    delay: 1000,
   },
 ]
 
@@ -49,6 +52,8 @@ const WhyJoin = () => {
                   padding='lg'
                   radius='md'
                   className='w-fit'
+                  data-aos='fade-up'
+                  data-aos-delay={data.delay}
                 >
                   <Stack mt='md' mb='xs'>
                     <ActionIcon
