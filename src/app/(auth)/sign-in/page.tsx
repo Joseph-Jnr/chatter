@@ -18,7 +18,6 @@ import Logo from '@/components/Logo'
 const SignIn = () => {
   const router = useRouter()
   const handleClick = () => {
-    nprogress.start()
     router.push('/register')
   }
   return (
@@ -34,22 +33,22 @@ const SignIn = () => {
         <TextInput
           label='Email address'
           placeholder='hello@gmail.com'
-          size='md'
+          size='sm'
         />
         <PasswordInput
           label='Password'
           placeholder='Your password'
           mt='md'
-          size='md'
+          size='sm'
         />
         <Checkbox label='Keep me logged in' mt='xl' size='md' />
-        <Button fullWidth mt='xl' size='md'>
+        <Button fullWidth mt='xl' radius='xl' color='#543EE0' size='md'>
           Login
         </Button>
 
         <Text ta='center' mt='md'>
           Don&apos;t have an account?{' '}
-          <Anchor<'div'> fw={700} onClick={handleClick}>
+          <Anchor<'div'> c='#543EE0' fw={700} onClick={handleClick}>
             Register
           </Anchor>
         </Text>

@@ -1,7 +1,7 @@
 .wrapper {
   @apply h-screen;
   background-size: cover;
-  background-image: url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1280&q=80);
+  background-image: url(../../public/assets/jpg/gorgeous-positive-young-dark-skinned-female-blogger-keyboarding-generic-laptop-smiling-being-inspired-while-creating-new-content-her-travel-blog-sitting-desk-with-diary-mug.jpg);
 }
 
 .form {
