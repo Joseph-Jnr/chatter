@@ -3,7 +3,6 @@ import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { Box, MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
-import '@mantine/nprogress/styles.css'
 import appTheme from '@/theme'
 
 const jakarta = Plus_Jakarta_Sans({
