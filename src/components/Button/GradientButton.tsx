@@ -13,7 +13,7 @@ const GradientButton = ({ text, onClick }: GradientButtonProps) => {
         size='md'
         variant='gradient'
         onClick={onClick}
-        gradient={{ from: 'rgba(84, 62, 224, 1)', to: 'cyan', deg: 90 }}
+        gradient={{ from: '#543EE0', to: 'cyan', deg: 90 }}
       >
         {text}
       </Button>

@@ -31,6 +31,19 @@
     color: #000;
     overflow-x: hidden;
   }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply rounded-full bg-slate-50;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full;
+    background: linear-gradient(171deg, #543ee0, cyan);
+  }
 }
 
 @layer utilities {
