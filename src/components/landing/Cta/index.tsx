@@ -1,7 +1,8 @@
 import { CommunityLottie } from '@/assets'
-import { Box, Button, Title } from '@mantine/core'
+import { Box } from '@mantine/core'
 import Lottie from 'lottie-react'
 import React from 'react'
+import ChButton from '../Button/ChButton'
 
 const Cta = () => {
   return (
@@ -23,15 +24,8 @@ const Cta = () => {
                 Share people your great ideas, and also read write-ups based on
                 your interests. connect with people of same interests and goals.
               </p>
-              <Button
-                radius='xl'
-                size='md'
-                className='mx-auto'
-                mt='md'
-                color='#543EE0'
-              >
-                Create an account
-              </Button>
+
+              <ChButton color='#543EE0'>Create an account</ChButton>
             </Box>
           </div>
         </div>

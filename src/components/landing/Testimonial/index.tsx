@@ -3,6 +3,7 @@
 import { Dots, Dots2 } from '@/assets'
 import { Avatar, Box, Button, Paper, Text } from '@mantine/core'
 import Image from 'next/image'
+import ChButton from '../Button/ChButton'
 
 const Testimonial = () => {
   return (
@@ -52,15 +53,9 @@ const Testimonial = () => {
             </div>
 
             <Box className='flex'>
-              <Button
-                radius='xl'
-                size='md'
-                className='mx-auto'
-                mt='md'
-                color='#543EE0'
-              >
+              <ChButton className='mx-auto mt-5' color='#543EE0'>
                 Join Chatter
-              </Button>
+              </ChButton>
             </Box>
           </Paper>
         </Box>

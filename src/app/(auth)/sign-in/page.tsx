@@ -5,7 +5,6 @@ import {
   TextInput,
   PasswordInput,
   Checkbox,
-  Button,
   Title,
   Text,
   Anchor,
@@ -13,12 +12,11 @@ import {
 import classes from '@/styles/AuthStyle.module.css'
 import { useRouter } from 'next/navigation'
 import Logo from '@/components/Logo'
+import ChButton from '@/components/landing/Button/ChButton'
 
 const SignIn = () => {
   const router = useRouter()
-  const handleClick = () => {
-    router.push('/register')
-  }
+
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
@@ -41,13 +39,22 @@ const SignIn = () => {
           size='sm'
         />
         <Checkbox label='Keep me logged in' mt='xl' size='md' />
-        <Button fullWidth mt='xl' radius='xl' color='#543EE0' size='md'>
+
+        <ChButton
+          className='w-full mt-10'
+          onClick={() => router.push('/feeds')}
+          color='#543EE0'
+        >
           Login
-        </Button>
+        </ChButton>
 
         <Text ta='center' mt='md'>
           Don&apos;t have an account?{' '}
-          <Anchor<'div'> c='#543EE0' fw={700} onClick={handleClick}>
+          <Anchor<'div'>
+            c='#543EE0'
+            fw={700}
+            onClick={() => router.push('/register')}
+          >
             Register
           </Anchor>
         </Text>

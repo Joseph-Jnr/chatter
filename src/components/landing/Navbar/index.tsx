@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Box, Button, Flex, Text } from '@mantine/core'
-import GradientButton from '../Button/GradientButton'
+import { Box, Flex } from '@mantine/core'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { LogoSvg } from '@/assets'
 import Logo from '../../Logo'
+import ChButton from '../Button/ChButton'
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)
@@ -60,7 +58,9 @@ const Navbar = () => {
             </Box>
 
             <Box className='nav--button relative'>
-              <GradientButton onClick={handleClick} text='Sign in' />
+              <ChButton onClick={handleClick} color={['#543EE0', 'teal']}>
+                Sign in
+              </ChButton>
             </Box>
           </Flex>
         </Box>

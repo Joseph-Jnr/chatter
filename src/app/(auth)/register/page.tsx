@@ -4,16 +4,14 @@ import {
   Paper,
   TextInput,
   PasswordInput,
-  Checkbox,
-  Button,
   Title,
   Text,
-  Anchor,
   Group,
   Select,
 } from '@mantine/core'
 import classes from '@/styles/AuthStyle.module.css'
 import Logo from '@/components/Logo'
+import ChButton from '@/components/landing/Button/ChButton'
 
 const Register = () => {
   return (
@@ -68,9 +66,10 @@ const Register = () => {
           mt='md'
           size='sm'
         />
-        <Button fullWidth mt='xl' radius='xl' color='#543EE0' size='md'>
+
+        <ChButton className='w-full mt-10' color='#543EE0'>
           Register
-        </Button>
+        </ChButton>
       </Paper>
     </div>
   )

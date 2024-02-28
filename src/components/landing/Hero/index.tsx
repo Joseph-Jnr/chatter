@@ -13,6 +13,7 @@ import {
 } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
 import Image from 'next/image'
+import ChButton from '../Button/ChButton'
 
 const Hero = () => {
   return (
@@ -62,9 +63,7 @@ const Hero = () => {
             </List>
 
             <Group mt={30} data-aos='fade-right' data-aos-delay='1000'>
-              <Button radius='xl' size='md' color='#543EE0'>
-                Get started
-              </Button>
+              <ChButton color='#543EE0'>Get started</ChButton>
 
               <Button variant='default' radius='xl' size='md'>
                 Community
