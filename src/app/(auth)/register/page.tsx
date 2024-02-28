@@ -12,8 +12,11 @@ import {
 import classes from '@/styles/AuthStyle.module.css'
 import Logo from '@/components/Logo'
 import ChButton from '@/components/landing/Button/ChButton'
+import { useRouter } from 'next/navigation'
 
 const Register = () => {
+  const router = useRouter()
+
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
@@ -67,7 +70,11 @@ const Register = () => {
           size='sm'
         />
 
-        <ChButton className='w-full mt-10' color='#543EE0'>
+        <ChButton
+          className='w-full mt-10'
+          color='#543EE0'
+          onClick={() => router.push('/otp-verification')}
+        >
           Register
         </ChButton>
       </Paper>
