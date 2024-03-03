@@ -10,6 +10,7 @@ import classes from '@/styles/SideNav.module.css'
 import LinksGroup from '@/components/LinksGroup'
 import Logo from '@/components/Logo'
 import { UserButton } from '@/components/UserButton'
+import { IconCategory } from '@tabler/icons-react'
 
 const mockdata = [
   //{ label: 'Dashboard', icon: IconGauge },
@@ -20,20 +21,20 @@ const mockdata = [
     links: [
       { label: 'Feeds', link: '/' },
       { label: 'Trending', link: '/' },
-      { label: 'Tags', link: '/' },
       { label: 'Mentions', link: '/' },
     ],
   },
-  { label: 'Followers', navLink: '/', icon: IconUsers },
   {
-    label: 'Releases',
-    icon: IconCalendarStats,
+    label: 'Categories',
+    icon: IconCategory,
     links: [
-      { label: 'Upcoming releases', link: '/' },
-      { label: 'Previous releases', link: '/' },
-      { label: 'Releases schedule', link: '/' },
+      { label: 'Sports', link: '/' },
+      { label: 'Education', link: '/' },
+      { label: 'Web Development', link: '/' },
+      { label: 'UI/UX Design', link: '/' },
     ],
   },
+  { label: 'Followers', navLink: '/', icon: IconUsers },
   { label: 'Analytics', navLink: '/', icon: IconPresentationAnalytics },
   { label: 'Log out', navLink: '/', icon: IconLogout },
 ]

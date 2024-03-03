@@ -50,10 +50,16 @@ const LinksGroup = ({
       >
         <Group justify='space-between' gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
-            <ThemeIcon variant='light' color='#543EE0' size={30}>
+            <ThemeIcon
+              variant='light'
+              color={label === 'Log out' ? 'red' : '#543EE0'}
+              size={30}
+            >
               <Icon style={{ width: rem(18), height: rem(18) }} />
             </ThemeIcon>
-            <Box ml='md'>{label}</Box>
+            <Box ml='md' className={label === 'Log out' ? 'text-red-500' : ''}>
+              {label}
+            </Box>
           </Box>
           {hasLinks && (
             <IconChevronRight

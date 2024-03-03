@@ -60,6 +60,15 @@
     text-wrap: balance;
   }
 
+  .app-header {
+    background-color: light-dark(
+      var(--mantine-color-white),
+      var(--mantine-color-dark-6)
+    );
+    border-bottom: rem(1px) solid
+      light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  }
+
   /* Nav styles */
 
   .floating--nav--wrap {

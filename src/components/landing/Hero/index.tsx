@@ -63,7 +63,9 @@ const Hero = () => {
             </List>
 
             <Group mt={30} data-aos='fade-right' data-aos-delay='1000'>
-              <ChButton color='#543EE0'>Get started</ChButton>
+              <a href='#getstarted'>
+                <ChButton color='#543EE0'>Get started</ChButton>
+              </a>
 
               <Button variant='default' radius='xl' size='md'>
                 Community

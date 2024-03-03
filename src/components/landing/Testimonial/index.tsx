@@ -4,11 +4,14 @@ import { Dots, Dots2 } from '@/assets'
 import { Avatar, Box, Button, Paper, Text } from '@mantine/core'
 import Image from 'next/image'
 import ChButton from '../Button/ChButton'
+import { useRouter } from 'next/navigation'
 
 const Testimonial = () => {
+  const router = useRouter()
+
   return (
     <>
-      <Box className='section--padding'>
+      <Box className='section--padding bg-slate-50'>
         <Box className='ch--container'>
           <Paper
             radius='md'
@@ -53,7 +56,11 @@ const Testimonial = () => {
             </div>
 
             <Box className='flex'>
-              <ChButton className='mx-auto mt-5' color='#543EE0'>
+              <ChButton
+                className='mx-auto mt-5'
+                color='#543EE0'
+                onClick={() => router.push('/register')}
+              >
                 Join Chatter
               </ChButton>
             </Box>

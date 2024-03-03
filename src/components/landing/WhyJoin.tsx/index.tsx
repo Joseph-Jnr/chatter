@@ -12,29 +12,28 @@ const whyCardData = [
     icon: <IconChartHistogram color='#543EE0' />,
     title: 'Analytics',
     desc: 'Analytics to track the number of views, likes and comment and also analyze the performance of your articles over a period of time',
-    delay: 200,
   },
   {
     icon: <IconUsersGroup color='#543EE0' />,
     title: 'Social interactions',
     desc: 'Users on the platform can interact with posts they like, comment and engage in discussions',
-    delay: 600,
   },
   {
     icon: <IconArticle color='#543EE0' />,
     title: 'Content creation',
     desc: 'Write nice and appealing with our in-built markdown, a rich text editor',
-    delay: 1000,
   },
 ]
 
 const WhyJoin = () => {
   return (
     <>
-      <Box className='section--padding'>
+      <Box className='py-5 md:py-20'>
         <Box className='ch--container'>
           <Box className='text-center'>
-            <Title>Why you should join chatter</Title>
+            <h1 className='text-2xl md:text-4xl font-bold'>
+              Why you should join chatter
+            </h1>
             <p className='text-slate-700 w-full md:w-9/12 mx-auto mt-3'>
               Our goal is to make writers and readers see our platform as their
               next heaven for blogging, ensuring ease in interactions,
@@ -53,7 +52,7 @@ const WhyJoin = () => {
                   radius='md'
                   className='w-fit'
                   data-aos='fade-up'
-                  data-aos-delay={data.delay}
+                  withBorder
                 >
                   <Stack mt='md' mb='xs'>
                     <ActionIcon

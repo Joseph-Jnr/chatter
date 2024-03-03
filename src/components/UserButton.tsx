@@ -4,7 +4,7 @@ import classes from '@/styles/UserButton.module.css'
 
 export function UserButton() {
   return (
-    <UnstyledButton className={classes.user}>
+    <UnstyledButton className={classes.user} onClick={() => {}}>
       <Group>
         <Avatar
           src='https://avatars.githubusercontent.com/u/67343514?v=4'

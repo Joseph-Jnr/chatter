@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 const About = () => {
   return (
-    <Box className='section--padding bg-white'>
+    <Box className='py-5 bg-white' id='getstarted'>
       <div className='ch--container grid grid-cols-1 md:grid-cols-2 items-center gap-20'>
         <Box className='order-1 md:order-2'>
           <Title order={2}>About Chatter</Title>
