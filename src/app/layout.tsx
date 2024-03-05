@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
-import { Box, MantineProvider } from '@mantine/core'
+import { Box, ColorSchemeScript, MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import appTheme from '@/theme'
 
@@ -23,6 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
+      <head>
+        <ColorSchemeScript />
+      </head>
       <body className={`${jakarta.className}`}>
         <MantineProvider theme={appTheme}>
           <Box maw={1850} mx='auto'>
