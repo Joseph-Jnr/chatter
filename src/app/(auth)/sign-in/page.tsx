@@ -10,6 +10,7 @@ import {
   Anchor,
 } from '@mantine/core'
 import classes from '@/styles/AuthStyle.module.css'
+import inputClass from '@/styles/InputStyle.module.css'
 import { useRouter } from 'next/navigation'
 import Logo from '@/components/Logo'
 import ChButton from '@/components/landing/Button/ChButton'
@@ -19,7 +20,7 @@ const SignIn = () => {
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={classes.form} radius={0} p={30}>
+      <Paper className={`h-auto md:h-screen ${classes.form}`} radius={0} p={30}>
         <div className='flex'>
           <Logo root='/' className='mx-auto' />
         </div>
@@ -31,14 +32,21 @@ const SignIn = () => {
           label='Email address'
           placeholder='hello@gmail.com'
           size='sm'
+          classNames={{ input: inputClass.input }}
         />
         <PasswordInput
           label='Password'
           placeholder='Your password'
           mt='md'
           size='sm'
+          classNames={{ input: inputClass.input }}
         />
-        <Checkbox label='Keep me logged in' mt='xl' size='md' />
+        <Checkbox
+          label='Keep me logged in'
+          mt='xl'
+          classNames={{ input: inputClass.input }}
+          size='sm'
+        />
 
         <ChButton
           className='w-full mt-10'

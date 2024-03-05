@@ -1,0 +1,13 @@
+.header {
+  /* background-color: light-dark(var(--mantine-color-white), var(--dark-bg)); */
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-8)
+  );
+  border-bottom: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+}
+
+.modal {
+  background: light-dark(var(--mantine-color-white), var(--dark-bg-light));
+}

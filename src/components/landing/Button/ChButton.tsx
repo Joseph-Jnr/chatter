@@ -6,7 +6,7 @@ interface ChButtonProps {
   hasLeftIcon?: React.ReactNode
   hasRightIcon?: React.ReactNode
   color: Color
-  variant?: 'solid' | 'outline'
+  variant?: 'filled' | 'light' | 'outline'
   children: React.ReactNode
   className?: string
   onClick?: () => void
@@ -16,12 +16,12 @@ const ChButton = ({
   hasLeftIcon,
   hasRightIcon,
   color,
-  variant = 'solid',
+  variant = 'filled',
   children,
   className,
   onClick,
 }: ChButtonProps) => {
-  const isSolid = variant === 'solid'
+  const isSolid = variant === 'filled'
 
   const buttonStyles = {
     background: isSolid

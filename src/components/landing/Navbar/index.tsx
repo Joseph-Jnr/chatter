@@ -6,6 +6,7 @@ import { Box, Flex } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 import Logo from '../../Logo'
 import ChButton from '../Button/ChButton'
+import classes from '@/styles/General.module.css'
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(false)
@@ -35,7 +36,10 @@ const Navbar = () => {
           isSticky ? 'sticky' : ''
         }`}
       >
-        <Box className='ch--container floating--nav' p={{ base: 0, sm: 20 }}>
+        <Box
+          className={`${classes.navbar} ch--container floating--nav`}
+          p={{ base: 0, sm: 20 }}
+        >
           <Flex
             justify='space-between'
             align='center'

@@ -6,6 +6,7 @@ import { Box, PinInput, Notification, rem } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import classes from '@/styles/InputStyle.module.css'
 
 const OtpVerification = () => {
   const router = useRouter()
@@ -36,7 +37,13 @@ const OtpVerification = () => {
         </div>
 
         <Box className='flex my-10'>
-          <PinInput className='mx-auto' size='xl' placeholder='' oneTimeCode />
+          <PinInput
+            className='mx-auto'
+            size='xl'
+            placeholder=''
+            classNames={{ input: classes.input }}
+            oneTimeCode
+          />
         </Box>
 
         <Box className='flex'>

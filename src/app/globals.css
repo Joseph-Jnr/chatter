@@ -6,6 +6,10 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --white: #fff;
+  --purple: #543ee0;
+  --dark-bg: #000612;
+  --dark-bg-light: #010a1d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,8 +37,13 @@
     overflow-x: hidden;
   }
 
+  /* This hides the native scrollbar */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -43,7 +52,7 @@
 
   ::-webkit-scrollbar-thumb {
     @apply rounded-full;
-    background: linear-gradient(171deg, #543ee0, cyan);
+    background: linear-gradient(171deg, var(--purple), cyan);
   }
 }
 
@@ -60,15 +69,6 @@
     text-wrap: balance;
   }
 
-  .app-header {
-    background-color: light-dark(
-      var(--mantine-color-white),
-      var(--mantine-color-dark-6)
-    );
-    border-bottom: rem(1px) solid
-      light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-  }
-
   /* Nav styles */
 
   .floating--nav--wrap {
@@ -76,7 +76,7 @@
   }
 
   .floating--nav {
-    @apply bg-white rounded-full py-3 px-0 md:px-10;
+    @apply rounded-full py-3 px-0 md:px-10;
     box-shadow: 0px 4px 40px rgba(28, 17, 50, 0.1);
   }
 

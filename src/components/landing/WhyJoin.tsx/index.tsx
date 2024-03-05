@@ -1,6 +1,6 @@
 'use client'
 
-import { ActionIcon, Box, Card, Stack, Text, Title } from '@mantine/core'
+import { ActionIcon, Box, Card, Stack, Text } from '@mantine/core'
 import {
   IconArticle,
   IconChartHistogram,
@@ -34,13 +34,12 @@ const WhyJoin = () => {
             <h1 className='text-2xl md:text-4xl font-bold'>
               Why you should join chatter
             </h1>
-            <p className='text-slate-700 w-full md:w-9/12 mx-auto mt-3'>
-              Our goal is to make writers and readers see our platform as their
-              next heaven for blogging, ensuring ease in interactions,
-              connecting with like-minded peers, have access to favorite content
-              based on interests and able to communicate your great ideas with
-              people
-            </p>
+            <div className='text-slate-700 w-full md:w-9/12 mx-auto mt-3'>
+              <Text c={'dimmed'} fz={{ base: 14, sm: 16 }}>
+                Our goal is to make writers and readers see our platform as
+                their next heaven for blogging.
+              </Text>
+            </div>
           </Box>
 
           <Box className='cards mt-20'>

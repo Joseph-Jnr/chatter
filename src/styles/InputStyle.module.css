@@ -1,0 +1,4 @@
+.input:active,
+.input:focus {
+  border: 1px solid #543ee0;
+}

@@ -1,8 +1,9 @@
 'use client'
 
 import { Dots, Dots2 } from '@/assets'
-import { Avatar, Box, Button, Paper, Text } from '@mantine/core'
+import { Avatar, Box, Paper, Text } from '@mantine/core'
 import Image from 'next/image'
+import classes from '@/styles/General.module.css'
 import ChButton from '../Button/ChButton'
 import { useRouter } from 'next/navigation'
 
@@ -11,7 +12,7 @@ const Testimonial = () => {
 
   return (
     <>
-      <Box className='section--padding bg-slate-50'>
+      <Box className={`${classes.testimonial} section--padding`}>
         <Box className='ch--container'>
           <Paper
             radius='md'
