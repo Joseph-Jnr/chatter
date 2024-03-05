@@ -24,35 +24,52 @@ import Logo from '@/components/Logo'
 import { UserButton } from '@/components/UserButton'
 import { IconCategory } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
-
-const mockdata = [
-  {
-    label: 'Overview',
-    icon: IconGauge,
-    initiallyOpened: true,
-    links: [
-      { label: 'Feeds', link: '/feeds' },
-      { label: 'Bookmarks', link: '/feeds/bookmarks' },
-      { label: 'Trending', link: '/feeds' },
-    ],
-  },
-  {
-    label: 'Categories',
-    icon: IconCategory,
-    links: [
-      { label: 'Sports', link: '/category/sports' },
-      { label: 'Education', link: '/category/education' },
-      { label: 'Web Development', link: '/category/web-development' },
-      { label: 'UI/UX Design', link: '/category/uiux-design' },
-    ],
-  },
-  { label: 'Followers', navLink: '/profile/followers', icon: IconUsers },
-  { label: 'Analytics', navLink: '/analytics', icon: IconChartBar },
-  { label: 'Log out', navLink: '/sign-in', icon: IconLogout },
-]
+import { usePathname } from 'next/navigation'
 
 const SideNav = ({ isNavVisible }: any) => {
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const currentPath = usePathname()
+
+  const createLinksGroup = ({ label, icon, links, navLink }: any) => {
+    const isNavLink = !!navLink
+    const groupLinks = links || []
+
+    return {
+      label,
+      icon,
+      initiallyOpened: isNavLink
+        ? currentPath === navLink
+        : groupLinks.some((link: any) => currentPath === link.link),
+      links: groupLinks,
+      navLink: isNavLink ? navLink : undefined,
+    }
+  }
+
+  const mockdata = [
+    createLinksGroup({
+      label: 'Overview',
+      icon: IconGauge,
+      links: [
+        { label: 'Feeds', link: '/feeds' },
+        { label: 'Bookmarks', link: '/feeds/bookmarks' },
+        { label: 'Trending', link: '#' },
+      ],
+    }),
+    createLinksGroup({
+      label: 'Categories',
+      icon: IconCategory,
+      links: [
+        { label: 'Sports', link: '/category/sports' },
+        { label: 'Education', link: '/category/education' },
+        { label: 'Web Development', link: '/category/web-development' },
+        { label: 'UI/UX Design', link: '/category/uiux-design' },
+      ],
+    }),
+
+    { label: 'Followers', navLink: '/profile/followers', icon: IconUsers },
+    { label: 'Analytics', navLink: '/analytics', icon: IconChartBar },
+    { label: 'Log out', navLink: '/sign-in', icon: IconLogout },
+  ]
 
   const links = mockdata.map((item) => (
     <LinksGroup {...item} key={item.label} />

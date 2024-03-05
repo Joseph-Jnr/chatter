@@ -12,7 +12,7 @@ import {
 } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
 import classes from '@/styles/LinksGroup.module.css'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 interface LinksGroupProps {
   icon: React.FC<any>
@@ -30,6 +30,8 @@ const LinksGroup = ({
   links,
 }: LinksGroupProps) => {
   const router = useRouter()
+  const currentPath = usePathname()
+
   const hasLinks = Array.isArray(links)
   const [opened, setOpened] = useState(initiallyOpened || false)
   const handleClick = () => {
@@ -42,7 +44,9 @@ const LinksGroup = ({
   const items = (hasLinks ? links : []).map((link) => (
     <Text<'a'>
       component='a'
-      className={classes.link}
+      className={`${classes.link} ${
+        link.link === currentPath && classes.active
+      }`}
       href={link.link}
       key={link.label}
       onClick={() => router.push(link.link)}
@@ -53,7 +57,12 @@ const LinksGroup = ({
 
   return (
     <>
-      <UnstyledButton onClick={handleClick} className={classes.control}>
+      <UnstyledButton
+        onClick={handleClick}
+        className={`${classes.control} ${
+          navLink === currentPath && classes.active
+        }`}
+      >
         <Group justify='space-between' gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon

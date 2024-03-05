@@ -23,10 +23,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <head>
-        <ColorSchemeScript />
-      </head>
       <body className={`${jakarta.className}`}>
+        <ColorSchemeScript />
         <MantineProvider theme={appTheme}>
           <Box maw={1850} mx='auto'>
             {children}
