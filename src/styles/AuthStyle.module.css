@@ -2,6 +2,7 @@
   @apply h-screen;
   background-size: cover;
   background-image: url(../../public/assets/jpg/gorgeous-positive-young-dark-skinned-female-blogger-keyboarding-generic-laptop-smiling-being-inspired-while-creating-new-content-her-travel-blog-sitting-desk-with-diary-mug.jpg);
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-gray-5));
 }
 
 .form {

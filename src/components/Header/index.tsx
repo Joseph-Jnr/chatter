@@ -13,6 +13,8 @@ import {
   TextInput,
   Title,
   rem,
+  useMantineColorScheme,
+  useMantineTheme,
 } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useDisclosure } from '@mantine/hooks'
@@ -73,6 +75,12 @@ const Header = ({ toggleSideNav }: any) => {
   const [burgerOpened, { toggle }] = useDisclosure()
   const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />
 
+  const { colorScheme } = useMantineColorScheme()
+  const theme = useMantineTheme()
+
+  const color =
+    colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
+
   return (
     <Box
       py={14}
@@ -112,6 +120,7 @@ const Header = ({ toggleSideNav }: any) => {
 
       {/* Modal */}
       <Modal
+        c={color}
         opened={opened}
         onClose={close}
         radius={'lg'}

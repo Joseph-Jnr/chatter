@@ -37,7 +37,7 @@ const ChButton = ({
 
   return (
     <button
-      className={`py-2 px-5 flex items-center justify-center gap-1 rounded-full font-semibold text-white ${className}`}
+      className={`py-2 px-5 flex items-center justify-center gap-1 rounded-full font-semibold ${className}`}
       style={buttonStyles}
       onClick={onClick}
     >

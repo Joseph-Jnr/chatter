@@ -1,9 +1,10 @@
+import '@mantine/core/styles.css'
+
+import { Box, ColorSchemeScript, MantineProvider } from '@mantine/core'
+import theme from '@/theme'
 import type { Metadata } from 'next'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
-import { Box, ColorSchemeScript, MantineProvider } from '@mantine/core'
-import '@mantine/core/styles.css'
-import appTheme from '@/theme'
 
 const jakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '700'],
@@ -23,9 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${jakarta.className}`}>
+      <head>
         <ColorSchemeScript />
-        <MantineProvider theme={appTheme}>
+        <meta
+          name='viewport'
+          content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no'
+        />
+      </head>
+      <body className={`${jakarta.className}`}>
+        <MantineProvider theme={theme}>
           <Box maw={1850} mx='auto'>
             {children}
           </Box>

@@ -7,6 +7,8 @@ import {
   useComputedColorScheme,
   ActionIcon,
   Box,
+  useMantineTheme,
+  Text,
 } from '@mantine/core'
 import {
   IconGauge,
@@ -75,10 +77,15 @@ const SideNav = ({ isNavVisible }: any) => {
     <LinksGroup {...item} key={item.label} />
   ))
 
-  const { setColorScheme } = useMantineColorScheme()
+  const { colorScheme, setColorScheme } = useMantineColorScheme()
   const computedColorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   })
+
+  const theme = useMantineTheme()
+
+  const color =
+    colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
 
   return (
     <Box
@@ -123,9 +130,9 @@ const SideNav = ({ isNavVisible }: any) => {
               stroke={1.5}
             />
           </ActionIcon>
-          <p className='text-sm'>
+          <Text c={color} className='text-sm'>
             {computedColorScheme === 'light' ? 'Dark mode' : 'Light mode'}
-          </p>
+          </Text>
         </div>
       </Group>
     </Box>

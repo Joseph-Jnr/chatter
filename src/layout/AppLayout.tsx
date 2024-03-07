@@ -2,7 +2,13 @@
 
 import Header from '@/components/Header'
 import SideNav from './SideNav'
-import { Box, Paper, Title } from '@mantine/core'
+import {
+  Box,
+  Paper,
+  Title,
+  useMantineColorScheme,
+  useMantineTheme,
+} from '@mantine/core'
 import { useState } from 'react'
 
 interface AppLayoutProps {
@@ -17,6 +23,14 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
     setIsNavVisible(!isNavVisible)
   }
 
+  const { colorScheme } = useMantineColorScheme()
+  const theme = useMantineTheme()
+
+  const bg =
+    colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0]
+  const color =
+    colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
+
   return (
     <div className='relative h-screen'>
       <div className='flex'>
@@ -25,7 +39,7 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
         </Box>
         <Box ml={{ base: 0, sm: 300 }} className='flex flex-col w-full'>
           <Header toggleSideNav={toggleSideNav} />
-          <Box p={13} py={100}>
+          <Box c={color} mih={'100vh'} bg={bg} p={13} py={100}>
             <Box px={{ base: 4, sm: 40 }} pos={'relative'}>
               <Title order={2} mb={30}>
                 {title}

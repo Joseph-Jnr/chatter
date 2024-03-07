@@ -1,6 +1,6 @@
-import { MantineColorsTuple, createTheme } from '@mantine/core'
+import { createTheme } from '@mantine/core'
 
-const appTheme = createTheme({
+const theme = createTheme({
   colors: {
     purple: [
       '#efecff',
@@ -15,6 +15,7 @@ const appTheme = createTheme({
       '#23159d',
     ],
   },
+  primaryColor: 'purple',
   breakpoints: {
     xs: '30em',
     sm: '48em',
@@ -24,4 +25,4 @@ const appTheme = createTheme({
   },
 })
 
-export default appTheme
+export default theme

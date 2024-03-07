@@ -1,8 +1,9 @@
 import { CommunityLottie } from '@/assets'
-import { Box, Button } from '@mantine/core'
+import { Box } from '@mantine/core'
 import Lottie from 'lottie-react'
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import ChButton from '../Button/ChButton'
 
 const Cta = () => {
   const router = useRouter()
@@ -28,14 +29,13 @@ const Cta = () => {
                 your interests. connect with people of same interests and goals.
               </p>
 
-              <Button
-                variant='default'
-                radius='xl'
-                size='md'
+              <ChButton
+                color='white'
+                variant='outline'
                 onClick={() => router.push('/register')}
               >
                 Create an account
-              </Button>
+              </ChButton>
             </Box>
           </div>
         </div>
