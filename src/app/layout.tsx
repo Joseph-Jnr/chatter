@@ -38,7 +38,7 @@ export default function RootLayout({
         }`}
       >
         <MantineProvider theme={theme}>
-          <RouterTransition />
+          {/* <RouterTransition /> */}
           <Box maw={1850} mx='auto'>
             {children}
           </Box>
