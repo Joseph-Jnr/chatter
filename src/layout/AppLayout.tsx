@@ -2,7 +2,7 @@
 
 import Header from '@/components/Header'
 import SideNav from './SideNav'
-import { Box, Title } from '@mantine/core'
+import { Box, Paper, Title } from '@mantine/core'
 import { useState } from 'react'
 
 interface AppLayoutProps {

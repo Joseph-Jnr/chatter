@@ -10,7 +10,7 @@ import Hero from '@/components/landing/Hero'
 import Navbar from '@/components/landing/Navbar'
 import Testimonial from '@/components/landing/Testimonial'
 import WhyJoin from '@/components/landing/WhyJoin.tsx'
-import { Box } from '@mantine/core'
+import { Box, Paper } from '@mantine/core'
 
 export default function Home() {
   useEffect(() => {
