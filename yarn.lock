@@ -175,6 +175,18 @@
   resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.5.3.tgz#34168712075ee40ff7353c840420d4568b0dd54e"
   integrity sha512-mFI448mAs12v8FrgSVhytqlhTVrEjIfd/PqPEfwJu5YcZIq4YZdqpzJIUbANnRrFSvmoQpDb1PssdKx7Ds35hw==
 
+"@mantine/nprogress@^7.6.1":
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/@mantine/nprogress/-/nprogress-7.6.1.tgz#d78587cf5ef608526c3f42d2381ec61a55cbf110"
+  integrity sha512-uSD9CJIQfDHRwjKvlgEsdP/dMhEcpKq3YNmnVfsvpcd8v2SY4lWCkT/x/gxyLZQ26UZbSL3peBc9yYozXBV+5w==
+  dependencies:
+    "@mantine/store" "7.6.1"
+
+"@mantine/store@7.6.1":
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.6.1.tgz#631f31134ee05f32c0842be6cd642b07b4f026c1"
+  integrity sha512-UqSsJLlAL53OSSUNK/aTXpkss9DX0TppTbtBKXPyflYfq0B9vKwQKumxEsg3UGVC4cjiQq2VD4mjGT94r+deug==
+
 "@next/env@14.1.0":
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-14.1.0.tgz#43d92ebb53bc0ae43dcc64fb4d418f8f17d7a341"

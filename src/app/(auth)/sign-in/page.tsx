@@ -22,11 +22,7 @@ const SignIn = () => {
   return (
     <AuthContainer>
       <div className={classes.wrapper}>
-        <Paper
-          className={`h-auto md:h-screen ${classes.form}`}
-          radius={0}
-          p={30}
-        >
+        <Paper className={`h-screen ${classes.form}`} radius={0} p={30}>
           <div className='flex'>
             <Logo root='/' className='mx-auto' />
           </div>
