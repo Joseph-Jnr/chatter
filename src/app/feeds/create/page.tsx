@@ -1,4 +1,4 @@
-import ChButton from '@/components/landing/Button/ChButton'
+import ChButton from '@/components/Buttons/ChButton'
 import AppLayout from '@/layout/AppLayout'
 import {
   Button,

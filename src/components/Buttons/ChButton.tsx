@@ -9,6 +9,8 @@ interface ChButtonProps {
   variant?: 'filled' | 'light' | 'outline'
   children: React.ReactNode
   className?: string
+  type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
   onClick?: () => void
 }
 
@@ -19,6 +21,8 @@ const ChButton = ({
   variant = 'filled',
   children,
   className,
+  type,
+  disabled,
   onClick,
 }: ChButtonProps) => {
   const isSolid = variant === 'filled'
@@ -33,10 +37,14 @@ const ChButton = ({
     border: isSolid
       ? 'none'
       : `1px solid ${Array.isArray(color) ? color[0] : color}`,
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    opacity: disabled ? 0.7 : 1,
   }
 
   return (
     <button
+      disabled={disabled}
+      type={type}
       className={`py-2 px-5 flex items-center justify-center gap-1 rounded-full font-semibold ${className}`}
       style={buttonStyles}
       onClick={onClick}

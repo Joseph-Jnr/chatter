@@ -4,7 +4,7 @@ import { Dots, Dots2 } from '@/assets'
 import { Avatar, Box, Paper, Text } from '@mantine/core'
 import Image from 'next/image'
 import classes from '@/styles/General.module.css'
-import ChButton from '../Button/ChButton'
+import ChButton from '../../Buttons/ChButton'
 import { useRouter } from 'next/navigation'
 
 const Testimonial = () => {

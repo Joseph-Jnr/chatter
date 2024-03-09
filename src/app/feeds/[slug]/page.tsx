@@ -11,7 +11,7 @@ import {
 } from '@tabler/icons-react'
 import Image from 'next/image'
 import { Woman } from '@/assets'
-import ChButton from '@/components/landing/Button/ChButton'
+import ChButton from '@/components/Buttons/ChButton'
 import { IconHeart } from '@tabler/icons-react'
 import formatStats from '@/services/formatStats'
 import { IconBookmark } from '@tabler/icons-react'

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Box, Flex } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 import Logo from '../../Logo'
-import ChButton from '../Button/ChButton'
+import ChButton from '../../Buttons/ChButton'
 import classes from '@/styles/General.module.css'
 
 const Navbar = () => {

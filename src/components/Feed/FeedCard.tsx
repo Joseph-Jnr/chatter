@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import classes from '@/styles/General.module.css'
 import { IconCheck } from '@tabler/icons-react'
+import { notifications } from '@mantine/notifications'
 
 interface FeedCardProps {
   title?: string
@@ -58,8 +59,6 @@ const FeedCard = ({
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isAlertVisible, setIsAlertVisible] = useState(false)
-  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
 
   const likeAction = () => {
     setIsLiked(!isLiked)
@@ -67,11 +66,14 @@ const FeedCard = ({
 
   const bookmarkAction = () => {
     setIsBookmarked(!isBookmarked)
-    setIsAlertVisible(true)
 
-    setTimeout(() => {
-      setIsAlertVisible(false)
-    }, 2000)
+    notifications.show({
+      icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+      withCloseButton: false,
+      color: 'teal',
+      message: 'Saved to bookmarks',
+      className: 'mt-10 w-fit mx-auto',
+    })
   }
 
   return (
@@ -154,20 +156,6 @@ const FeedCard = ({
           </div>
         </div>
       </Card>
-
-      {/* Bookmark Notification */}
-      {isAlertVisible && (
-        <Box className='fixed top-10 left-0 right-0 mx-auto w-60 z-50 bounce-down-animation'>
-          <Notification
-            icon={checkIcon}
-            color='teal'
-            title='Bookmarked'
-            mx={'auto'}
-            withCloseButton={false}
-            mt='md'
-          />
-        </Box>
-      )}
     </>
   )
 }

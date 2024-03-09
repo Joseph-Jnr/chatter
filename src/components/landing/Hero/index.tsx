@@ -13,7 +13,7 @@ import {
 } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
 import Image from 'next/image'
-import ChButton from '../Button/ChButton'
+import ChButton from '../../Buttons/ChButton'
 
 const Hero = () => {
   return (

@@ -1,8 +1,10 @@
 'use client'
 
 import '@mantine/core/styles.css'
+import '@mantine/notifications/styles.css'
 
 import { Box, ColorSchemeScript, MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 import theme from '@/theme'
 import { metadata } from './sharedConstants'
 import { Plus_Jakarta_Sans } from 'next/font/google'
@@ -38,6 +40,7 @@ export default function RootLayout({
         }`}
       >
         <MantineProvider theme={theme}>
+          <Notifications position='top-center' />
           {/* <RouterTransition /> */}
           <Box maw={1850} mx='auto'>
             {children}

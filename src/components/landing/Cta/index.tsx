@@ -3,7 +3,7 @@ import { Box } from '@mantine/core'
 import Lottie from 'lottie-react'
 import React from 'react'
 import { useRouter } from 'next/navigation'
-import ChButton from '../Button/ChButton'
+import ChButton from '../../Buttons/ChButton'
 
 const Cta = () => {
   const router = useRouter()

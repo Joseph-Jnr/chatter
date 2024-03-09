@@ -12,11 +12,14 @@ import {
 import classes from '@/styles/AuthStyle.module.css'
 import inputClass from '@/styles/InputStyle.module.css'
 import Logo from '@/components/Logo'
-import ChButton from '@/components/landing/Button/ChButton'
+import ChButton from '@/components/Buttons/ChButton'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import PasswordStrengthCheck from '@/components/Auth/PasswordStrengthCheck'
 
 const Register = () => {
   const router = useRouter()
+  const [value, setValue] = useState('')
 
   return (
     <div className={classes.wrapper}>
@@ -73,13 +76,17 @@ const Register = () => {
             classNames={{ input: inputClass.input }}
           />
         </Group>
-        <PasswordInput
-          label='Password'
-          placeholder='Your password'
-          mt='md'
-          size='sm'
-          classNames={{ input: inputClass.input }}
-        />
+        <PasswordStrengthCheck value={value}>
+          <PasswordInput
+            label='Password'
+            placeholder='Your password'
+            mt='md'
+            size='sm'
+            classNames={{ input: inputClass.input }}
+            value={value}
+            onChange={(event) => setValue(event.currentTarget.value)}
+          />
+        </PasswordStrengthCheck>
         <PasswordInput
           label='Confirm password'
           placeholder='Re-type password'
