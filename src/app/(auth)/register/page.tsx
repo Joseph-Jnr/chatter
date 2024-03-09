@@ -14,12 +14,45 @@ import inputClass from '@/styles/InputStyle.module.css'
 import Logo from '@/components/Logo'
 import ChButton from '@/components/Buttons/ChButton'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import PasswordStrengthCheck from '@/components/Auth/PasswordStrengthCheck'
+import { yupResolver } from 'mantine-form-yup-resolver'
+import * as yup from 'yup'
+import { useForm } from '@mantine/form'
+
+const schema = yup.object().shape({
+  firstName: yup.string().required('This field is required'),
+  lastName: yup.string().required('This field is required'),
+  status: yup.string().required('This field is required'),
+  email: yup.string().required('This field is required'),
+  username: yup.string().required('This field is required'),
+  password: yup.string().required('This field is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords do not match')
+    .required('Please confirm your password'),
+})
 
 const Register = () => {
   const router = useRouter()
-  const [value, setValue] = useState('')
+
+  const form = useForm({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      status: '',
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validate: yupResolver(schema),
+    validateInputOnChange: ['confirmPassword'],
+  })
+
+  const handleSubmit = () => {
+    console.log(form.values)
+    //router.push('/otp-verification')
+  }
 
   return (
     <div className={classes.wrapper}>
@@ -34,74 +67,80 @@ const Register = () => {
           Create an account whether you are a reader or writer
         </Text>
 
-        <Group>
-          <TextInput
-            label='First name'
-            className='w-full md:w-auto'
-            placeholder='John'
-            size='sm'
-            classNames={{ input: inputClass.input }}
-          />
-          <TextInput
-            label='Last name'
-            className='w-full md:w-auto'
-            placeholder='Doe'
-            size='sm'
-            classNames={{ input: inputClass.input }}
-          />
-        </Group>
-        <Select
-          label='You are joining as?'
-          placeholder='Choose status'
-          data={['Reader', 'Writer']}
-          mt='md'
-          size='sm'
-          classNames={{ input: inputClass.input }}
-        />
-        <Group>
-          <TextInput
-            label='Email address'
-            className='w-full md:w-auto'
-            placeholder='hello@gmail.com'
-            type='email'
+        <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Group>
+            <TextInput
+              label='First name'
+              className='w-full md:w-auto'
+              size='sm'
+              classNames={{ input: inputClass.input }}
+              {...form.getInputProps('firstName')}
+            />
+            <TextInput
+              label='Last name'
+              className='w-full md:w-auto'
+              size='sm'
+              classNames={{ input: inputClass.input }}
+              {...form.getInputProps('lastName')}
+            />
+          </Group>
+          <Select
+            label='You are joining as?'
+            placeholder='Choose status'
+            data={['Reader', 'Writer']}
             mt='md'
             size='sm'
             classNames={{ input: inputClass.input }}
+            {...form.getInputProps('status')}
           />
-          <TextInput
-            label='Username'
-            className='w-full md:w-auto'
-            mt='md'
-            size='sm'
-            classNames={{ input: inputClass.input }}
-          />
-        </Group>
-        <PasswordStrengthCheck value={value}>
+          <Group>
+            <TextInput
+              label='Email address'
+              className='w-full md:w-auto'
+              type='email'
+              mt='md'
+              size='sm'
+              classNames={{ input: inputClass.input }}
+              {...form.getInputProps('email')}
+            />
+            <TextInput
+              label='Username'
+              className='w-full md:w-auto'
+              mt='md'
+              size='sm'
+              classNames={{ input: inputClass.input }}
+              {...form.getInputProps('username')}
+            />
+          </Group>
+          <PasswordStrengthCheck
+            onChange={(value) => {
+              form.setFieldValue('password', value)
+            }}
+            value={form.values.password}
+          >
+            <PasswordInput
+              label='Password'
+              placeholder='Choose a password'
+              mt='md'
+              size='sm'
+              classNames={{ input: inputClass.input }}
+              value={form.values.password}
+              {...form.getInputProps('password')}
+            />
+          </PasswordStrengthCheck>
           <PasswordInput
-            label='Password'
-            placeholder='Your password'
+            label='Confirm password'
+            placeholder='Re-type password'
             mt='md'
             size='sm'
             classNames={{ input: inputClass.input }}
-            value={value}
-            onChange={(event) => setValue(event.currentTarget.value)}
+            {...form.getInputProps('confirmPassword')}
           />
-        </PasswordStrengthCheck>
-        <PasswordInput
-          label='Confirm password'
-          placeholder='Re-type password'
-          mt='md'
-          size='sm'
-          classNames={{ input: inputClass.input }}
-        />
 
-        <ChButton
-          className='w-full mt-10'
-          color='#543EE0'
-          onClick={() => router.push('/otp-verification')}
-        >
-          Register
-        </ChButton>
+          <ChButton type='submit' className='w-full mt-10' color='#543EE0'>
+            Register
+          </ChButton>
+        </form>
       </Paper>
     </div>
   )

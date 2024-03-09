@@ -85,6 +85,7 @@ const SignIn = () => {
 
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <TextInput
+              type='email'
               label='Email address'
               size='sm'
               classNames={{ input: inputClass.input }}
@@ -110,7 +111,7 @@ const SignIn = () => {
           </form>
 
           <Text ta='center' mt='md'>
-            Don&apos;t have an account?
+            Don&apos;t have an account?{' '}
             <Anchor<'div'>
               c='#543EE0'
               fw={700}

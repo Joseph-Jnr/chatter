@@ -47,11 +47,13 @@ export function getStrength(password: string) {
 
 interface PasswordStrengthCheckProps {
   value: string
+  onChange: (value: string) => void
   children: React.ReactNode
 }
 
 const PasswordStrengthCheck = ({
   value,
+  onChange,
   children,
 }: PasswordStrengthCheckProps) => {
   const [popoverOpened, setPopoverOpened] = useState(false)
