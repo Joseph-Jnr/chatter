@@ -8,6 +8,8 @@ import {
   Text,
   Group,
   Select,
+  Loader,
+  rem,
 } from '@mantine/core'
 import classes from '@/styles/AuthStyle.module.css'
 import inputClass from '@/styles/InputStyle.module.css'
@@ -18,11 +20,15 @@ import PasswordStrengthCheck from '@/components/Auth/PasswordStrengthCheck'
 import { yupResolver } from 'mantine-form-yup-resolver'
 import * as yup from 'yup'
 import { useForm } from '@mantine/form'
+import { useState } from 'react'
+import { AuthRegister } from '@/services/apis'
+import { notifications } from '@mantine/notifications'
+import { IconCheck, IconX } from '@tabler/icons-react'
 
 const schema = yup.object().shape({
-  firstName: yup.string().required('This field is required'),
-  lastName: yup.string().required('This field is required'),
-  status: yup.string().required('This field is required'),
+  first_name: yup.string().required('This field is required'),
+  last_name: yup.string().required('This field is required'),
+  role: yup.string().required('This field is required'),
   email: yup
     .string()
     .required('Enter email address')
@@ -36,25 +42,55 @@ const schema = yup.object().shape({
 })
 
 const Register = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
   const form = useForm({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      status: '',
+      first_name: '',
+      last_name: '',
+      role: '',
       email: '',
       username: '',
       password: '',
-      confirmPassword: '',
     },
     validate: yupResolver(schema),
     validateInputOnChange: ['email', 'confirmPassword'],
+    transformValues: (values) => ({
+      ...values,
+    }),
   })
 
-  const handleSubmit = () => {
-    console.log(form.values)
-    //router.push('/otp-verification')
+  console.log(form.values)
+
+  const handleSubmit = async (values: any) => {
+    setIsSubmitting(true)
+    try {
+      // Omit confirmPassword from form values
+      const { confirmPassword, ...formData } = values
+
+      const res = await AuthRegister(formData)
+      console.log(res)
+      notifications.show({
+        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        withCloseButton: false,
+        color: 'green',
+        title: 'Registration Successful!',
+        message: 'Enjoy the experience.',
+      })
+      //router.push('/feeds')
+    } catch (error) {
+      console.log(error)
+      notifications.show({
+        icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+        withCloseButton: false,
+        color: 'red',
+        title: 'Registration failed!',
+        message: 'Something went wrong. Try again',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -77,14 +113,14 @@ const Register = () => {
               className='w-full md:w-auto'
               size='sm'
               classNames={{ input: inputClass.input }}
-              {...form.getInputProps('firstName')}
+              {...form.getInputProps('first_name')}
             />
             <TextInput
               label='Last name'
               className='w-full md:w-auto'
               size='sm'
               classNames={{ input: inputClass.input }}
-              {...form.getInputProps('lastName')}
+              {...form.getInputProps('last_name')}
             />
           </Group>
           <Select
@@ -98,7 +134,7 @@ const Register = () => {
             mt='md'
             size='sm'
             classNames={{ input: inputClass.input, option: inputClass.option }}
-            {...form.getInputProps('status')}
+            {...form.getInputProps('role')}
           />
           <Group>
             <TextInput
@@ -146,11 +182,11 @@ const Register = () => {
 
           <ChButton
             type='submit'
-            disabled={!form.isValid()}
+            disabled={!form.isValid() || isSubmitting}
             className='w-full mt-10'
             color='#543EE0'
           >
-            Register
+            {isSubmitting ? <Loader color='white' size={20} /> : 'Register'}
           </ChButton>
         </form>
       </Paper>

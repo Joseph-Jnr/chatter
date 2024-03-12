@@ -11,6 +11,7 @@ import {
   Divider,
   Group,
   rem,
+  Loader,
 } from '@mantine/core'
 import classes from '@/styles/AuthStyle.module.css'
 import inputClass from '@/styles/InputStyle.module.css'
@@ -19,7 +20,6 @@ import Logo from '@/components/Logo'
 import ChButton from '@/components/Buttons/ChButton'
 import AuthContainer from '@/layout/AuthContainer'
 import { GoogleButton } from '@/components/Buttons/GoogleButton'
-import { TwitterButton } from '@/components/Buttons/TwitterButton'
 import { yupResolver } from 'mantine-form-yup-resolver'
 import * as yup from 'yup'
 import { useForm } from '@mantine/form'
@@ -28,6 +28,8 @@ import { IconX } from '@tabler/icons-react'
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
+import { Login } from '@/services/apis'
+import { useState } from 'react'
 
 const schema = yup.object().shape({
   email: yup
@@ -38,6 +40,7 @@ const schema = yup.object().shape({
 })
 
 const SignIn = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
 
   const form = useForm({
@@ -47,19 +50,20 @@ const SignIn = () => {
     },
     validate: yupResolver(schema),
     validateInputOnChange: ['email'],
+    transformValues: (values) => ({
+      ...values,
+    }),
   })
 
-  const loginCredentials = {
-    email: 'jojo123@gmail.com',
-    password: 'password',
-  }
-
-  const handleSubmit = () => {
-    console.log(form.values)
-
-    if (form.values === loginCredentials) {
-      router.push('/feeds')
-    } else {
+  const handleSubmit = async (values: any) => {
+    setIsSubmitting(true)
+    try {
+      const res = await Login(values)
+      console.log(res)
+      //localStorage.setItem('chatterAuthToken', res?.data)
+      //router.push('/feeds')
+    } catch (error) {
+      console.log(error)
       notifications.show({
         icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
         withCloseButton: false,
@@ -67,6 +71,8 @@ const SignIn = () => {
         title: 'Authentication failed!',
         message: 'Incorrect email or password. Try again',
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -134,11 +140,11 @@ const SignIn = () => {
 
             <ChButton
               type='submit'
-              disabled={!form.isValid()}
+              disabled={!form.isValid() || isSubmitting}
               className='w-full mt-10'
               color='#543EE0'
             >
-              Login
+              {isSubmitting ? <Loader color='white' size={20} /> : 'Login'}
             </ChButton>
           </form>
 

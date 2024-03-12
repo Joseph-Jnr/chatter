@@ -5,7 +5,7 @@ import axios, {
 } from 'axios'
 
 const instance = axios.create({
-  //baseURL: 'https://trouve-core-api.up.railway.app/api/v1',
+  baseURL: 'https://f782-154-66-135-97.ngrok-free.app/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
