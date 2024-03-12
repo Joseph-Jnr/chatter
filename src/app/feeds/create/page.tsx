@@ -6,16 +6,18 @@ import {
   Alert,
   Button,
   Card,
+  FileInput,
   Group,
   NumberInput,
   Select,
   TagsInput,
   Textarea,
   Title,
+  rem,
 } from '@mantine/core'
 import classes from '@/styles/InputStyle.module.css'
 import Editor from '@/components/Editor'
-import { IconInfoCircle } from '@tabler/icons-react'
+import { IconInfoCircle, IconPhoto } from '@tabler/icons-react'
 import { yupResolver } from 'mantine-form-yup-resolver'
 import * as yup from 'yup'
 import { useForm } from '@mantine/form'
@@ -23,6 +25,7 @@ import { useCallback, useState } from 'react'
 
 const schema = yup.object().shape({
   content: yup.string().required('Content is required'),
+  image: yup.mixed().required('Image is required'),
   excerpt: yup
     .string()
     .required('Enter excerpt')
@@ -38,9 +41,14 @@ const schema = yup.object().shape({
 const CreateFeed = () => {
   const [content, setContent] = useState('')
 
+  const icon = (
+    <IconPhoto style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+  )
+
   const form = useForm({
     initialValues: {
       content: content,
+      image: '',
       excerpt: '',
       duration: '',
       category: '',
@@ -90,9 +98,18 @@ const CreateFeed = () => {
               <Title order={4} mb='lg'>
                 Additional info
               </Title>
+              <FileInput
+                leftSection={icon}
+                accept='image/png,image/jpeg'
+                label='Thumbnail'
+                description='Add an image for your post'
+                leftSectionPointerEvents='none'
+                {...form.getInputProps('image')}
+              />
               <Textarea
                 label='Excerpt'
                 autosize
+                mt={'md'}
                 description='A brief intro for your post.'
                 classNames={{ input: classes.input }}
                 {...form.getInputProps('excerpt')}
