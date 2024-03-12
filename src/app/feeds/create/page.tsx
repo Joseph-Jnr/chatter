@@ -10,7 +10,7 @@ import {
   NumberInput,
   Select,
   TagsInput,
-  TextInput,
+  Textarea,
   Title,
 } from '@mantine/core'
 import classes from '@/styles/InputStyle.module.css'
@@ -19,28 +19,46 @@ import { IconInfoCircle } from '@tabler/icons-react'
 import { yupResolver } from 'mantine-form-yup-resolver'
 import * as yup from 'yup'
 import { useForm } from '@mantine/form'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 const schema = yup.object().shape({
   content: yup.string().required('Content is required'),
-  excerpt: yup.string().required('Enter excerpt'),
+  excerpt: yup
+    .string()
+    .required('Enter excerpt')
+    .max(256, 'Maximum of 256 characters exceeded'),
   duration: yup.string().required('This field is required'),
   category: yup.string().required('Select a category'),
-  tags: yup.array(),
+  tags: yup
+    .array()
+    .required('This field is required')
+    .min(1, 'Add least 1 tag is required'),
 })
 
 const CreateFeed = () => {
+  const [content, setContent] = useState('')
+
   const form = useForm({
     initialValues: {
-      content: '',
+      content: content,
       excerpt: '',
       duration: '',
       category: '',
       tags: [],
     },
     validate: yupResolver(schema),
-    //validateInputOnChange: ['email'],
+    validateInputOnChange: ['tags', 'excerpt'],
   })
+
+  const handleContentChange = useCallback(
+    (newContent: string) => {
+      setContent(newContent)
+      form.setFieldValue('content', newContent)
+    },
+    [setContent, form.setFieldValue]
+  )
+
+  console.log(form.values)
 
   const handleSubmit = () => {
     console.log(form.values)
@@ -62,15 +80,19 @@ const CreateFeed = () => {
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <div className='grid grid-cols-1 gap-10 md:gap-20'>
             <div className='textarea'>
-              <Editor />
+              <Editor
+                onContentChange={handleContentChange}
+                {...form.getInputProps('content')}
+              />
             </div>
 
             <Card withBorder radius='md' className='aux-input p-5'>
               <Title order={4} mb='lg'>
                 Additional info
               </Title>
-              <TextInput
+              <Textarea
                 label='Excerpt'
+                autosize
                 description='A brief intro for your post.'
                 classNames={{ input: classes.input }}
                 {...form.getInputProps('excerpt')}

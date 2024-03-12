@@ -3,16 +3,12 @@ import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
-import { useMemo } from 'react'
 
 interface EditorProps {
-  postContent?: string
-  onChange: (content: string) => void
+  onContentChange: (content: string) => void
 }
 
-const content = ''
-
-const Editor = () => {
+const Editor = ({ onContentChange }: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -20,15 +16,12 @@ const Editor = () => {
       Image,
       Placeholder.configure({ placeholder: 'Your post content...' }),
     ],
-    content,
   })
 
-  useMemo(() => {
-    if (editor) {
-      console.log(JSON.stringify(editor.getHTML())) // Get current HTML of the document
-    }
-  }, [editor])
-  //console.log(editor?.getText())
+  editor?.on('update', () => {
+    const contentHTML = editor.getHTML()
+    onContentChange(contentHTML)
+  })
 
   return (
     <RichTextEditor editor={editor}>
