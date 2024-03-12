@@ -14,7 +14,7 @@ import * as yup from 'yup'
 import { useForm } from '@mantine/form'
 
 const schema = yup.object().shape({
-  otp: yup.string().required(),
+  otp: yup.string().required().min(4),
 })
 
 const OtpVerification = () => {
@@ -90,6 +90,7 @@ const OtpVerification = () => {
                 type='submit'
                 className='w-full mx-auto'
                 color='#543EE0'
+                disabled={!form.isValid()}
               >
                 Verify
               </ChButton>

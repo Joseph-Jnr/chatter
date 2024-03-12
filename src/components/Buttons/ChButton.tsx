@@ -27,18 +27,29 @@ const ChButton = ({
 }: ChButtonProps) => {
   const isSolid = variant === 'filled'
 
+  const buttonColor = isSolid
+    ? disabled
+      ? 'rgba(255, 255, 255, 0.5)' // Solid and disabled (opaque white)
+      : Array.isArray(color)
+      ? color[0]
+      : color
+    : disabled
+    ? 'rgba(255, 255, 255, 0.5)' // Not solid but disabled (opaque white)
+    : 'white' // Not solid and not disabled
+
   const buttonStyles = {
     background: isSolid
       ? Array.isArray(color)
         ? `linear-gradient(90deg, ${color.join(', ')})`
         : color
       : 'transparent',
-    color: isSolid ? 'white' : Array.isArray(color) ? color[0] : color,
+    //color: isSolid ? 'white' : Array.isArray(color) ? color[0] : color,
+    color: isSolid && !disabled ? 'white' : buttonColor,
     border: isSolid
       ? 'none'
       : `1px solid ${Array.isArray(color) ? color[0] : color}`,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.7 : 1,
+    opacity: disabled ? 0.5 : 1,
   }
 
   return (

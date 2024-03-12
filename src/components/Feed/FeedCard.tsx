@@ -6,6 +6,7 @@ import {
   Avatar,
   Box,
   Card,
+  Image,
   Notification,
   Text,
   Title,
@@ -20,7 +21,6 @@ import {
   IconHeartFilled,
   IconMessageCircle,
 } from '@tabler/icons-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -31,6 +31,7 @@ import { notifications } from '@mantine/notifications'
 interface FeedCardProps {
   title?: string
   author: string
+  author_username: string
   authorImage?: string
   date?: string
   duration?: number
@@ -42,12 +43,13 @@ interface FeedCardProps {
     bookmarks: number | 0
   }
   content?: string
-  thumbnail?: any
+  thumbnail: string
 }
 
 const FeedCard = ({
   title,
   author,
+  author_username,
   authorImage,
   date,
   duration,
@@ -80,9 +82,13 @@ const FeedCard = ({
     <>
       <Card withBorder padding='lg' className='w-fit' radius={'lg'}>
         <div className='user-info flex gap-4'>
-          <Avatar src={authorImage} size='lg' alt='author image' />
+          <Link href={`/${author_username}`}>
+            <Avatar src={authorImage} size='lg' alt='author image' />
+          </Link>
           <div className='flex flex-col'>
-            <Title order={4}>{author}</Title>
+            <Link href={`/${author_username}`}>
+              <Title order={4}>{author}</Title>
+            </Link>
             <div className={`${classes.meta} flex flex-col gap-2 mt-3`}>
               <div className='flex gap-1'>
                 <span className='text-xs'>{date}</span>
@@ -102,7 +108,7 @@ const FeedCard = ({
           <Text fz='sm' className='w-full' lineClamp={2} mt={10} mb={30}>
             {content}
           </Text>
-          <Image src={Woman} className='rounded-xl' alt='woman' />
+          <Image src={thumbnail} className='rounded-xl' alt='woman' />
         </div>
 
         <div className='flex items-center justify-between text-xs '>

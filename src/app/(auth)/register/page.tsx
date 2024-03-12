@@ -23,7 +23,10 @@ const schema = yup.object().shape({
   firstName: yup.string().required('This field is required'),
   lastName: yup.string().required('This field is required'),
   status: yup.string().required('This field is required'),
-  email: yup.string().required('This field is required'),
+  email: yup
+    .string()
+    .required('Enter email address')
+    .email('Invalid email address'),
   username: yup.string().required('This field is required'),
   password: yup.string().required('This field is required'),
   confirmPassword: yup
@@ -46,7 +49,7 @@ const Register = () => {
       confirmPassword: '',
     },
     validate: yupResolver(schema),
-    validateInputOnChange: ['confirmPassword'],
+    validateInputOnChange: ['email', 'confirmPassword'],
   })
 
   const handleSubmit = () => {
@@ -88,9 +91,13 @@ const Register = () => {
             label='You are joining as?'
             placeholder='Choose status'
             data={['Reader', 'Writer']}
+            allowDeselect={false}
+            comboboxProps={{
+              transitionProps: { transition: 'pop', duration: 200 },
+            }}
             mt='md'
             size='sm'
-            classNames={{ input: inputClass.input }}
+            classNames={{ input: inputClass.input, option: inputClass.option }}
             {...form.getInputProps('status')}
           />
           <Group>
@@ -137,7 +144,12 @@ const Register = () => {
             {...form.getInputProps('confirmPassword')}
           />
 
-          <ChButton type='submit' className='w-full mt-10' color='#543EE0'>
+          <ChButton
+            type='submit'
+            disabled={!form.isValid()}
+            className='w-full mt-10'
+            color='#543EE0'
+          >
             Register
           </ChButton>
         </form>

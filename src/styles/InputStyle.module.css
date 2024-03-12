@@ -2,3 +2,7 @@
 .input:focus {
   border: 1px solid #543ee0;
 }
+
+.option {
+  color: light-dark(var(--mantine-color-dark-7), var(--mantine-color-gray-6));
+}

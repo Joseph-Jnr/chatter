@@ -25,6 +25,9 @@ import * as yup from 'yup'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
+import { jwtDecode } from 'jwt-decode'
+import axios from 'axios'
 
 const schema = yup.object().shape({
   email: yup
@@ -43,6 +46,7 @@ const SignIn = () => {
       password: '',
     },
     validate: yupResolver(schema),
+    validateInputOnChange: ['email'],
   })
 
   const loginCredentials = {
@@ -65,6 +69,29 @@ const SignIn = () => {
       })
     }
   }
+
+  /* Google Auth */
+  const login = useGoogleLogin({
+    /* onSuccess: (tokenResponse) => {
+      console.log(tokenResponse)
+    }, */
+    onSuccess: async (response) => {
+      try {
+        const res = await axios.get(
+          'https://www.googleapis.com/oauth2/v3/userinfo',
+          {
+            headers: {
+              Authorization: `Bearer ${response.access_token}`,
+            },
+          }
+        )
+        console.log(res)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    onError: () => console.log('Login failed'),
+  })
 
   return (
     <AuthContainer>
@@ -105,7 +132,12 @@ const SignIn = () => {
               size='sm'
             />
 
-            <ChButton type='submit' className='w-full mt-10' color='#543EE0'>
+            <ChButton
+              type='submit'
+              disabled={!form.isValid()}
+              className='w-full mt-10'
+              color='#543EE0'
+            >
               Login
             </ChButton>
           </form>
@@ -128,9 +160,24 @@ const SignIn = () => {
             my='lg'
           />
 
+          {/* <div className='flex justify-center'>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                const decodedResponse = jwtDecode(
+                  credentialResponse?.credential
+                )
+                console.log(decodedResponse)
+              }}
+              onError={() => {
+                console.log('Login failed')
+              }}
+            />
+          </div> */}
+
           <Group grow mb='md' mt='md'>
-            <GoogleButton radius='xl'>Google</GoogleButton>
-            <TwitterButton radius='xl'>Twitter</TwitterButton>
+            <GoogleButton onClick={() => login()} radius='xl'>
+              Google
+            </GoogleButton>
           </Group>
         </Paper>
       </div>
