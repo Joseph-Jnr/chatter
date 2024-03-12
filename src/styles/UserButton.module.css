@@ -4,7 +4,7 @@
   padding: var(--mantine-spacing-md);
   color: light-dark(var(--mantine-color-dark-5), var(--mantine-color-dark-0));
   border-radius: 10px;
-  background-color: light-dark(var(--white), var(--mantine-color-dark-7));
+  background-color: light-dark(var(--white), var(--mantine-color-dark-6));
   /* background-color: light-dark(transparent, #010a1d); */
   border: 1px solid light-dark(var(--mantine-color-gray-3), transparent);
 

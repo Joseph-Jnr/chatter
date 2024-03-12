@@ -19,7 +19,6 @@ import {
 import { IconSearch } from '@tabler/icons-react'
 import { useDisclosure } from '@mantine/hooks'
 import Logo from '../Logo'
-import headerClass from './Header.module.css'
 import classes from '@/styles/InputStyle.module.css'
 import genClass from '@/styles/General.module.css'
 import Link from 'next/link'
@@ -70,9 +69,8 @@ const posts = [
   },
 ]
 
-const Header = ({ toggleSideNav }: any) => {
+const Header = ({ openNav, onClick }: any) => {
   const [opened, { open, close }] = useDisclosure(false)
-  const [burgerOpened, { toggle }] = useDisclosure()
   const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />
 
   const { colorScheme } = useMantineColorScheme()
@@ -82,21 +80,9 @@ const Header = ({ toggleSideNav }: any) => {
     colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
 
   return (
-    <Box
-      py={14}
-      px={13}
-      ml={{ base: 0, sm: 300 }}
-      className={`${headerClass.header} flex justify-between md:justify-center items-center sticky z-50`}
-    >
-      <div className='menu md:hidden' onClick={toggleSideNav}>
-        <Burger
-          opened={burgerOpened}
-          onClick={toggle}
-          size={'sm'}
-          aria-label='Toggle navigation'
-        />
-      </div>
-      <Logo root='/feeds' className='md:hidden' />
+    <>
+      <Burger opened={openNav} onClick={onClick} hiddenFrom='sm' size='sm' />
+      <Logo root='/feeds' />
       <TextInput
         leftSectionPointerEvents='none'
         leftSection={icon}
@@ -188,7 +174,7 @@ const Header = ({ toggleSideNav }: any) => {
           </ScrollArea>
         </Box>
       </Modal>
-    </Box>
+    </>
   )
 }
 

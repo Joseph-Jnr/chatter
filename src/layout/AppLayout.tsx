@@ -3,13 +3,13 @@
 import Header from '@/components/Header'
 import SideNav from './SideNav'
 import {
-  Box,
-  Paper,
+  AppShell,
+  Group,
   Title,
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core'
-import { useState } from 'react'
+import { useDisclosure } from '@mantine/hooks'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -17,11 +17,7 @@ interface AppLayoutProps {
 }
 
 const AppLayout = ({ children, title }: AppLayoutProps) => {
-  const [isNavVisible, setIsNavVisible] = useState(false)
-
-  const toggleSideNav = () => {
-    setIsNavVisible(!isNavVisible)
-  }
+  const [opened, { toggle }] = useDisclosure()
 
   const { colorScheme } = useMantineColorScheme()
   const theme = useMantineTheme()
@@ -32,24 +28,26 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
     colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
 
   return (
-    <div className='relative h-screen'>
-      <div className='flex'>
-        <Box className='z-50'>
-          <SideNav isNavVisible={isNavVisible} />
-        </Box>
-        <Box ml={{ base: 0, sm: 300 }} className='flex flex-col w-full'>
-          <Header toggleSideNav={toggleSideNav} />
-          <Box c={color} mih={'100vh'} bg={bg} p={13} py={100}>
-            <Box px={{ base: 4, sm: 40 }} pos={'relative'}>
-              <Title order={2} mb={30}>
-                {title}
-              </Title>
-              {children}
-            </Box>
-          </Box>
-        </Box>
-      </div>
-    </div>
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      padding='md'
+    >
+      <AppShell.Header>
+        <Group h='100%' className='flex justify-between items-center' px='md'>
+          <Header openNav={opened} onClick={toggle} />
+        </Group>
+      </AppShell.Header>
+      <AppShell.Navbar p='md'>
+        <SideNav />
+      </AppShell.Navbar>
+      <AppShell.Main c={color} bg={bg}>
+        <Title order={2} mb={30}>
+          {title}
+        </Title>
+        {children}
+      </AppShell.Main>
+    </AppShell>
   )
 }
 
