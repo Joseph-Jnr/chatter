@@ -24,11 +24,10 @@ const data = [
 const Analytics = () => {
   const stats = data.map((stat) => {
     const Icon = icons[stat.icon]
-
     return (
       <Paper withBorder p='md' radius='md' key={stat.title}>
         <Group justify='space-between'>
-          <Text size='xs' c='dimmed' className={''}>
+          <Text size='lg' c='dimmed' className={'font-bold'}>
             {stat.title}
           </Text>
           <Icon className={''} size='1.4rem' stroke={1.5} />
@@ -44,6 +43,7 @@ const Analytics = () => {
       </Paper>
     )
   })
+
   return (
     <AppLayout title='Analytics'>
       <SimpleGrid cols={{ base: 1, xs: 2, md: 4 }}>{stats}</SimpleGrid>
