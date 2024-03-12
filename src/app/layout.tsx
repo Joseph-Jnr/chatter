@@ -1,5 +1,3 @@
-'use client'
-
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/tiptap/styles.css'
@@ -7,12 +5,12 @@ import '@mantine/tiptap/styles.css'
 import { Box, ColorSchemeScript, MantineProvider } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import theme from '@/theme'
-import { metadata } from './sharedConstants'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import RouterTransition from '@/components/RouterTransition'
-import { usePathname } from 'next/navigation'
 import { GoogleOAuthProvider } from '@react-oauth/google'
+import { Metadata } from 'next'
+import AppBody from '@/layout/AppBody'
 
 const jakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '700'],
@@ -20,13 +18,30 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
 })
 
+export const metadata: Metadata = {
+  title: 'Chatter',
+  description:
+    'A home for writers and readers. Unleash the power of words, connect with like-minded readers and writers.',
+  openGraph: {
+    type: 'website',
+    url: 'https://chatter-appx.vercel.app',
+    title: 'Chatter',
+    description:
+      'A multi-functional platform where authors and readers can have access to their own content.',
+    siteName: 'Chatter',
+    images: [
+      {
+        url: 'https://drive.google.com/uc?export=view&id=1M3tNb1zfdzn-_rB7Jy1EWWVpZufSiQnZ',
+      },
+    ],
+  },
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const path = usePathname()
-
   return (
     <html lang='en'>
       <head>
@@ -36,11 +51,7 @@ export default function RootLayout({
           content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no'
         />
       </head>
-      <body
-        className={`${jakarta.className} ${
-          path !== '/' ? 'hide-scrollbar' : ''
-        }`}
-      >
+      <AppBody font={`${jakarta.className}`}>
         <MantineProvider theme={theme}>
           <Notifications position='top-center' />
           {/* <RouterTransition /> */}
@@ -50,7 +61,7 @@ export default function RootLayout({
             </Box>
           </GoogleOAuthProvider>
         </MantineProvider>
-      </body>
+      </AppBody>
     </html>
   )
 }
