@@ -10,6 +10,9 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { useLayoutEffect } from 'react'
+import { isAuthenticated } from '@/utils/Auth'
+import { redirect, usePathname } from 'next/navigation'
 
 interface AppLayoutProps {
   children: React.ReactNode
@@ -17,6 +20,29 @@ interface AppLayoutProps {
 }
 
 const AppLayout = ({ children, title }: AppLayoutProps) => {
+  const currentRoute = usePathname()
+  //Check is user is authenticated
+  /* useLayoutEffect(() => {
+    const isAuth = isAuthenticated
+    if (!isAuth) {
+      //reroute to sign in page if user is not authenticated
+      redirect('/sign-in')
+    }
+  }, []) */
+
+  useLayoutEffect(() => {
+    const isAuth = isAuthenticated
+
+    // Skip redirection to sign-in page if user is on the '/feeds/[slug]' route
+    if (
+      !isAuth &&
+      currentRoute !== '/sign-in' &&
+      !currentRoute.startsWith('/feeds/')
+    ) {
+      redirect('/sign-in')
+    }
+  }, [])
+
   const [opened, { toggle }] = useDisclosure()
 
   const { colorScheme } = useMantineColorScheme()
@@ -34,12 +60,18 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
       padding='md'
     >
       <AppShell.Header>
-        <Group h='100%' className='flex justify-between items-center' px='md'>
+        <Group
+          h='100%'
+          className={`flex items-center ${
+            isAuthenticated ? 'justify-between' : ''
+          }`}
+          px='md'
+        >
           <Header openNav={opened} onClick={toggle} />
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p='md'>
-        <SideNav />
+        <SideNav isAuthenticated={isAuthenticated} />
       </AppShell.Navbar>
       <AppShell.Main c={color} bg={bg}>
         <Title order={2} mb={30}>

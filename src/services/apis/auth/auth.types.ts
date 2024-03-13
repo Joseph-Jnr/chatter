@@ -8,7 +8,7 @@ export type CRegisterPayload = {
   last_name: string
   role: string
   email: string
-  username: string
+  user_name: string
   password: string
 }
 

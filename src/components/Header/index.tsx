@@ -22,6 +22,7 @@ import Logo from '../Logo'
 import classes from '@/styles/InputStyle.module.css'
 import genClass from '@/styles/General.module.css'
 import Link from 'next/link'
+import { isAuthenticated } from '@/utils/Auth'
 
 const people = [
   {
@@ -83,26 +84,30 @@ const Header = ({ openNav, onClick }: any) => {
     <>
       <Burger opened={openNav} onClick={onClick} hiddenFrom='sm' size='sm' />
       <Logo root='/feeds' />
-      <TextInput
-        leftSectionPointerEvents='none'
-        leftSection={icon}
-        placeholder='Search'
-        className='hidden md:block'
-        classNames={{ input: classes.input }}
-        onClick={open}
-        radius='xl'
-      />
-      <Group display={{ sm: 'none' }}>
-        <ActionIcon
-          onClick={open}
-          variant='default'
-          radius='xl'
-          size='lg'
-          aria-label='Search'
-        >
-          <IconSearch size={20} />
-        </ActionIcon>
-      </Group>
+      {isAuthenticated && (
+        <>
+          <TextInput
+            leftSectionPointerEvents='none'
+            leftSection={icon}
+            placeholder='Search'
+            className='hidden md:block'
+            classNames={{ input: classes.input }}
+            onClick={open}
+            radius='xl'
+          />
+          <Group display={{ sm: 'none' }}>
+            <ActionIcon
+              onClick={open}
+              variant='default'
+              radius='xl'
+              size='lg'
+              aria-label='Search'
+            >
+              <IconSearch size={20} />
+            </ActionIcon>
+          </Group>
+        </>
+      )}
 
       {/* Modal */}
       <Modal

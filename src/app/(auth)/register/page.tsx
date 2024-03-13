@@ -23,7 +23,7 @@ import { useForm } from '@mantine/form'
 import { useState } from 'react'
 import { AuthRegister } from '@/services/apis'
 import { notifications } from '@mantine/notifications'
-import { IconCheck, IconX } from '@tabler/icons-react'
+import { IconAlertHexagon, IconCheck, IconX } from '@tabler/icons-react'
 
 const schema = yup.object().shape({
   first_name: yup.string().required('This field is required'),
@@ -33,7 +33,7 @@ const schema = yup.object().shape({
     .string()
     .required('Enter email address')
     .email('Invalid email address'),
-  username: yup.string().required('This field is required'),
+  user_name: yup.string().required('This field is required'),
   password: yup.string().required('This field is required'),
   confirmPassword: yup
     .string()
@@ -51,7 +51,7 @@ const Register = () => {
       last_name: '',
       role: '',
       email: '',
-      username: '',
+      user_name: '',
       password: '',
     },
     validate: yupResolver(schema),
@@ -61,7 +61,7 @@ const Register = () => {
     }),
   })
 
-  console.log(form.values)
+  //console.log(form.values)
 
   const handleSubmit = async (values: any) => {
     setIsSubmitting(true)
@@ -71,13 +71,25 @@ const Register = () => {
 
       const res = await AuthRegister(formData)
       console.log(res)
-      notifications.show({
-        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-        withCloseButton: false,
-        color: 'green',
-        title: 'Registration Successful!',
-        message: 'Enjoy the experience.',
-      })
+      if (res?.success === true) {
+        notifications.show({
+          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+          withCloseButton: false,
+          color: 'green',
+          title: 'Registration Successful!',
+          message: 'Enjoy the experience.',
+        })
+      } else {
+        notifications.show({
+          icon: (
+            <IconAlertHexagon style={{ width: rem(20), height: rem(20) }} />
+          ),
+          withCloseButton: false,
+          color: 'red',
+          title: 'Oops!',
+          message: res?.message,
+        })
+      }
       //router.push('/feeds')
     } catch (error) {
       console.log(error)
@@ -103,7 +115,7 @@ const Register = () => {
           Register!
         </Title>
         <Text my={10} mb={50} fz='sm' c='gray' ta='center'>
-          Create an account whether you are a reader or writer
+          Create an account whether you are a reader or an author
         </Text>
 
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -126,7 +138,7 @@ const Register = () => {
           <Select
             label='You are joining as?'
             placeholder='Choose status'
-            data={['Reader', 'Writer']}
+            data={['Reader', 'Author']}
             allowDeselect={false}
             comboboxProps={{
               transitionProps: { transition: 'pop', duration: 200 },
@@ -152,7 +164,7 @@ const Register = () => {
               mt='md'
               size='sm'
               classNames={{ input: inputClass.input }}
-              {...form.getInputProps('username')}
+              {...form.getInputProps('user_name')}
             />
           </Group>
           <PasswordStrengthCheck

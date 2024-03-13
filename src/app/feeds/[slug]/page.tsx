@@ -1,12 +1,26 @@
 'use client'
 
 import AppLayout from '@/layout/AppLayout'
-import { Avatar, Box, Card, Notification, Textarea, rem } from '@mantine/core'
+import {
+  Avatar,
+  Box,
+  Card,
+  Modal,
+  Notification,
+  Text,
+  Textarea,
+  Title,
+  rem,
+  useComputedColorScheme,
+  useMantineColorScheme,
+  useMantineTheme,
+} from '@mantine/core'
 import classes from '@/styles/General.module.css'
 import inputClass from '@/styles/InputStyle.module.css'
 import {
   IconBook,
   IconBookmarkFilled,
+  IconExclamationCircle,
   IconHeartFilled,
 } from '@tabler/icons-react'
 import Image from 'next/image'
@@ -18,25 +32,45 @@ import { IconBookmark } from '@tabler/icons-react'
 import { IconEye } from '@tabler/icons-react'
 import { useState } from 'react'
 import { IconCheck } from '@tabler/icons-react'
+import { isAuthenticated } from '@/utils/Auth'
+import { useDisclosure } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
+import { useParams, useRouter } from 'next/navigation'
+import { IconMoodPuzzled } from '@tabler/icons-react'
 
 const FeedDetail = () => {
   const [isLiked, setIsLiked] = useState(false)
   const [isBookmarked, setIsBookmarked] = useState(false)
-  const [isAlertVisible, setIsAlertVisible] = useState(false)
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
+  const [opened, { open, close }] = useDisclosure(false)
+  const router = useRouter()
+  const { slug } = useParams<{ slug: string; item: string }>()
 
   const likeAction = () => {
-    setIsLiked(!isLiked)
+    isAuthenticated ? setIsLiked(!isLiked) : open()
   }
 
   const bookmarkAction = () => {
-    setIsBookmarked(!isBookmarked)
-    setIsAlertVisible(true)
+    if (isAuthenticated) {
+      setIsBookmarked(!isBookmarked)
 
-    setTimeout(() => {
-      setIsAlertVisible(false)
-    }, 2000)
+      notifications.show({
+        icon: checkIcon,
+        withCloseButton: false,
+        color: 'teal',
+        message: 'Saved to bookmarks',
+        className: 'mt-10 w-fit mx-auto',
+      })
+    } else {
+      open()
+    }
   }
+
+  const { colorScheme, setColorScheme } = useMantineColorScheme()
+  const theme = useMantineTheme()
+
+  const color =
+    colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
 
   return (
     <AppLayout>
@@ -282,33 +316,55 @@ const FeedDetail = () => {
           </div>
         </div>
 
-        <div className='comment-section mt-16'>
-          <Card>
-            <Textarea
-              label='Leave a comment'
-              placeholder='Write something...'
-              classNames={{ input: inputClass.input }}
-            />
-            <div className='mt-4'>
-              <ChButton color='#543ee0'>Comment</ChButton>
-            </div>
-          </Card>
-        </div>
+        {isAuthenticated && (
+          <div className='comment-section mt-16'>
+            <Card>
+              <Textarea
+                label='Leave a comment'
+                placeholder='Write something...'
+                classNames={{ input: inputClass.input }}
+              />
+              <div className='mt-4'>
+                <ChButton color='#543ee0'>Comment</ChButton>
+              </div>
+            </Card>
+          </div>
+        )}
       </div>
 
-      {/* Bookmark Notification */}
-      {isAlertVisible && (
-        <Box className='fixed top-10 left-0 right-0 mx-auto w-60 z-50 bounce-down-animation'>
-          <Notification
-            icon={checkIcon}
-            color='teal'
-            title='Bookmarked'
-            mx={'auto'}
-            withCloseButton={false}
-            mt='md'
-          />
-        </Box>
-      )}
+      <Modal
+        c={color}
+        opened={opened}
+        onClose={close}
+        radius={'lg'}
+        centered
+        withCloseButton={false}
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+      >
+        <div className='flex flex-col items-center'>
+          <IconMoodPuzzled color='red' size={60} />
+
+          <Title c={color} my={5} order={3}>
+            Ooops!
+          </Title>
+
+          <Text size='sm' className='text-center' mb={40} c='dimmed'>
+            You can't perform this action. Login or create an account in order
+            to interact with posts on Chatter.
+          </Text>
+
+          <ChButton
+            className='w-full'
+            onClick={() => router.push('/sign-in')}
+            color={'#544ee0'}
+          >
+            Login
+          </ChButton>
+        </div>
+      </Modal>
     </AppLayout>
   )
 }

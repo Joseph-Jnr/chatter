@@ -9,6 +9,8 @@ import {
   useMantineTheme,
   Text,
   AppShell,
+  Card,
+  Title,
 } from '@mantine/core'
 import {
   IconGauge,
@@ -17,6 +19,7 @@ import {
   IconChartBar,
   IconSun,
   IconMoon,
+  IconExclamationCircle,
 } from '@tabler/icons-react'
 import cx from 'clsx'
 import classes from '@/styles/SideNav.module.css'
@@ -24,10 +27,12 @@ import themeStyles from '@/styles/ActionToggle.module.css'
 import LinksGroup from '@/components/LinksGroup'
 import { UserButton } from '@/components/UserButton'
 import { IconCategory } from '@tabler/icons-react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import ChButton from '@/components/Buttons/ChButton'
 
-const SideNav = () => {
+const SideNav = ({ isAuthenticated }: any) => {
   const currentPath = usePathname()
+  const router = useRouter()
 
   const createLinksGroup = ({ label, icon, links, navLink }: any) => {
     const isNavLink = !!navLink
@@ -86,14 +91,37 @@ const SideNav = () => {
 
   return (
     <>
-      <AppShell.Section>
-        <div className={classes.user}>
-          <UserButton />
-        </div>
-      </AppShell.Section>
-      <ScrollArea className={classes.links}>
-        <div className={classes.linksInner}>{links}</div>
-      </ScrollArea>
+      {isAuthenticated ? (
+        <>
+          <AppShell.Section>
+            <div className={classes.user}>
+              <UserButton />
+            </div>
+          </AppShell.Section>
+          <ScrollArea className={classes.links}>
+            <div className={classes.linksInner}>{links}</div>
+          </ScrollArea>
+        </>
+      ) : (
+        <Card my={100} padding='lg' radius='md' className='text-center'>
+          <div className='flex justify-center'>
+            <IconExclamationCircle color='orange' size={60} />
+          </div>
+
+          <Title c={color} my={5} order={3}>
+            Access Restricted
+          </Title>
+
+          <Text size='sm' mb={40} c='dimmed'>
+            Login or create an account to access all features of Chatter.
+          </Text>
+
+          <ChButton onClick={() => router.push('/sign-in')} color={'#544ee0'}>
+            Login
+          </ChButton>
+        </Card>
+      )}
+
       <AppShell.Section>
         <Group
           justify='start'
