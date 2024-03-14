@@ -16,8 +16,6 @@ import {
   IconBookmarkFilled,
   IconHeartFilled,
 } from '@tabler/icons-react'
-import Image from 'next/image'
-import { Woman } from '@/assets'
 import ChButton from '@/components/Buttons/ChButton'
 import { IconHeart } from '@tabler/icons-react'
 import formatStats from '@/services/formatStats'
@@ -31,7 +29,7 @@ import { notifications } from '@mantine/notifications'
 import { useParams, useRouter } from 'next/navigation'
 import { IconMoodPuzzled } from '@tabler/icons-react'
 import Comment from '@/components/Feed/Comment'
-import { GetPosts, GetSinglePost } from '@/services/apis'
+import { GetPosts, GetSinglePost, UpdateViewsCount } from '@/services/apis'
 import { useQuery } from '@tanstack/react-query'
 import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
@@ -62,6 +60,21 @@ const FeedDetail = () => {
   }
 
   GetPostIdFromSlug(slug)
+
+  // Update views count
+  useEffect(() => {
+    // Check if postId is not empty
+    if (postId) {
+      // Call UpdateViews to update the views count
+      UpdateViewsCount(postId)
+        .then(() => {
+          console.log('Views count updated successfully')
+        })
+        .catch((error) => {
+          console.error('Error updating views count:', error)
+        })
+    }
+  }, [postId])
 
   const { data: postDetail, isFetching } = useQuery({
     queryKey: ['postDetail', postId],

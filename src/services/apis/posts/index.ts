@@ -58,6 +58,15 @@ export const DeleteBookmark = async (
     throw err
   }
 }
+export const UpdateViewsCount = async (postId: string): Promise<any> => {
+  try {
+    const url = `/post/update-view/${postId}`
+    const res = await axios.put(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
 export const CommentPost = async (
   payload: CCommentsPayload,
   postId?: string
