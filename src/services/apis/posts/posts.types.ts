@@ -2,7 +2,8 @@ export type CPostPayload = {
   title: string
   content: string
   tags: Array<string>
-  image: string
+  imageUrl: string
+  slug: string
   excerpt: string
   authorId: string
   duration: number

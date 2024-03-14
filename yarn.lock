@@ -169,6 +169,13 @@
     react-textarea-autosize "8.5.3"
     type-fest "^3.13.1"
 
+"@mantine/dropzone@^7.6.2":
+  version "7.6.2"
+  resolved "https://registry.yarnpkg.com/@mantine/dropzone/-/dropzone-7.6.2.tgz#79b76b8c4904501a0dce7a6009212b393965f3f8"
+  integrity sha512-xhbUKWGzLkZfZu5rEqUQsVhLvfEkDtR8zxyCnMI9UgXcJ+xbzk9aqfwTd4c3+MogqINv5EHlyTcJR1SXGN592w==
+  dependencies:
+    react-dropzone-esm "15.0.1"
+
 "@mantine/form@^7.6.1":
   version "7.6.1"
   resolved "https://registry.yarnpkg.com/@mantine/form/-/form-7.6.1.tgz#b98307c91ae8fe5559590d2eefe6c60c22868330"
@@ -2852,6 +2859,13 @@ react-dom@^18:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-dropzone-esm@15.0.1:
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/react-dropzone-esm/-/react-dropzone-esm-15.0.1.tgz#8c689638aaa9feb5b2a429dd565acfa6792263e5"
+  integrity sha512-RdeGpqwHnoV/IlDFpQji7t7pTtlC2O1i/Br0LWkRZ9hYtLyce814S71h5NolnCZXsIN5wrZId6+8eQj2EBnEzg==
+  dependencies:
+    prop-types "^15.8.1"
+
 react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
@@ -2887,6 +2901,11 @@ react-remove-scroll@^2.5.7:
     tslib "^2.1.0"
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
+
+react-slugify@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-slugify/-/react-slugify-3.0.3.tgz#f6827ef0dedfa31789fc2906ed3e201351c85140"
+  integrity sha512-CWQvLIyG8vOH8DWBY+fKvJHtd2IWLHVk0mfQlFS28kVckQBv06NGJajAOurS3+HSgsmYP/6R9qDAdJYSotXMWA==
 
 react-style-singleton@^2.2.1:
   version "2.2.1"

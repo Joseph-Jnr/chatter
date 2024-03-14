@@ -9,7 +9,7 @@ import { useForm } from '@mantine/form'
 import { useState } from 'react'
 import { CommentPost } from '@/services/apis'
 import { notifications } from '@mantine/notifications'
-import { IconCheck } from '@tabler/icons-react'
+import { IconCheck, IconX } from '@tabler/icons-react'
 
 const schema = yup.object().shape({
   comment: yup.string().required('Enter comment'),
@@ -49,7 +49,7 @@ const CommentForm = ({ postId, refetch }: CommentFormProps) => {
     } catch (error) {
       console.log(error)
       notifications.show({
-        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
         withCloseButton: false,
         color: 'red',
         title: 'Ooops!',
