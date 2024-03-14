@@ -43,7 +43,7 @@ const Comment = ({ postId }: CommentProps) => {
   return (
     <div className='mb-10'>
       {postComments.map((comment) => (
-        <div className='mb-10'>
+        <div key={comment.id} className='mb-10'>
           <Group>
             <Avatar
               src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png'

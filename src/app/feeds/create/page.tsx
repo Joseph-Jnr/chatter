@@ -63,7 +63,7 @@ const CreateFeed = () => {
       setContent(newContent)
       form.setFieldValue('content', newContent)
     },
-    [setContent, form.setFieldValue]
+    [setContent, form.setFieldValue, form]
   )
 
   console.log(form.values)

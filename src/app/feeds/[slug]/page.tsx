@@ -222,7 +222,7 @@ const FeedDetail = () => {
           </Title>
 
           <Text size='sm' className='text-center' mb={40} c='dimmed'>
-            You can't perform this action. Login or create an account in order
+            You cannot perform this action. Login or create an account in order
             to interact with posts on Chatter.
           </Text>
 
