@@ -19,9 +19,7 @@ export type CBookmarksPayload = {
 }
 
 export type CCommentsPayload = {
-  postId: string
-  userId: string
-  comment: string
+  comment?: string
 }
 
 export type CSearchPayload = {

@@ -13,7 +13,7 @@ interface CommentProps {
 }
 
 const Comment = ({ postId }: CommentProps) => {
-  const { data: postDetail } = useQuery({
+  const { data: postDetail, refetch } = useQuery({
     queryKey: ['postDetail', postId],
     queryFn: () => GetSinglePost(postId),
   })
@@ -48,7 +48,7 @@ const Comment = ({ postId }: CommentProps) => {
       </ScrollArea>
 
       {/* Comment form */}
-      <CommentForm postId={postId} />
+      <CommentForm postId={postId} refetch={refetch} />
     </Card>
   )
 }

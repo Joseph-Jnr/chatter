@@ -59,8 +59,8 @@ export const DeleteBookmark = async (
   }
 }
 export const CommentPost = async (
-  postId: string,
-  payload: CCommentsPayload
+  payload: CCommentsPayload,
+  postId?: string
 ): Promise<any> => {
   try {
     const url = `/comment/add-comment/${postId}`

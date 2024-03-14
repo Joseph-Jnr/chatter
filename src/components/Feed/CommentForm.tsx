@@ -1,19 +1,83 @@
-import { Textarea } from '@mantine/core'
+'use client'
+
+import { Textarea, rem } from '@mantine/core'
 import inputClass from '@/styles/InputStyle.module.css'
 import ChButton from '../Buttons/ChButton'
+import { yupResolver } from 'mantine-form-yup-resolver'
+import * as yup from 'yup'
+import { useForm } from '@mantine/form'
+import { useState } from 'react'
+import { CommentPost } from '@/services/apis'
+import { notifications } from '@mantine/notifications'
+import { IconCheck } from '@tabler/icons-react'
 
-const CommentForm = ({ postId }: { postId: string }) => {
+const schema = yup.object().shape({
+  comment: yup.string().required('Enter comment'),
+})
+
+interface CommentFormProps {
+  postId: string
+  refetch: () => void
+}
+
+const CommentForm = ({ postId, refetch }: CommentFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const form = useForm({
+    initialValues: {
+      comment: '',
+    },
+    validate: yupResolver(schema),
+    transformValues: (values) => ({
+      ...values,
+    }),
+  })
+
+  const handleSubmit = async (values: any) => {
+    setIsSubmitting(true)
+    try {
+      const res = await CommentPost(values, postId)
+      console.log(res)
+      form.setFieldValue('comment', '')
+      refetch()
+      notifications.show({
+        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        withCloseButton: false,
+        color: 'green',
+        message: 'Comment sent',
+      })
+    } catch (error) {
+      console.log(error)
+      notifications.show({
+        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        withCloseButton: false,
+        color: 'red',
+        title: 'Ooops!',
+        message: 'Something went wrong. Try again',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <div>
+    <form onSubmit={form.onSubmit(handleSubmit)}>
       <Textarea
         label='Leave a comment'
         placeholder='Write something...'
         classNames={{ input: inputClass.input }}
+        {...form.getInputProps('comment')}
       />
       <div className='mt-4'>
-        <ChButton color='#543ee0'>Comment</ChButton>
+        <ChButton
+          type='submit'
+          disabled={!form.isValid() || isSubmitting}
+          color='#543ee0'
+        >
+          Comment
+        </ChButton>
       </div>
-    </div>
+    </form>
   )
 }
 
