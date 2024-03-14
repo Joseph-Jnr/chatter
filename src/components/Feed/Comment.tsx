@@ -1,8 +1,7 @@
 import { GetSinglePost } from '@/services/apis'
-import feeds from '@/services/feedsMock'
-import { Text, Avatar, Group } from '@mantine/core'
+import { Text, Avatar, Group, Card, ScrollArea } from '@mantine/core'
+import CommentForm from './CommentForm'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
 
 interface CommentProps {
   id?: string
@@ -14,55 +13,43 @@ interface CommentProps {
 }
 
 const Comment = ({ postId }: CommentProps) => {
-  const [comments, setComments] = useState<CommentProps[]>([])
+  const { data: postDetail } = useQuery({
+    queryKey: ['postDetail', postId],
+    queryFn: () => GetSinglePost(postId),
+  })
 
-  useEffect(() => {
-    const fetchPostAndComments = async () => {
-      try {
-        const res = await GetSinglePost(postId)
-        if (res?.data?.comments) {
-          setComments(res.data.comments)
-          console.log(res.data.comments)
-        }
-      } catch (error) {
-        console.error('Error:', error)
-      }
-    }
-
-    fetchPostAndComments()
-  }, [postId])
-  /* try {
-    const res = await GetSinglePost(postId)
-    console.log(res)
-  } catch (error) {
-    console.error('Error:', error)
-  } */
-
-  const postComments = feeds[0].comments
+  const comments = postDetail?.data?.comments
 
   return (
-    <div className='mb-10'>
-      {postComments.map((comment) => (
-        <div key={comment.id} className='mb-10'>
-          <Group>
-            <Avatar
-              src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png'
-              alt='Jacob Warnhalter'
-              radius='xl'
-            />
-            <div>
-              <Text size='sm'>Jacob Warnhalter</Text>
-              <Text size='xs' c='dimmed'>
-                10 minutes ago
+    <Card>
+      <ScrollArea mah={500}>
+        <div className='mb-10'>
+          {comments?.map((comment: any) => (
+            <div key={comment.id} className='mb-10'>
+              <Group>
+                <Avatar
+                  src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png'
+                  alt='Jacob Warnhalter'
+                  radius='xl'
+                />
+                <div>
+                  <Text size='sm'>Jacob Warnhalter</Text>
+                  <Text size='xs' c='dimmed'>
+                    10 minutes ago
+                  </Text>
+                </div>
+              </Group>
+              <Text pl={54} pt='sm' size='sm'>
+                {comment.comment}
               </Text>
             </div>
-          </Group>
-          <Text pl={54} pt='sm' size='sm'>
-            {comment.comment}
-          </Text>
+          ))}
         </div>
-      ))}
-    </div>
+      </ScrollArea>
+
+      {/* Comment form */}
+      <CommentForm postId={postId} />
+    </Card>
   )
 }
 

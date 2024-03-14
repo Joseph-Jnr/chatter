@@ -3,24 +3,17 @@
 import AppLayout from '@/layout/AppLayout'
 import {
   Avatar,
-  Box,
-  Card,
   Modal,
-  Notification,
   Text,
-  Textarea,
   Title,
   rem,
-  useComputedColorScheme,
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core'
 import classes from '@/styles/General.module.css'
-import inputClass from '@/styles/InputStyle.module.css'
 import {
   IconBook,
   IconBookmarkFilled,
-  IconExclamationCircle,
   IconHeartFilled,
 } from '@tabler/icons-react'
 import Image from 'next/image'
@@ -38,7 +31,10 @@ import { notifications } from '@mantine/notifications'
 import { useParams, useRouter } from 'next/navigation'
 import { IconMoodPuzzled } from '@tabler/icons-react'
 import Comment from '@/components/Feed/Comment'
-import { GetSinglePost } from '@/services/apis'
+import { GetPosts, GetSinglePost } from '@/services/apis'
+import { useQuery } from '@tanstack/react-query'
+import FormatDate from '@/components/FormatDate'
+import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
 
 const FeedDetail = () => {
   const [isLiked, setIsLiked] = useState(false)
@@ -47,26 +43,32 @@ const FeedDetail = () => {
   const [opened, { open, close }] = useDisclosure(false)
   const router = useRouter()
   const { slug } = useParams<{ slug: string; item: string }>()
+  const [postId, setPostId] = useState('')
 
-  const [comments, setComments] = useState([])
-
-  const postId = ''
-
-  useEffect(() => {
-    const fetchPostAndComments = async () => {
-      try {
-        const res = await GetSinglePost(postId)
-        if (res?.data?.comments) {
-          setComments(res.data.comments)
-          console.log(res.data.comments)
-        }
-      } catch (error) {
-        console.error('Error:', error)
+  // Get post ID from slug
+  const GetPostIdFromSlug = async (slug: string) => {
+    try {
+      const posts = await GetPosts()
+      const post = posts.data.find((post: any) => post.slug === slug) // Find post with matching slug
+      if (post) {
+        setPostId(post.id)
+        return post.id // Return post ID if found
+      } else {
+        throw new Error(`Post with slug ${slug} not found`)
       }
+    } catch (err) {
+      throw err
     }
+  }
 
-    fetchPostAndComments()
-  }, [slug])
+  GetPostIdFromSlug(slug)
+
+  const { data: postDetail, isFetching } = useQuery({
+    queryKey: ['postDetail', postId],
+    queryFn: () => GetSinglePost(postId),
+  })
+
+  const postDetailData = postDetail?.data
 
   const likeAction = () => {
     isAuthenticated ? setIsLiked(!isLiked) : open()
@@ -97,107 +99,100 @@ const FeedDetail = () => {
   return (
     <AppLayout>
       <div className='md:mx-40'>
-        <h2 className='text-2xl lg:text-4xl font-bold'>Starting out in Tech</h2>
+        {isFetching ? (
+          <SingleFeedSkeleton />
+        ) : (
+          <>
+            <h2 className='text-2xl lg:text-4xl font-bold'>
+              {postDetailData?.title}
+            </h2>
 
-        <div className={`${classes.meta} flex flex-col gap-2 my-5`}>
-          <div className='flex gap-1'>
-            <span className='text-xs'>March 3 2024</span>
-          </div>
-          <div className='flex gap-1'>
-            <IconBook size={14} />
-            <span className='text-xs'>5 mins read</span>
-          </div>
-        </div>
+            <div className={`${classes.meta} flex flex-col gap-2 my-5`}>
+              <div className='flex gap-1'>
+                <span className='text-xs'>
+                  <FormatDate
+                    data={postDetailData?.created_at}
+                    formatType='fullDate'
+                  />
+                </span>
+              </div>
+              <div className='flex gap-1'>
+                <IconBook size={14} />
+                <span className='text-xs'>
+                  {postDetailData?.duration} mins read
+                </span>
+              </div>
+            </div>
 
-        <div className='flex items-center gap-2'>
-          <Avatar
-            src='https://avatars.githubusercontent.com/u/67343514?v=4'
-            size={40}
-            radius={80}
-          />
-          <p className='text-sm'>by Grace Davison</p>
-        </div>
-
-        <div className='my-10'>
-          <Image src={Woman} className='rounded-lg' alt='image' />
-        </div>
-
-        <div className='content'>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quasi,
-          architecto vitae. Corrupti facilis totam voluptatem id velit delectus
-          ex quam tempore commodi modi, nulla quisquam a? Voluptates iusto
-          laborum impedit! Mollitia, minus! Nam corporis ea doloremque laborum,
-          quod quisquam quam impedit? Pariatur numquam, eaque, reiciendis
-          accusamus temporibus natus quidem ea doloremque eos repudiandae sint
-          explicabo ipsa dolorem, omnis facilis accusantium. Dicta reiciendis,
-          repellat, recusandae eaque exercitationem pariatur ex officiis debitis
-          suscipit cupiditate, adipisci ad dolores commodi iusto molestiae
-          voluptatem voluptates ratione consequatur alias facere! Impedit cumque
-          quis nemo facere ut. Labore, sed amet temporibus molestias autem
-          tempora aliquam in facere accusamus deleniti laboriosam reprehenderit
-          non rem. Saepe molestias, animi rem repellendus placeat, dolore
-          necessitatibus sunt quae sed dolores nobis omnis! Perferendis adipisci
-          ipsum, quia, nulla consequuntur deserunt voluptas tempora repellendus
-          iure doloremque hic veritatis harum? Aut ab, debitis, minima,
-          molestias illo quas hic ex praesentium libero velit quae suscipit
-          quibusdam.
-        </div>
-
-        <div className='reactions mt-10'>
-          <div className='icons flex items-center gap-5 md:gap-7'>
-            <div
-              className='flex items-center gap-1 hover:cursor-pointer'
-              onClick={likeAction}
-            >
-              {isLiked ? (
-                <IconHeartFilled size={18} className='text-red-600' />
-              ) : (
-                <IconHeart size={18} stroke={1} />
-              )}
-              <p className='flex gap-1'>
-                {formatStats(5000)}{' '}
-                <span className='hidden md:block'>likes</span>
+            <div className='flex items-center gap-2'>
+              <Avatar
+                src={postDetailData?.author?.imageUrl}
+                size={40}
+                radius={80}
+              />
+              <p className='text-sm'>
+                by {postDetailData?.author?.first_name}{' '}
+                {postDetailData?.author?.last_name}
               </p>
             </div>
 
-            <div
-              className='flex items-center hover:cursor-pointer gap-1'
-              onClick={bookmarkAction}
-            >
-              {isBookmarked ? (
-                <IconBookmarkFilled size={18} />
-              ) : (
-                <IconBookmark size={18} stroke={1} />
-              )}
-              <p className='flex gap-1'>
-                {formatStats(100)}{' '}
-                <span className='hidden md:block'>bookmarks</span>
-              </p>
+            <div className='my-10'>
+              <img
+                src={postDetailData?.imageUrl}
+                className='rounded-lg'
+                alt='image'
+              />
             </div>
 
-            <div className='flex items-center gap-1'>
-              <IconEye size={18} stroke={1} />
-              <p className='flex gap-1'>
-                {formatStats(701000)}{' '}
-                <span className='hidden md:block'>views</span>
-              </p>
+            <div className='content'>{postDetailData?.content}</div>
+
+            <div className='reactions mt-10'>
+              <div className='icons flex items-center gap-5 md:gap-7'>
+                <div
+                  className='flex items-center gap-1 hover:cursor-pointer'
+                  onClick={likeAction}
+                >
+                  {isLiked ? (
+                    <IconHeartFilled size={18} className='text-red-600' />
+                  ) : (
+                    <IconHeart size={18} stroke={1} />
+                  )}
+                  <p className='flex gap-1'>
+                    {formatStats(postDetailData?.likes?.length)}{' '}
+                    <span className='hidden md:block'>likes</span>
+                  </p>
+                </div>
+
+                <div
+                  className='flex items-center hover:cursor-pointer gap-1'
+                  onClick={bookmarkAction}
+                >
+                  {isBookmarked ? (
+                    <IconBookmarkFilled size={18} />
+                  ) : (
+                    <IconBookmark size={18} stroke={1} />
+                  )}
+                  <p className='flex gap-1'>
+                    {formatStats(postDetailData?.bookmarks?.length)}{' '}
+                    <span className='hidden md:block'>bookmarks</span>
+                  </p>
+                </div>
+
+                <div className='flex items-center gap-1'>
+                  <IconEye size={18} stroke={1} />
+                  <p className='flex gap-1'>
+                    {formatStats(postDetailData?.views)}{' '}
+                    <span className='hidden md:block'>views</span>
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {isAuthenticated && (
           <div className='comment-section mt-16'>
-            <Card>
-              <Comment postId='564c8f4b-98d6-4736-97d4-6bf6ee60ef85' />
-              <Textarea
-                label='Leave a comment'
-                placeholder='Write something...'
-                classNames={{ input: inputClass.input }}
-              />
-              <div className='mt-4'>
-                <ChButton color='#543ee0'>Comment</ChButton>
-              </div>
-            </Card>
+            <Comment postId={postId} />
           </div>
         )}
       </div>
