@@ -60,8 +60,13 @@ const SignIn = () => {
     try {
       const res = await Login(values)
       console.log(res)
-      //localStorage.setItem('chatterAuthToken', res?.data)
-      //router.push('/feeds')
+      localStorage.setItem('chatterAuthToken', res?.data)
+      router.push('/feeds')
+
+      /* cookies().set('currentUser', JSON.stringify(res?.data), {
+        maxAge: 3600,
+        path: '/',
+      }) */
     } catch (error) {
       console.log(error)
       notifications.show({

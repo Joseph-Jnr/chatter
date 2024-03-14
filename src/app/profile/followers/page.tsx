@@ -1,7 +1,12 @@
+'use client'
+
+import EmptyState from '@/components/EmptyState'
+import FollowersSkeleton from '@/components/Skeletons/FollowersSkeleton'
 import AppLayout from '@/layout/AppLayout'
-import followers from '@/services/followersMock'
+import { GetAllFollowers } from '@/services/apis'
 import { Avatar, Box, Button, Group, Text } from '@mantine/core'
-import React from 'react'
+import { IconUsersGroup } from '@tabler/icons-react'
+import { useQuery } from '@tanstack/react-query'
 
 interface FollowerCardProps {
   name: string
@@ -35,14 +40,39 @@ const FollowerCard = ({ name, username, image }: FollowerCardProps) => {
 }
 
 const Followers = () => {
+  //Fetching followers
+  const { data: followers, isFetching } = useQuery({
+    queryKey: ['followers'],
+    queryFn: GetAllFollowers,
+  })
+  const followersData = followers?.data
+
   return (
     <AppLayout title='Followers'>
       <p> People that follow you</p>
 
       <div className='mt-10'>
-        {followers.map((follower) => (
-          <FollowerCard key={follower.id} {...follower} />
-        ))}
+        {isFetching ? (
+          <>
+            {[...Array(3)].map((_, index) => (
+              <FollowersSkeleton key={index} />
+            ))}
+          </>
+        ) : (
+          <>
+            {followersData?.length < 1 ? (
+              <EmptyState
+                icon={<IconUsersGroup size={40} />}
+                title='You do not have any followers yet'
+                description='Share your posts with friends and family. This gives you a chance to be spotted.'
+              />
+            ) : (
+              followersData?.map((follower: any) => (
+                <FollowerCard key={follower.id} {...follower} />
+              ))
+            )}
+          </>
+        )}
       </div>
     </AppLayout>
   )

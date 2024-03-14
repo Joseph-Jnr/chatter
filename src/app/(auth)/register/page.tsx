@@ -90,7 +90,7 @@ const Register = () => {
           message: res?.message,
         })
       }
-      //router.push('/feeds')
+      router.push('/feeds')
     } catch (error) {
       console.log(error)
       notifications.show({

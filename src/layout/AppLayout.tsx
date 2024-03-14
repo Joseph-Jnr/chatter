@@ -22,15 +22,8 @@ interface AppLayoutProps {
 const AppLayout = ({ children, title }: AppLayoutProps) => {
   const currentRoute = usePathname()
   //Check is user is authenticated
-  /* useLayoutEffect(() => {
-    const isAuth = isAuthenticated
-    if (!isAuth) {
-      //reroute to sign in page if user is not authenticated
-      redirect('/sign-in')
-    }
-  }, []) */
 
-  useLayoutEffect(() => {
+  /*  useLayoutEffect(() => {
     const isAuth = isAuthenticated
 
     // Skip redirection to sign-in page if user is on the '/feeds/[slug]' route
@@ -41,7 +34,7 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
     ) {
       redirect('/sign-in')
     }
-  }, [])
+  }, []) */
 
   const [opened, { toggle }] = useDisclosure()
 

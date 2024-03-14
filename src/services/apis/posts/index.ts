@@ -39,17 +39,44 @@ export const BookmarkPost = async (
   payload: CBookmarksPayload
 ): Promise<any> => {
   try {
-    const url = '/post/bookmark'
+    const url = '/bookmark/save-bookmark'
     const res = await axios.post(url, payload)
     return res.data
   } catch (err) {
     throw err
   }
 }
-export const CommentPost = async (payload: CCommentsPayload): Promise<any> => {
+export const DeleteBookmark = async (
+  postId: string,
+  payload: CBookmarksPayload
+): Promise<any> => {
   try {
-    const url = '/post/comment'
+    const url = `/bookmark/remove-bookmark/${postId}`
+    const res = await axios.delete(url, { data: payload })
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+export const CommentPost = async (
+  postId: string,
+  payload: CCommentsPayload
+): Promise<any> => {
+  try {
+    const url = `/comment/add-comment/${postId}`
     const res = await axios.post(url, payload)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+export const DeleteComment = async (
+  postId: string,
+  payload: CCommentsPayload
+): Promise<any> => {
+  try {
+    const url = `/comment/remove-comment/${postId}`
+    const res = await axios.delete(url, { data: payload })
     return res.data
   } catch (err) {
     throw err
@@ -69,6 +96,28 @@ export const SearchChatter = async (payload: CSearchPayload): Promise<any> => {
 export const GetPosts = async () => {
   try {
     const url = '/post'
+    const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
+// Get author posts
+export const GetAuthorPosts = async () => {
+  try {
+    const url = '/post/author-posts'
+    const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
+// Get posts
+export const GetSinglePost = async (postId: string) => {
+  try {
+    const url = `/post/${postId}`
     const res = await axios.get(url)
     return res.data
   } catch (err) {

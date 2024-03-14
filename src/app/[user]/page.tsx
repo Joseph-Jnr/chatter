@@ -2,6 +2,7 @@ import { Card, Avatar, Text, Group, Button, Title } from '@mantine/core'
 import classes from '@/styles/General.module.css'
 import AppLayout from '@/layout/AppLayout'
 import { IconTemplate } from '@tabler/icons-react'
+import EmptyState from '@/components/EmptyState'
 
 const stats = [
   { value: '34K', label: 'Followers' },
@@ -58,14 +59,15 @@ const User = () => {
             Posts
           </Title>
         </div>
-        <div className='empty-state flex flex-col items-center gap-3 my-16'>
+        <EmptyState icon={<IconTemplate size={40} />} title='No Post yet' />
+        {/* <div className='empty-state flex flex-col items-center gap-3 my-16'>
           <div
             className={`${classes.icon} w-20 h-20 rounded-full flex justify-center items-center`}
           >
             <IconTemplate size={40} />
           </div>
           <h3 className='font-semibold'>No post</h3>
-        </div>
+        </div> */}
       </div>
     </AppLayout>
   )

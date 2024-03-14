@@ -11,6 +11,7 @@ import {
   AppShell,
   Card,
   Title,
+  Skeleton,
 } from '@mantine/core'
 import {
   IconGauge,
@@ -29,10 +30,18 @@ import { UserButton } from '@/components/UserButton'
 import { IconCategory } from '@tabler/icons-react'
 import { usePathname, useRouter } from 'next/navigation'
 import ChButton from '@/components/Buttons/ChButton'
+import { useQuery } from '@tanstack/react-query'
+import { GetProfile } from '@/services/apis'
 
 const SideNav = ({ isAuthenticated }: any) => {
   const currentPath = usePathname()
   const router = useRouter()
+
+  //Fetching profile
+  const { data: profile, isFetching } = useQuery({
+    queryKey: ['profile'],
+    queryFn: GetProfile,
+  })
 
   const createLinksGroup = ({ label, icon, links, navLink }: any) => {
     const isNavLink = !!navLink
@@ -99,7 +108,15 @@ const SideNav = ({ isAuthenticated }: any) => {
             </div>
           </AppShell.Section>
           <ScrollArea className={classes.links}>
-            <div className={classes.linksInner}>{links}</div>
+            {isFetching ? (
+              <div className={`${classes.linksInner} flex flex-col gap-5 px-5`}>
+                {[...Array(5)].map((_, index) => (
+                  <Skeleton height={30} key={index} />
+                ))}
+              </div>
+            ) : (
+              <div className={classes.linksInner}>{links}</div>
+            )}
           </ScrollArea>
         </>
       ) : (
@@ -123,35 +140,39 @@ const SideNav = ({ isAuthenticated }: any) => {
       )}
 
       <AppShell.Section>
-        <Group
-          justify='start'
-          py={20}
-          className='hover:cursor-pointer'
-          onClick={() =>
-            setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
-          }
-        >
-          <div className='flex items-center gap-4'>
-            <ActionIcon
-              variant='default'
-              radius='xl'
-              size='lg'
-              aria-label='Toggle color scheme'
-            >
-              <IconSun
-                className={cx(themeStyles.icon, themeStyles.light)}
-                stroke={1.5}
-              />
-              <IconMoon
-                className={cx(themeStyles.icon, themeStyles.dark)}
-                stroke={1.5}
-              />
-            </ActionIcon>
-            <Text c={color} className='text-sm'>
-              {computedColorScheme === 'light' ? 'Dark mode' : 'Light mode'}
-            </Text>
-          </div>
-        </Group>
+        {isFetching ? (
+          <Skeleton height={30} />
+        ) : (
+          <Group
+            justify='start'
+            py={20}
+            className='hover:cursor-pointer'
+            onClick={() =>
+              setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
+            }
+          >
+            <div className='flex items-center gap-4'>
+              <ActionIcon
+                variant='default'
+                radius='xl'
+                size='lg'
+                aria-label='Toggle color scheme'
+              >
+                <IconSun
+                  className={cx(themeStyles.icon, themeStyles.light)}
+                  stroke={1.5}
+                />
+                <IconMoon
+                  className={cx(themeStyles.icon, themeStyles.dark)}
+                  stroke={1.5}
+                />
+              </ActionIcon>
+              <Text c={color} className='text-sm'>
+                {computedColorScheme === 'light' ? 'Dark mode' : 'Light mode'}
+              </Text>
+            </div>
+          </Group>
+        )}
       </AppShell.Section>
     </>
   )

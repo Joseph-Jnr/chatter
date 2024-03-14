@@ -1,17 +1,7 @@
 'use client'
 
-import { Woman } from '@/assets'
 import formatStats from '@/services/formatStats'
-import {
-  Avatar,
-  Box,
-  Card,
-  Image,
-  Notification,
-  Text,
-  Title,
-  rem,
-} from '@mantine/core'
+import { Avatar, Card, Image, Text, Title, rem } from '@mantine/core'
 import {
   IconBook,
   IconBookmark,
@@ -27,36 +17,57 @@ import { useState } from 'react'
 import classes from '@/styles/General.module.css'
 import { IconCheck } from '@tabler/icons-react'
 import { notifications } from '@mantine/notifications'
+import FormatDate from '../FormatDate'
 
 interface FeedCardProps {
   title?: string
-  author: string
-  author_username: string
-  authorImage?: string
-  date?: string
+  content?: string
+  imageUrl: string
+  created_at: string
   duration?: number
   slug?: string
-  analytics: {
-    likes: number | 0
-    comments: number | 0
-    views: number | 0
-    bookmarks: number | 0
-  }
-  content?: string
-  thumbnail: string
+  likes: Likes[]
+  comments: Comments[]
+  bookmarks: Bookmarks[]
+  views: number | 0
+  author: Author
+}
+
+interface Comments {
+  id: string
+  comment: string
+}
+
+interface Likes {
+  id: string
+}
+
+interface Bookmarks {
+  id: string
+}
+
+interface Author {
+  id: string
+  first_name: string
+  last_name: string
+  user_name: string
+  email: string
+  role: string
+  imageUrl: string
 }
 
 const FeedCard = ({
   title,
   author,
-  author_username,
-  authorImage,
-  date,
+  created_at,
   duration,
   slug,
-  analytics,
+  likes,
+  comments,
+  bookmarks,
+  views,
   content,
-  thumbnail,
+  imageUrl,
 }: FeedCardProps) => {
   const router = useRouter()
   const [isLiked, setIsLiked] = useState(false)
@@ -82,16 +93,20 @@ const FeedCard = ({
     <>
       <Card withBorder padding='lg' className='w-fit' radius={'lg'}>
         <div className='user-info flex gap-4'>
-          <Link href={`/${author_username}`}>
-            <Avatar src={authorImage} size='lg' alt='author image' />
+          <Link href={`/${author?.user_name}`}>
+            <Avatar src={author.imageUrl} size='lg' alt='author image' />
           </Link>
           <div className='flex flex-col'>
-            <Link href={`/${author_username}`}>
-              <Title order={4}>{author}</Title>
+            <Link href={`/${author?.user_name}`}>
+              <Title order={4}>
+                {author?.first_name} {author?.last_name}
+              </Title>
             </Link>
             <div className={`${classes.meta} flex flex-col gap-2 mt-3`}>
               <div className='flex gap-1'>
-                <span className='text-xs'>{date}</span>
+                <span className='text-xs'>
+                  <FormatDate data={created_at} formatType='fullDate' />
+                </span>
               </div>
               <div className='flex gap-1'>
                 <IconBook size={14} />
@@ -108,7 +123,7 @@ const FeedCard = ({
           <Text fz='sm' className='w-full' lineClamp={2} mt={10} mb={30}>
             {content}
           </Text>
-          <Image src={thumbnail} className='rounded-xl' alt='woman' />
+          <Image src={imageUrl} className='rounded-xl' alt='image' />
         </div>
 
         <div className='flex items-center justify-between text-xs '>
@@ -123,7 +138,7 @@ const FeedCard = ({
                 <IconHeart size={18} stroke={1} />
               )}
               <p className='flex gap-1'>
-                {formatStats(analytics.likes)}{' '}
+                {formatStats(likes?.length)}{' '}
                 <span className='hidden md:block'>likes</span>
               </p>
             </div>
@@ -133,14 +148,14 @@ const FeedCard = ({
             >
               <IconMessageCircle size={18} stroke={1} />
               <p className='flex gap-1'>
-                {formatStats(analytics.comments)}
+                {formatStats(comments?.length)}
                 <span className='hidden md:block'>comments</span>
               </p>
             </div>
             <div className='flex items-center gap-1'>
               <IconEye size={18} stroke={1} />
               <p className='flex gap-1'>
-                {formatStats(analytics.views)}{' '}
+                {formatStats(views)}{' '}
                 <span className='hidden md:block'>views</span>
               </p>
             </div>
@@ -156,7 +171,7 @@ const FeedCard = ({
               <IconBookmark size={18} stroke={1} />
             )}
             <p className='flex gap-1'>
-              {formatStats(analytics.bookmarks)}{' '}
+              {formatStats(bookmarks?.length)}{' '}
               <span className='hidden md:block'>bookmarks</span>
             </p>
           </div>

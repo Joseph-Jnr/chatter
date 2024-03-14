@@ -4,10 +4,21 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 
+// Function to retrieve the bearer token from local storage
+const getAuthToken = (): string | null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('chatterAuthToken')
+  }
+  return null
+}
+
+const token = getAuthToken()
+
 const instance = axios.create({
-  baseURL: 'https://f782-154-66-135-97.ngrok-free.app/api/v1',
+  baseURL: 'https://chatter-production-e8a9.up.railway.app/api/v1',
   headers: {
     'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
   },
 })
 

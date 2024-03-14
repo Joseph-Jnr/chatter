@@ -7,10 +7,47 @@ import { CFollowerPayload } from './user.types'
  * @param  {CFollowerPayload} payload
  * @returns Promise
  */
-export const AddFollower = async (payload: CFollowerPayload): Promise<any> => {
+export const FollowUser = async (
+  userId: string,
+  payload: CFollowerPayload
+): Promise<any> => {
   try {
-    const url = '/followers/add'
+    const url = `/followers/follow/${userId}`
     const res = await axios.post(url, payload)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+export const UnfollowUser = async (
+  userId: string,
+  payload: CFollowerPayload
+): Promise<any> => {
+  try {
+    const url = `/followers/unfollow/${userId}`
+    const res = await axios.delete(url, { data: payload })
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
+// Get followers
+export const GetAllFollowers = async () => {
+  try {
+    const url = '/followers/followers-list'
+    const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
+// Get following
+export const GetAllFollowing = async () => {
+  try {
+    const url = '/followers/following-list'
+    const res = await axios.get(url)
     return res.data
   } catch (err) {
     throw err
@@ -20,7 +57,7 @@ export const AddFollower = async (payload: CFollowerPayload): Promise<any> => {
 // Get profile
 export const GetProfile = async () => {
   try {
-    const url = '/profile'
+    const url = '/user/profile'
     const res = await axios.get(url)
     return res.data
   } catch (err) {
@@ -43,17 +80,6 @@ export const GetUser = async () => {
 export const GetUsers = async () => {
   try {
     const url = '/user/all'
-    const res = await axios.get(url)
-    return res.data
-  } catch (err) {
-    throw err
-  }
-}
-
-// Get followers
-export const GetFollowers = async () => {
-  try {
-    const url = '/followers'
     const res = await axios.get(url)
     return res.data
   } catch (err) {

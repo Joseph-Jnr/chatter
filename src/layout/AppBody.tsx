@@ -1,6 +1,9 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
 
 interface AppBodyProps {
   children: React.ReactNode
@@ -12,7 +15,7 @@ const AppBody = ({ children, font }: AppBodyProps) => {
 
   return (
     <body className={`${font} ${path !== '/' ? 'hide-scrollbar' : ''}`}>
-      {children}
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </body>
   )
 }
