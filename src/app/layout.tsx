@@ -11,6 +11,7 @@ import RouterTransition from '@/components/RouterTransition'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Metadata } from 'next'
 import AppBody from '@/layout/AppBody'
+import { UserProvider } from '@/context/useUser'
 
 const jakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '700'],
@@ -53,13 +54,15 @@ export default function RootLayout({
       </head>
       <AppBody font={`${jakarta.className}`}>
         <MantineProvider theme={theme}>
-          <Notifications position='top-center' />
-          {/* <RouterTransition /> */}
-          <GoogleOAuthProvider clientId='962813123148-daa01cipki4vspu15sdgk5jghr6rj7k2.apps.googleusercontent.com'>
-            <Box maw={1850} mx='auto'>
-              {children}
-            </Box>
-          </GoogleOAuthProvider>
+          <UserProvider>
+            <Notifications position='top-center' />
+            {/* <RouterTransition /> */}
+            <GoogleOAuthProvider clientId='962813123148-daa01cipki4vspu15sdgk5jghr6rj7k2.apps.googleusercontent.com'>
+              <Box maw={1850} mx='auto'>
+                {children}
+              </Box>
+            </GoogleOAuthProvider>
+          </UserProvider>
         </MantineProvider>
       </AppBody>
     </html>

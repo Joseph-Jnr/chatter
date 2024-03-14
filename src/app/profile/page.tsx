@@ -26,16 +26,11 @@ import {
 } from '@/services/apis'
 import formatStats from '@/services/formatStats'
 import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton'
+import { useUser } from '@/context/useUser'
 
 const Profile = () => {
   const router = useRouter()
-
-  //Fetching profile
-  const { data: profile, isFetching } = useQuery({
-    queryKey: ['profile'],
-    queryFn: GetProfile,
-  })
-  const profileData = profile?.data
+  const userData = useUser()
 
   //Fetching followers
   const { data: followers } = useQuery({
@@ -52,7 +47,7 @@ const Profile = () => {
   const followingCount = formatStats(following?.data?.length)
 
   //Fetching author posts
-  const { data: authorPost } = useQuery({
+  const { data: authorPost, isFetching } = useQuery({
     queryKey: ['authorPost'],
     queryFn: GetAuthorPosts,
   })
@@ -84,21 +79,25 @@ const Profile = () => {
           <ProfileSkeleton />
         ) : (
           <>
-            <Avatar
-              src={profileData?.imageUrl}
-              size={80}
-              radius={80}
-              mx='auto'
-            />
-            <Text ta='center' fz='lg' fw={500} mt='sm'>
-              {profileData?.first_name} {profileData?.last_name}
-            </Text>
-            <Text ta='center' className='capitalize' fz='sm' c='dimmed'>
-              {profileData?.role}
-            </Text>
-            <Group mt='md' justify='center' gap={30}>
-              {items}
-            </Group>
+            {userData && (
+              <>
+                <Avatar
+                  src={userData?.imageUrl}
+                  size={80}
+                  radius={80}
+                  mx='auto'
+                />
+                <Text ta='center' fz='lg' fw={500} mt='sm'>
+                  {userData?.first_name} {userData?.last_name}
+                </Text>
+                <Text ta='center' className='capitalize' fz='sm' c='dimmed'>
+                  {userData?.role}
+                </Text>
+                <Group mt='md' justify='center' gap={30}>
+                  {items}
+                </Group>
+              </>
+            )}
           </>
         )}
       </Card>

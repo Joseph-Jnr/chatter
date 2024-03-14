@@ -23,6 +23,7 @@ export function UserButton() {
     queryKey: ['profile'],
     queryFn: GetProfile,
   })
+
   const profileData = profile?.data
 
   return (

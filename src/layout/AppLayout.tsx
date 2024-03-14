@@ -13,6 +13,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { useLayoutEffect } from 'react'
 import { isAuthenticated } from '@/utils/Auth'
 import { redirect, usePathname } from 'next/navigation'
+import { UserProvider } from '@/context/useUser'
 
 interface AppLayoutProps {
   children: React.ReactNode

@@ -15,7 +15,6 @@ export type CLikesPayload = {
 }
 
 export type CBookmarksPayload = {
-  postId: string
   userId: string
 }
 
