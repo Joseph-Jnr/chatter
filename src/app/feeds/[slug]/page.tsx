@@ -4,6 +4,7 @@ import AppLayout from '@/layout/AppLayout'
 import {
   Avatar,
   Modal,
+  Pill,
   Text,
   Title,
   rem,
@@ -224,6 +225,14 @@ const FeedDetail = () => {
             </div>
 
             <div className='content'>{postDetailData?.content}</div>
+
+            <div className='tags-area flex gap-3 mt-10'>
+              {postDetailData?.tags?.map((tag: any) => (
+                <Pill key={tag} bg='gray' className={classes.tags} size='lg'>
+                  #{...tag}
+                </Pill>
+              ))}
+            </div>
 
             <div className='reactions mt-10'>
               <div className='icons flex items-center gap-5 md:gap-7'>

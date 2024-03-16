@@ -54,3 +54,7 @@
   background: light-dark(var(--white), var(--mantine-color-dark-6));
   color: light-dark(var(--mantine-color-dark-8), var(--mantine-color-gray-3));
 }
+
+.tags {
+  color: light-dark(var(--mantine-color-gray-8), var(--mantine-color-gray-3));
+}
