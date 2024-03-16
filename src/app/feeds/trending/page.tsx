@@ -14,11 +14,11 @@ const Trending = () => {
   })
   const trendingData = trending?.data */
 
-  // refer to Bookmarks page
+  // TODO: refer to Bookmarks page
 
   return (
     <AppLayout title='Trending'>
-      <p>What's going viral?</p>
+      <p>What&apos;s going viral?</p>
 
       <div className='posts mt-20'>
         <EmptyState

@@ -5,6 +5,7 @@ import { CFollowerPayload, CProfilePayload } from './user.types'
 /**
  * Description: Send data to add a new follower
  * @param  {CFollowerPayload} payload
+ * @param  {CProfilePayload} payload
  * @returns Promise
  */
 export const FollowUser = async (
@@ -69,8 +70,8 @@ export const UpdateProfilePicture = async (
   payload: CProfilePayload
 ): Promise<any> => {
   try {
-    const url = `/user/profile/image-update`
-    const res = await axios.put(url, { data: payload })
+    const url = '/user/profile/image-update'
+    const res = await axios.put(url, payload)
     return res.data
   } catch (err) {
     throw err

@@ -11,6 +11,7 @@ import {
   Box,
   Skeleton,
   rem,
+  Loader,
 } from '@mantine/core'
 import classes from '@/styles/General.module.css'
 import AppLayout from '@/layout/AppLayout'
@@ -30,6 +31,7 @@ import EmptyState from '@/components/EmptyState'
 import { UpdateProfilePicture } from '@/services/apis'
 import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
+import { useState } from 'react'
 
 const Profile = () => {
   const router = useRouter()
@@ -37,6 +39,7 @@ const Profile = () => {
   const fetchingData = useFetching()
   const isFetching = fetchingData?.isFetching
   const refetch = fetchingData?.refetch
+  const [isUploading, setIsUploading] = useState(false)
 
   console.log('user data: ', userData)
 
@@ -59,41 +62,60 @@ const Profile = () => {
   ))
 
   // Update profile picture
-
-  const handleImageChange = (event: any) => {
+  const handleImageChange = async (event: any) => {
     const file = event.target.files[0]
-    const reader = new FileReader()
 
-    reader.onload = async () => {
+    if (file) {
+      setIsUploading(true)
+
       try {
-        const base64String = reader.result as string
-        //const base64String = reader.result as string
-        console.log('Base64 image:', base64String)
-        const data = { image: base64String }
+        const reader = new FileReader()
 
-        // Call the API to update the profile picture
-        const res = await UpdateProfilePicture(data)
-        console.log(res)
+        reader.onload = async () => {
+          const base64String = reader.result as string
 
-        notifications.show({
-          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-          withCloseButton: false,
-          color: 'green',
-          message: 'Profile updated',
-        })
+          console.log('Base64 image:', base64String)
+
+          try {
+            const res = await UpdateProfilePicture({ image: base64String })
+            console.log(res)
+            setIsUploading(false)
+
+            if (res.success) {
+              if (refetch) {
+                refetch()
+              } else {
+                console.error('Refetch function is null')
+              }
+            }
+
+            notifications.show({
+              icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+              withCloseButton: false,
+              color: 'green',
+              message: 'Profile updated',
+            })
+          } catch (error) {
+            console.error('Error updating profile picture:', error)
+            notifications.show({
+              icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+              withCloseButton: false,
+              color: 'red',
+              title: 'Profile update failed!',
+              message: 'Something went wrong. Please try again',
+            })
+          } finally {
+            setIsUploading(false)
+          }
+        }
+
+        reader.readAsDataURL(file)
       } catch (error) {
-        console.error('Error updating profile picture:', error)
-        notifications.show({
-          icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
-          withCloseButton: false,
-          color: 'red',
-          title: 'Profile update failed!',
-          message: 'Something went wrong. Please try again',
-        })
+        console.error('Error reading file:', error)
+        // Handle error
+        setIsUploading(false)
       }
     }
-
-    reader.readAsDataURL(file)
   }
 
   return (
@@ -113,11 +135,17 @@ const Profile = () => {
                       radius={80}
                       mx='auto'
                     />
+                    {isUploading && (
+                      <div className='bg-white absolute top-0 w-full h-full flex items-center justify-center rounded-full bg-opacity-25'>
+                        <Loader color='#543ee0' />
+                      </div>
+                    )}
                     <input
                       type='file'
                       accept='.jpg, .jpeg, .png'
                       id='profile_pic'
                       onChange={handleImageChange}
+                      disabled={isUploading}
                       hidden
                     />
                     <Tooltip
