@@ -207,6 +207,7 @@ const Profile = () => {
                 {userData?.posts?.map((feed: any) => (
                   <FeedCard
                     key={feed.id}
+                    refetch={refetch}
                     author={userData?.userInfo}
                     {...feed}
                   />

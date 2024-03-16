@@ -14,13 +14,15 @@ const Feeds = () => {
   const router = useRouter()
 
   //Fetching posts
-  const { data: posts, isFetching } = useQuery({
+  const {
+    data: posts,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['posts'],
     queryFn: GetPosts,
   })
   const allPosts = posts?.data
-
-  console.log(allPosts)
 
   return (
     <>
@@ -37,7 +39,7 @@ const Feeds = () => {
               ) : (
                 <>
                   {allPosts?.map((feed: any) => (
-                    <FeedCard key={feed.id} {...feed} />
+                    <FeedCard key={feed.id} refetch={refetch} {...feed} />
                   ))}
                 </>
               )}

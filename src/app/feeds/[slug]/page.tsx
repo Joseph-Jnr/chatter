@@ -29,7 +29,15 @@ import { notifications } from '@mantine/notifications'
 import { useParams, useRouter } from 'next/navigation'
 import { IconMoodPuzzled } from '@tabler/icons-react'
 import Comment from '@/components/Feed/Comment'
-import { GetPosts, GetSinglePost, UpdateViewsCount } from '@/services/apis'
+import {
+  BookmarkPost,
+  DeleteBookmark,
+  GetPosts,
+  GetSinglePost,
+  LikePost,
+  UnLikePost,
+  UpdateViewsCount,
+} from '@/services/apis'
 import { useQuery } from '@tanstack/react-query'
 import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
@@ -76,28 +84,86 @@ const FeedDetail = () => {
     }
   }, [postId])
 
-  const { data: postDetail, isFetching } = useQuery({
+  const {
+    data: postDetail,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['postDetail', postId],
     queryFn: () => GetSinglePost(postId),
   })
 
   const postDetailData = postDetail?.data
 
-  const likeAction = () => {
-    isAuthenticated ? setIsLiked(!isLiked) : open()
+  //Check likes status
+  useEffect(() => {
+    if (
+      postDetailData &&
+      postDetailData.likes &&
+      postDetailData.likes.length > 0
+    ) {
+      setIsLiked(true)
+    }
+  }, [postDetailData])
+
+  //Check bookmark status
+  useEffect(() => {
+    if (
+      postDetailData &&
+      postDetailData.bookmarks &&
+      postDetailData.bookmarks.length > 0
+    ) {
+      setIsBookmarked(true)
+    }
+  }, [postDetailData])
+
+  const likeAction = async () => {
+    if (isAuthenticated) {
+      try {
+        if (isLiked) {
+          // If already liked, remove the like
+          await UnLikePost(postId)
+          refetch()
+          setIsLiked(false)
+        } else {
+          // If not liked, add a new like
+          await LikePost(postId)
+          refetch()
+          setIsLiked(true)
+        }
+      } catch (error) {
+        console.error('Error toggling like:', error)
+      }
+    } else {
+      open()
+    }
   }
 
-  const bookmarkAction = () => {
+  const bookmarkAction = async () => {
     if (isAuthenticated) {
-      setIsBookmarked(!isBookmarked)
-
-      notifications.show({
-        icon: checkIcon,
-        withCloseButton: false,
-        color: 'teal',
-        message: 'Saved to bookmarks',
-        className: 'mt-10 w-fit mx-auto',
-      })
+      try {
+        if (isBookmarked) {
+          // If already bookmarked, delete the bookmark
+          await DeleteBookmark(postId)
+          refetch()
+          setIsBookmarked(false)
+        } else {
+          // If not bookmarked, add a new bookmark
+          await BookmarkPost({ postId: postId })
+          refetch()
+          setIsBookmarked(true)
+        }
+        // Show notification
+        notifications.show({
+          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+          withCloseButton: false,
+          color: 'teal',
+          message: isBookmarked ? 'Bookmark removed' : 'Saved to bookmarks',
+          className: 'mt-10 w-fit mx-auto',
+        })
+      } catch (error) {
+        console.error('Error toggling bookmark:', error)
+      }
     } else {
       open()
     }

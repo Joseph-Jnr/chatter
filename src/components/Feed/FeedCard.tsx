@@ -24,7 +24,8 @@ import {
   LikePost,
   UnLikePost,
 } from '@/services/apis'
-import { useUser } from '@/context/useUser'
+import { useUser, useFetching } from '@/context/useUser'
+import { isAuthenticated } from '@/utils/Auth'
 
 export interface FeedCardProps {
   id: string
@@ -39,6 +40,7 @@ export interface FeedCardProps {
   bookmarks: Bookmarks[]
   views: number | 0
   author: Author
+  refetch?: () => void
 }
 
 interface Comments {
@@ -77,6 +79,7 @@ const FeedCard = ({
   views,
   excerpt,
   imageUrl,
+  refetch,
 }: FeedCardProps) => {
   const router = useRouter()
   const userData = useUser()
@@ -105,52 +108,78 @@ const FeedCard = ({
   // Like implementation
 
   const likeAction = async () => {
-    try {
-      if (isLiked) {
-        // If already liked, unlike the post
-        await UnLikePost(id)
-        setIsLiked(false)
-      } else {
-        // If not liked, like the post
-        await LikePost(id)
-        setIsLiked(true)
+    if (isAuthenticated) {
+      try {
+        if (isLiked) {
+          // If already liked, remove the like
+          const res = await UnLikePost(id)
+          setIsLiked(false)
+          if (res.success) {
+            if (refetch) {
+              refetch()
+            } else {
+              console.error('Refetch function is null')
+            }
+          }
+        } else {
+          // If not liked, add a new like
+          const res = await LikePost(id)
+          setIsLiked(true)
+          if (res.success) {
+            if (refetch) {
+              refetch()
+            } else {
+              console.error('Refetch function is null')
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error toggling like:', error)
       }
-    } catch (error) {
-      console.error('Error toggling like:', error)
+    } else {
+      open()
     }
   }
 
   const bookmarkAction = async () => {
-    /* setIsBookmarked(!isBookmarked)
-
-    notifications.show({
-      icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-      withCloseButton: false,
-      color: 'teal',
-      message: 'Saved to bookmarks',
-      className: 'mt-10 w-fit mx-auto',
-    }) */
-
-    try {
-      if (isBookmarked) {
-        // If already bookmarked, delete the bookmark
-        await DeleteBookmark(id)
-        setIsBookmarked(false)
-      } else {
-        // If not bookmarked, add a new bookmark
-        await BookmarkPost({ postId: id })
-        setIsBookmarked(true)
+    if (isAuthenticated) {
+      try {
+        if (isBookmarked) {
+          // If already bookmarked, delete the bookmark
+          const res = await DeleteBookmark(id)
+          setIsBookmarked(false)
+          if (res.success) {
+            if (refetch) {
+              refetch()
+            } else {
+              console.error('Refetch function is null')
+            }
+          }
+        } else {
+          // If not bookmarked, add a new bookmark
+          const res = await BookmarkPost({ postId: id })
+          setIsBookmarked(true)
+          if (res.success) {
+            if (refetch) {
+              refetch()
+            } else {
+              console.error('Refetch function is null')
+            }
+          }
+        }
+        // Show notification
+        notifications.show({
+          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+          withCloseButton: false,
+          color: 'teal',
+          message: isBookmarked ? 'Bookmark removed' : 'Saved to bookmarks',
+          className: 'mt-10 w-fit mx-auto',
+        })
+      } catch (error) {
+        console.error('Error toggling bookmark:', error)
       }
-      // Show notification
-      notifications.show({
-        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-        withCloseButton: false,
-        color: 'teal',
-        message: isBookmarked ? 'Bookmark removed' : 'Saved to bookmarks',
-        className: 'mt-10 w-fit mx-auto',
-      })
-    } catch (error) {
-      console.error('Error toggling bookmark:', error)
+    } else {
+      open()
     }
   }
 

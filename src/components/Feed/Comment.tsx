@@ -21,8 +21,6 @@ const Comment = ({ postId }: CommentProps) => {
 
   const comments = postDetail?.data?.comments
 
-  console.log(comments)
-
   return (
     <Card>
       <ScrollArea className='max-h-[400px]' h={200}>
