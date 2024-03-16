@@ -96,10 +96,6 @@ const FeedCard = ({
     setIsLiked(likes?.some((like) => like.postId === id))
   }, [likes, id])
 
-  console.log('Bookmarked? ', isBookmarked)
-  console.log('Liked? ', isLiked)
-  console.log('Profile: ', userData)
-
   // Dynamic routing to author profile
   const isCurrentUser = userId === author?.id
   // Determine the href value based on the condition

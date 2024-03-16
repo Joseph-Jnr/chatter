@@ -5,10 +5,10 @@ import { useQuery } from '@tanstack/react-query'
 import { GetProfile } from '@/services/apis'
 
 // Define the shape of user data
-interface UserData {
+export interface UserData {
   followers: []
   following: []
-  posts: []
+  posts: Post[]
   userInfo: {
     id: string
     first_name: string
@@ -18,6 +18,25 @@ interface UserData {
     role: string
     imageUrl: string
   }
+}
+
+interface Post {
+  id: string
+  title: string
+  content: string
+  imageUrl: string
+  likes: any[] | null
+  authorId: string
+  comments: any[] | null
+  views: number
+  duration: number
+  slug: string
+  bookmarks: any[] | null
+  created_at: string
+  updated_at: string
+  tags: string[]
+  excerpt: string
+  category: string
 }
 
 // Create a context to store user information

@@ -41,8 +41,6 @@ const Profile = () => {
   const refetch = fetchingData?.refetch
   const [isUploading, setIsUploading] = useState(false)
 
-  console.log('user data: ', userData)
-
   formatStats()
   const stats = [
     { value: userData?.followers?.length, label: 'Followers' },
@@ -73,8 +71,6 @@ const Profile = () => {
 
         reader.onload = async () => {
           const base64String = reader.result as string
-
-          console.log('Base64 image:', base64String)
 
           try {
             const res = await UpdateProfilePicture({ image: base64String })

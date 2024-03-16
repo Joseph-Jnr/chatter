@@ -1,4 +1,9 @@
+'use client'
+
+import AnalyticsSkeleton from '@/components/Skeletons/AnalyticsSkeleton'
+import { UserData, useFetching, useUser } from '@/context/useUser'
 import AppLayout from '@/layout/AppLayout'
+import formatStats from '@/services/formatStats'
 import { Group, Paper, SimpleGrid, Text } from '@mantine/core'
 import {
   IconEye,
@@ -14,14 +19,62 @@ const icons = {
   view: IconEye,
 }
 
-const data = [
-  { title: 'Posts', icon: 'post', value: '13,456', diff: 34 },
-  { title: 'Likes', icon: 'like', value: '4,145', diff: -13 },
-  { title: 'Bookmarks', icon: 'bookmark', value: '745', diff: 18 },
-  { title: 'Views', icon: 'view', value: '188', diff: -30 },
-] as const
-
 const Analytics = () => {
+  const userData = useUser()
+  const fetchingData = useFetching()
+  const isFetching = fetchingData?.isFetching
+
+  let totalLikes = 0
+  let totalBookmarks = 0
+  const totalPosts = userData?.posts?.length
+  const totalViews = userData?.posts?.reduce(
+    (sum, post) => sum + post?.views,
+    0
+  )
+  const getTotalLikes = (userData: UserData): number => {
+    const { posts } = userData
+    const totalLikes = posts?.reduce((sum, post) => {
+      if (post.likes && post.likes.length) {
+        return sum + post.likes.length
+      }
+      return sum
+    }, 0)
+    return totalLikes
+  }
+
+  const getTotalBookmarks = (userData: UserData): number => {
+    const { posts } = userData
+    const totalBookmarks = posts?.reduce((sum, post) => {
+      if (post.bookmarks && post.bookmarks.length) {
+        return sum + post.bookmarks.length
+      }
+      return sum
+    }, 0)
+    return totalBookmarks
+  }
+
+  if (userData) {
+    totalLikes = getTotalLikes(userData)
+    totalBookmarks = getTotalBookmarks(userData)
+  }
+
+  const data = [
+    {
+      title: 'Posts',
+      icon: 'post',
+      value: formatStats(totalPosts),
+      diff: 34,
+    },
+    { title: 'Likes', icon: 'like', value: formatStats(totalLikes), diff: -13 },
+    {
+      title: 'Bookmarks',
+      icon: 'bookmark',
+      value: formatStats(totalBookmarks),
+      diff: 18,
+    },
+    { title: 'Views', icon: 'view', value: formatStats(totalViews), diff: -30 },
+  ] as const
+
   const stats = data.map((stat) => {
     const Icon = icons[stat.icon]
     return (
@@ -46,7 +99,17 @@ const Analytics = () => {
 
   return (
     <AppLayout title='Analytics'>
-      <SimpleGrid cols={{ base: 1, xs: 2, md: 4 }}>{stats}</SimpleGrid>
+      <SimpleGrid cols={{ base: 1, xs: 2, md: 4 }}>
+        {isFetching ? (
+          <>
+            {[...Array(4)].map((_, index) => (
+              <AnalyticsSkeleton key={index} />
+            ))}
+          </>
+        ) : (
+          <>{stats}</>
+        )}
+      </SimpleGrid>
     </AppLayout>
   )
 }
