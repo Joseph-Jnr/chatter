@@ -81,7 +81,7 @@ const SideNav = ({ isAuthenticated }: any) => {
       ],
     }),
 
-    { label: 'Followers', navLink: '/profile/followers', icon: IconUsers },
+    { label: 'Friends', navLink: '/profile/friends', icon: IconUsers },
     { label: 'Analytics', navLink: '/analytics', icon: IconChartBar },
     { label: 'Log out', navLink: '/sign-in', icon: IconLogout },
   ]
