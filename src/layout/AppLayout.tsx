@@ -67,7 +67,7 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
       <AppShell.Navbar p='md'>
         <SideNav isAuthenticated={isAuthenticated} />
       </AppShell.Navbar>
-      <AppShell.Main c={color} bg={bg}>
+      <AppShell.Main c={color} bg={bg} pb={100}>
         <Title order={2} mb={30}>
           {title}
         </Title>

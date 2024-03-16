@@ -206,7 +206,7 @@ const FeedCard = ({
                 <IconHeart size={18} stroke={1} />
               )}
               <p className='flex gap-1'>
-                {formatStats(likes?.length)}{' '}
+                {likes === null ? 0 : formatStats(likes?.length)}
                 <span className='hidden md:block'>likes</span>
               </p>
             </div>
@@ -216,7 +216,7 @@ const FeedCard = ({
             >
               <IconMessageCircle size={18} stroke={1} />
               <p className='flex gap-1'>
-                {formatStats(comments?.length)}
+                {comments === null ? 0 : formatStats(comments?.length)}
                 <span className='hidden md:block'>comments</span>
               </p>
             </div>
@@ -239,7 +239,7 @@ const FeedCard = ({
               <IconBookmark size={18} stroke={1} />
             )}
             <p className='flex gap-1'>
-              {formatStats(bookmarks?.length)}{' '}
+              {bookmarks === null ? 0 : formatStats(bookmarks?.length)}
               <span className='hidden md:block'>bookmarks</span>
             </p>
           </div>
