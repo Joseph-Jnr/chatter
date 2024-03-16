@@ -79,9 +79,9 @@ export const UpdateProfilePicture = async (
 }
 
 // Get a Chatter user profile
-export const GetUser = async () => {
+export const GetUser = async (username: string) => {
   try {
-    const url = '/user'
+    const url = `/user/profile/username?q=${username}`
     const res = await axios.get(url)
     return res.data
   } catch (err) {

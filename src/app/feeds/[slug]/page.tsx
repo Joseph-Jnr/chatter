@@ -224,7 +224,10 @@ const FeedDetail = () => {
               />
             </div>
 
-            <div className='content'>{postDetailData?.content}</div>
+            <div
+              className='content'
+              dangerouslySetInnerHTML={{ __html: postDetailData?.content }}
+            />
 
             <div className='tags-area flex gap-3 mt-10'>
               {postDetailData?.tags?.map((tag: any) => (
