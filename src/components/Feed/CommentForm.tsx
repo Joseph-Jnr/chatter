@@ -1,6 +1,6 @@
 'use client'
 
-import { Textarea, rem } from '@mantine/core'
+import { Loader, Textarea, rem } from '@mantine/core'
 import inputClass from '@/styles/InputStyle.module.css'
 import ChButton from '../Buttons/ChButton'
 import { yupResolver } from 'mantine-form-yup-resolver'
@@ -74,7 +74,7 @@ const CommentForm = ({ postId, refetch }: CommentFormProps) => {
           disabled={!form.isValid() || isSubmitting}
           color='#543ee0'
         >
-          Comment
+          {isSubmitting ? <Loader color='white' size={20} /> : 'Comment'}
         </ChButton>
       </div>
     </form>

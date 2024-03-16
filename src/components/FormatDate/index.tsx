@@ -6,6 +6,7 @@ type DateFormatType =
   | 'datePipeTime'
   | 'dateDashTime'
   | 'shortDate'
+  | 'timeAgo'
 
 interface FormatDateProps {
   data: string
@@ -38,6 +39,45 @@ const FormatDate: React.FC<FormatDateProps> = ({ data, formatType }) => {
         return `${day} - ${digitMonth} - ${year} | ${formattedTime}`
       case 'shortDate':
         return `${day} - ${digitMonth} - ${year}`
+      case 'timeAgo':
+        const now = new Date()
+        const seconds = Math.floor(
+          (now.getTime() - dateObject.getTime()) / 1000
+        )
+        const intervals = {
+          year: Math.floor(seconds / 31536000),
+          month: Math.floor(seconds / 2592000),
+          week: Math.floor(seconds / 604800),
+          day: Math.floor(seconds / 86400),
+          hour: Math.floor(seconds / 3600),
+          minute: Math.floor(seconds / 60),
+        }
+
+        if (intervals.year > 0) {
+          return intervals.year === 1
+            ? '1 year ago'
+            : `${intervals.year} years ago`
+        } else if (intervals.month > 0) {
+          return intervals.month === 1
+            ? '1 month ago'
+            : `${intervals.month} months ago`
+        } else if (intervals.week > 0) {
+          return intervals.week === 1
+            ? '1 week ago'
+            : `${intervals.week} weeks ago`
+        } else if (intervals.day > 0) {
+          return intervals.day === 1 ? '1 day ago' : `${intervals.day} days ago`
+        } else if (intervals.hour > 0) {
+          return intervals.hour === 1
+            ? '1 hour ago'
+            : `${intervals.hour} hours ago`
+        } else if (intervals.minute > 0) {
+          return intervals.minute === 1
+            ? '1 minute ago'
+            : `${intervals.minute} minutes ago`
+        } else {
+          return 'just now'
+        }
       default:
         return date
     }

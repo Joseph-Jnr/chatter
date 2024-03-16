@@ -2,6 +2,7 @@ import { GetSinglePost } from '@/services/apis'
 import { Text, Avatar, Group, Card, ScrollArea } from '@mantine/core'
 import CommentForm from './CommentForm'
 import { useQuery } from '@tanstack/react-query'
+import FormatDate from '../FormatDate'
 
 interface CommentProps {
   id?: string
@@ -20,26 +21,37 @@ const Comment = ({ postId }: CommentProps) => {
 
   const comments = postDetail?.data?.comments
 
+  console.log(comments)
+
   return (
     <Card>
-      <ScrollArea mah={500}>
+      <ScrollArea className='max-h-[400px]' h={200}>
         <div className='mb-10'>
           {comments?.map((comment: any) => (
             <div key={comment.id} className='mb-10'>
-              <Group>
+              <div className='flex gap-5'>
                 <Avatar
-                  src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png'
-                  alt='Jacob Warnhalter'
+                  src={comment?.users?.imageUrl}
+                  alt={comment?.users?.user_name}
                   radius='xl'
                 />
                 <div>
-                  <Text size='sm'>Jacob Warnhalter</Text>
-                  <Text size='xs' c='dimmed'>
-                    10 minutes ago
+                  <Text size='sm'>
+                    {comment?.users?.first_name} {comment?.users?.last_name}{' '}
+                    <span className='mx-1'>•</span>
+                    <span className='text-xs text-[#828282] italic'>
+                      <FormatDate
+                        data={comment?.created_at}
+                        formatType='timeAgo'
+                      />
+                    </span>
+                  </Text>
+                  <Text size='xs' mb={'sm'}>
+                    @{comment?.users?.user_name}
                   </Text>
                 </div>
-              </Group>
-              <Text pl={54} pt='sm' size='sm'>
+              </div>
+              <Text pl={54} mt='md' size='sm'>
                 {comment.comment}
               </Text>
             </div>
