@@ -10,55 +10,41 @@ import {
   Tooltip,
   Box,
   Skeleton,
+  rem,
 } from '@mantine/core'
 import classes from '@/styles/General.module.css'
 import AppLayout from '@/layout/AppLayout'
-import feeds from '@/services/feedsMock'
 import FeedCard from '@/components/Feed/FeedCard'
-import { IconPhotoEdit } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
-import { useQuery } from '@tanstack/react-query'
 import {
-  GetAllFollowers,
-  GetAllFollowing,
-  GetAuthorPosts,
-  GetProfile,
-} from '@/services/apis'
+  IconCheck,
+  IconPlus,
+  IconTemplate,
+  IconUserEdit,
+} from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
 import formatStats from '@/services/formatStats'
 import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton'
-import { useUser } from '@/context/useUser'
+import { useUser, useFetching } from '@/context/useUser'
+import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
+import EmptyState from '@/components/EmptyState'
+import { UpdateProfilePicture } from '@/services/apis'
+import { notifications } from '@mantine/notifications'
+import { IconX } from '@tabler/icons-react'
 
 const Profile = () => {
   const router = useRouter()
   const userData = useUser()
+  const fetchingData = useFetching()
+  const isFetching = fetchingData?.isFetching
+  const refetch = fetchingData?.refetch
 
-  //Fetching followers
-  const { data: followers } = useQuery({
-    queryKey: ['followers'],
-    queryFn: GetAllFollowers,
-  })
-  const followersCount = formatStats(followers?.data?.length)
-
-  //Fetching following
-  const { data: following } = useQuery({
-    queryKey: ['following'],
-    queryFn: GetAllFollowing,
-  })
-  const followingCount = formatStats(following?.data?.length)
-
-  //Fetching author posts
-  const { data: authorPost, isFetching } = useQuery({
-    queryKey: ['authorPost'],
-    queryFn: GetAuthorPosts,
-  })
-  const authorPostData = authorPost?.data
-  const authorPostCount = formatStats(authorPost?.data?.length)
+  console.log('user data: ', userData)
 
   formatStats()
   const stats = [
-    { value: followersCount, label: 'Followers' },
-    { value: followingCount, label: 'Follows' },
-    { value: authorPostCount, label: 'Posts' },
+    { value: userData?.followers?.length, label: 'Followers' },
+    { value: userData?.following?.length, label: 'Follows' },
+    { value: userData?.posts?.length, label: 'Posts' },
   ]
 
   const items = stats.map((stat) => (
@@ -72,6 +58,44 @@ const Profile = () => {
     </div>
   ))
 
+  // Update profile picture
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0]
+    const reader = new FileReader()
+
+    reader.onload = async () => {
+      try {
+        const base64String = reader.result as string
+        //const base64String = reader.result as string
+        console.log('Base64 image:', base64String)
+        const data = { image: base64String }
+
+        // Call the API to update the profile picture
+        const res = await UpdateProfilePicture(data)
+        console.log(res)
+
+        notifications.show({
+          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+          withCloseButton: false,
+          color: 'green',
+          message: 'Profile updated',
+        })
+      } catch (error) {
+        console.error('Error updating profile picture:', error)
+        notifications.show({
+          icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+          withCloseButton: false,
+          color: 'red',
+          title: 'Profile update failed!',
+          message: 'Something went wrong. Please try again',
+        })
+      }
+    }
+
+    reader.readAsDataURL(file)
+  }
+
   return (
     <AppLayout title='My Profile'>
       <Card withBorder padding='xl' radius='md'>
@@ -81,18 +105,46 @@ const Profile = () => {
           <>
             {userData && (
               <>
-                <Avatar
-                  src={userData?.imageUrl}
-                  size={80}
-                  radius={80}
-                  mx='auto'
-                />
-                <Text ta='center' fz='lg' fw={500} mt='sm'>
-                  {userData?.first_name} {userData?.last_name}
-                </Text>
-                <Text ta='center' className='capitalize' fz='sm' c='dimmed'>
-                  {userData?.role}
-                </Text>
+                <div className='flex'>
+                  <div className='relative w-fit mx-auto'>
+                    <Avatar
+                      src={userData?.userInfo?.imageUrl}
+                      size={80}
+                      radius={80}
+                      mx='auto'
+                    />
+                    <input
+                      type='file'
+                      accept='.jpg, .jpeg, .png'
+                      id='profile_pic'
+                      onChange={handleImageChange}
+                      hidden
+                    />
+                    <Tooltip
+                      label='Update profile picture'
+                      position='right-end'
+                    >
+                      <label
+                        htmlFor='profile_pic'
+                        className='w-10 h-10 profile-update-btn shadow-lg rounded-full flex items-center justify-center absolute -bottom-2 -right-2 cursor-pointer'
+                      >
+                        <IconUserEdit className={classes.profile_action_icon} />
+                      </label>
+                    </Tooltip>
+                  </div>
+                </div>
+                <div className='text-center'>
+                  <Text fz='lg' fw={500} mt='sm'>
+                    {userData?.userInfo?.first_name}{' '}
+                    {userData?.userInfo?.last_name}
+                  </Text>
+                  <Text className='text-sm' mb={'md'}>
+                    @{userData?.userInfo?.user_name}
+                  </Text>
+                  <Text className='capitalize' fz='sm' c='dimmed'>
+                    {userData?.userInfo?.role}
+                  </Text>
+                </div>
                 <Group mt='md' justify='center' gap={30}>
                   {items}
                 </Group>
@@ -108,11 +160,33 @@ const Profile = () => {
             Posts
           </Title>
         </div>
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
-          {feeds?.map((feed: any) => (
-            <FeedCard key={feed.id} {...feed} />
-          ))}
-        </div>
+        {isFetching ? (
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
+            {[...Array(2)].map((_, index) => (
+              <FeedsSkeleton key={index} />
+            ))}
+          </div>
+        ) : (
+          <>
+            {userData && userData.posts && userData.posts.length < 1 ? (
+              <EmptyState
+                icon={<IconTemplate size={40} />}
+                title='You do not have any post yet'
+                description='Click on the plus button to create a new post.'
+              />
+            ) : (
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
+                {userData?.posts?.map((feed: any) => (
+                  <FeedCard
+                    key={feed.id}
+                    author={userData?.userInfo}
+                    {...feed}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
@@ -128,7 +202,7 @@ const Profile = () => {
               c={'white'}
               bg={'#543ee0'}
             >
-              <IconPhotoEdit size={25} stroke={1.5} />
+              <IconPlus size={25} stroke={1.5} />
             </Box>
           </Tooltip>
         )}

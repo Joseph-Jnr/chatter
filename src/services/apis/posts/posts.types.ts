@@ -16,7 +16,7 @@ export type CLikesPayload = {
 }
 
 export type CBookmarksPayload = {
-  userId: string
+  postId: string
 }
 
 export type CCommentsPayload = {

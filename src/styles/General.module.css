@@ -45,3 +45,12 @@
 }
 
 /* Landing page styles */
+
+.profile_action_icon {
+  color: light-dark(#1e0d8d, var(--mantine-color-gray-1));
+}
+
+.handle_theme {
+  background: light-dark(var(--white), var(--mantine-color-dark-6));
+  color: light-dark(var(--mantine-color-dark-8), var(--mantine-color-gray-3));
+}

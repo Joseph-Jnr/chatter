@@ -155,3 +155,8 @@
 
   /* Animations */
 }
+
+.profile-update-btn {
+  background-color: #6b56f156;
+  backdrop-filter: blur(4px);
+}

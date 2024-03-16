@@ -14,17 +14,13 @@ import classes from '@/styles/UserButton.module.css'
 import { useRouter } from 'next/navigation'
 import { GetProfile } from '@/services/apis'
 import { useQuery } from '@tanstack/react-query'
+import { useUser, useFetching } from '@/context/useUser'
 
 export function UserButton() {
   const router = useRouter()
-
-  //Fetching profile
-  const { data: profile, isFetching } = useQuery({
-    queryKey: ['profile'],
-    queryFn: GetProfile,
-  })
-
-  const profileData = profile?.data
+  const userData = useUser()
+  const fetchingData = useFetching()
+  const isFetching = fetchingData?.isFetching
 
   return (
     <>
@@ -36,16 +32,16 @@ export function UserButton() {
           onClick={() => router.push('/profile')}
         >
           <Group>
-            <Avatar src={profileData?.imageUrl} radius='xl' />
+            <Avatar src={userData?.userInfo?.imageUrl} radius='xl' />
 
             <div style={{ flex: 1 }}>
               <Text size='sm' fw={500}>
-                {profileData?.first_name} {profileData?.last_name}
+                {userData?.userInfo?.first_name} {userData?.userInfo?.last_name}
               </Text>
 
               <Box w={150}>
                 <Text truncate='end' c='dimmed' fz={12}>
-                  {profileData?.email}
+                  {userData?.userInfo?.email}
                 </Text>
               </Box>
             </div>

@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 import axios from '@/services/axios'
-import { CFollowerPayload } from './user.types'
+import { CFollowerPayload, CProfilePayload } from './user.types'
 
 /**
  * Description: Send data to add a new follower
@@ -59,6 +59,18 @@ export const GetProfile = async () => {
   try {
     const url = '/user/profile'
     const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
+export const UpdateProfilePicture = async (
+  payload: CProfilePayload
+): Promise<any> => {
+  try {
+    const url = `/user/profile/image-update`
+    const res = await axios.put(url, { data: payload })
     return res.data
   } catch (err) {
     throw err

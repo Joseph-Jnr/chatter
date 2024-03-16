@@ -4,7 +4,7 @@ import FeedCard from '@/components/Feed/FeedCard'
 import AppLayout from '@/layout/AppLayout'
 import feeds from '@/services/feedsMock'
 import { Affix, Box, Skeleton, Tooltip } from '@mantine/core'
-import { IconPhotoEdit } from '@tabler/icons-react'
+import { IconPlus } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { GetPosts } from '@/services/apis'
@@ -19,6 +19,8 @@ const Feeds = () => {
     queryFn: GetPosts,
   })
   const allPosts = posts?.data
+
+  console.log(allPosts)
 
   return (
     <>
@@ -54,7 +56,7 @@ const Feeds = () => {
                   c={'white'}
                   bg={'#543ee0'}
                 >
-                  <IconPhotoEdit size={25} stroke={1.5} />
+                  <IconPlus size={25} stroke={1.5} />
                 </Box>
               </Tooltip>
             )}

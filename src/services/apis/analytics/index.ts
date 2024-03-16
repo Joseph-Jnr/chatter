@@ -2,7 +2,7 @@
 import axios from '@/services/axios'
 
 // Get all users bookmarks
-export const GetAllBookmarks = async () => {
+/* export const GetAllBookmarks = async () => {
   try {
     const url = '/bookmark/get-bookmarks'
     const res = await axios.get(url)
@@ -10,4 +10,4 @@ export const GetAllBookmarks = async () => {
   } catch (err) {
     throw err
   }
-}
+} */

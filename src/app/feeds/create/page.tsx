@@ -61,7 +61,7 @@ const CreateFeed = () => {
   const router = useRouter()
   const userId = useUser()
 
-  const authorId = String(userId?.id)
+  const authorId = String(userId?.userInfo?.id)
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file)
@@ -225,8 +225,10 @@ const CreateFeed = () => {
                     data={[
                       'Sports',
                       'Education',
-                      'Web Development',
-                      'UI/UX Design',
+                      'Programming',
+                      'Design',
+                      'Lifestyle',
+                      'Finance',
                     ]}
                     mt='md'
                     size='sm'
@@ -238,7 +240,7 @@ const CreateFeed = () => {
                   />
                   <TagsInput
                     label='Tags'
-                    description='Add up to 5 tags'
+                    description='Hit enter to add tag. You can add up to 5 tags'
                     maxTags={5}
                     mt='md'
                     classNames={{ input: classes.input }}

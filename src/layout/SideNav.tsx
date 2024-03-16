@@ -65,7 +65,7 @@ const SideNav = ({ isAuthenticated }: any) => {
       links: [
         { label: 'Feeds', link: '/feeds' },
         { label: 'Bookmarks', link: '/feeds/bookmarks' },
-        { label: 'Trending', link: '#' },
+        { label: 'Trending', link: '/feeds/trending' },
       ],
     }),
     createLinksGroup({
@@ -74,8 +74,10 @@ const SideNav = ({ isAuthenticated }: any) => {
       links: [
         { label: 'Sports', link: '/category/sports' },
         { label: 'Education', link: '/category/education' },
-        { label: 'Web Development', link: '/category/web-development' },
-        { label: 'UI/UX Design', link: '/category/uiux-design' },
+        { label: 'Programming', link: '/category/programming' },
+        { label: 'Design', link: '/category/design' },
+        { label: 'Lifestyle', link: '/category/lifestyle' },
+        { label: 'Finance', link: '/category/finance' },
       ],
     }),
 

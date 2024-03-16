@@ -1,6 +1,6 @@
 const feeds = [
   {
-    id: 1,
+    id: '1',
     title: 'Starting out as a Product designer',
     author: {
       id: '564c8f4b-98d6-4736-97d4-6bf6ee60ef85',
@@ -20,8 +20,12 @@ const feeds = [
       { id: '1', comment: 'Nice post' },
       { id: '2', comment: 'This post is trash' },
     ],
-    bookmarks: [{ id: '1' }, { id: '2' }],
+    bookmarks: [
+      { id: '1', postId: '323243' },
+      { id: '2', postId: '320398093' },
+    ],
     views: 10000,
+    excerpt: 'This is a description of this post',
     content:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, fugit. Fugit impedit incidunt, dicta libero quidem tempora natus amet! Similique eligendi labore quas nulla, vero a reiciendis dolorem non tempora? Lorem ipsum dolor sit amet consectetur adipisicing elit.',
     imageUrl:

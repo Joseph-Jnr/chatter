@@ -26,10 +26,21 @@ export const CreateNewPost = async (payload: CPostPayload): Promise<any> => {
     throw err
   }
 }
-export const LikePost = async (payload: CLikesPayload): Promise<any> => {
+
+export const LikePost = async (postId: string) => {
   try {
-    const url = '/post/like'
-    const res = await axios.post(url, payload)
+    const url = `/likes/like-post/${postId}`
+    const res = await axios.post(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
+export const UnLikePost = async (postId: string) => {
+  try {
+    const url = `/likes/unlike-post/${postId}`
+    const res = await axios.delete(url)
     return res.data
   } catch (err) {
     throw err
@@ -46,18 +57,26 @@ export const BookmarkPost = async (
     throw err
   }
 }
-export const DeleteBookmark = async (
-  postId: string,
-  payload: CBookmarksPayload
-): Promise<any> => {
+export const DeleteBookmark = async (postId: string): Promise<any> => {
   try {
     const url = `/bookmark/remove-bookmark/${postId}`
-    const res = await axios.delete(url, { data: payload })
+    const res = await axios.delete(url)
     return res.data
   } catch (err) {
     throw err
   }
 }
+
+export const GetAllBookmarks = async () => {
+  try {
+    const url = '/bookmark/get-bookmarks'
+    const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
 export const UpdateViewsCount = async (postId: string): Promise<any> => {
   try {
     const url = `/post/update-view/${postId}`
@@ -91,10 +110,10 @@ export const DeleteComment = async (
     throw err
   }
 }
-export const SearchChatter = async (payload: CSearchPayload): Promise<any> => {
+export const SearchChatter = async (value: string) => {
   try {
-    const url = '/post/search'
-    const res = await axios.post(url, payload)
+    const url = `/search/posts?q=${value}`
+    const res = await axios.get(url)
     return res.data
   } catch (err) {
     throw err
@@ -108,6 +127,7 @@ export const GetPosts = async () => {
     const res = await axios.get(url)
     return res.data
   } catch (err) {
+    console.log(err)
     throw err
   }
 }
