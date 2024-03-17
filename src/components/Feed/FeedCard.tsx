@@ -81,20 +81,44 @@ const FeedCard = ({
   imageUrl,
   refetch,
 }: FeedCardProps) => {
+  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
+  const notificationProps = {
+    icon: checkIcon,
+    withCloseButton: false,
+    color: 'teal',
+    className: 'mt-10 w-fit mx-auto',
+  }
+  const [isLiked, setIsLiked] = useState(false)
+  let [likesCount, setLikesCount] = useState(0)
+  const [isBookmarked, setIsBookmarked] = useState(false)
+  let [bookmarksCount, setBookmarksCount] = useState(0)
   const router = useRouter()
   const userData = useUser()
   const userId = String(userData?.userInfo?.id)
-  const [isLiked, setIsLiked] = useState(false)
-  const [isBookmarked, setIsBookmarked] = useState(false)
-  useEffect(() => {
-    // Check if the post is already bookmarked when the component mounts
-    setIsBookmarked(bookmarks?.some((bookmark) => bookmark.postId === id))
-  }, [bookmarks, id])
 
+  //Check likes status
+  const getLikesCount = likes && likes.length
   useEffect(() => {
-    // Check if the post is already liked when the component mounts
-    setIsLiked(likes?.some((like) => like.postId === id))
-  }, [likes, id])
+    if (likes && likes.length > 0) {
+      // Check if any like has the current user's ID
+      const hasUserLiked = likes.some((like: any) => like.userId === userId)
+      setIsLiked(hasUserLiked)
+      setLikesCount(getLikesCount)
+    }
+  }, [likes, userId])
+
+  //Check bookmark status
+  const getBookmarksCount = bookmarks && bookmarks.length
+  useEffect(() => {
+    if (bookmarks && bookmarks.length > 0) {
+      // Check if any bookmark has the current user's ID
+      const hasUserBookmarked = bookmarks.some(
+        (bookmark: any) => bookmark.userId === userId
+      )
+      setIsBookmarked(hasUserBookmarked)
+      setBookmarksCount(getBookmarksCount)
+    }
+  }, [bookmarks, userId])
 
   // Dynamic routing to author profile
   const isCurrentUser = userId === author?.id
@@ -107,30 +131,25 @@ const FeedCard = ({
     if (isAuthenticated) {
       try {
         if (isLiked) {
-          // If already liked, remove the like
-          const res = await UnLikePost(id)
           setIsLiked(false)
-          if (res.success) {
-            if (refetch) {
-              refetch()
-            } else {
-              console.error('Refetch function is null')
-            }
-          }
+          setLikesCount(likesCount - 1)
+          const res = await UnLikePost(id)
+          console.log(res)
         } else {
           // If not liked, add a new like
-          const res = await LikePost(id)
           setIsLiked(true)
-          if (res.success) {
-            if (refetch) {
-              refetch()
-            } else {
-              console.error('Refetch function is null')
-            }
-          }
+          setLikesCount(likesCount + 1)
+          const res = await LikePost(id)
+          console.log(res)
         }
       } catch (error) {
         console.error('Error toggling like:', error)
+        if (isLiked) {
+          setLikesCount(likesCount + 1)
+        } else {
+          setLikesCount(likesCount - 1)
+        }
+        setIsLiked(!isLiked)
       }
     } else {
       open()
@@ -141,38 +160,33 @@ const FeedCard = ({
     if (isAuthenticated) {
       try {
         if (isBookmarked) {
-          // If already bookmarked, delete the bookmark
-          const res = await DeleteBookmark(id)
           setIsBookmarked(false)
-          if (res.success) {
-            if (refetch) {
-              refetch()
-            } else {
-              console.error('Refetch function is null')
-            }
-          }
+          setBookmarksCount(bookmarksCount - 1)
+          notifications.show({
+            ...notificationProps,
+            message: 'Bookmark removed',
+          })
+          const res = await DeleteBookmark(id)
+          console.log(res)
         } else {
           // If not bookmarked, add a new bookmark
-          const res = await BookmarkPost({ postId: id })
           setIsBookmarked(true)
-          if (res.success) {
-            if (refetch) {
-              refetch()
-            } else {
-              console.error('Refetch function is null')
-            }
-          }
+          setBookmarksCount(bookmarksCount + 1)
+          notifications.show({
+            ...notificationProps,
+            message: 'Saved to bookmarks',
+          })
+          const res = await BookmarkPost({ postId: id })
+          console.log(res)
         }
-        // Show notification
-        notifications.show({
-          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-          withCloseButton: false,
-          color: 'teal',
-          message: isBookmarked ? 'Bookmark removed' : 'Saved to bookmarks',
-          className: 'mt-10 w-fit mx-auto',
-        })
       } catch (error) {
         console.error('Error toggling bookmark:', error)
+        if (isBookmarked) {
+          setBookmarksCount(bookmarksCount + 1)
+        } else {
+          setBookmarksCount(bookmarksCount - 1)
+        }
+        setIsBookmarked(!isBookmarked)
       }
     } else {
       open()
@@ -181,7 +195,7 @@ const FeedCard = ({
 
   return (
     <>
-      <Card withBorder padding='lg' className='w-fit' radius={'lg'}>
+      <Card withBorder padding='lg' className='w-full' radius={'lg'}>
         <div className='user-info flex gap-4'>
           <Link href={hrefValue}>
             <Avatar src={author?.imageUrl} size='lg' alt='author image' />
@@ -216,7 +230,7 @@ const FeedCard = ({
           <Text fz='sm' className='w-full' lineClamp={2} mt={10} mb={30}>
             {excerpt}
           </Text>
-          <Image src={imageUrl} className='rounded-xl' alt='image' />
+          <Image src={imageUrl} className='rounded-xl h-[400px]' alt='image' />
         </div>
 
         <div className='flex items-center justify-between text-xs '>
@@ -231,7 +245,7 @@ const FeedCard = ({
                 <IconHeart size={18} stroke={1} />
               )}
               <p className='flex gap-1'>
-                {likes === null ? 0 : formatStats(likes?.length)}
+                {likes === null ? 0 : formatStats(likesCount)}
                 <span className='hidden md:block'>likes</span>
               </p>
             </div>
@@ -264,7 +278,7 @@ const FeedCard = ({
               <IconBookmark size={18} stroke={1} />
             )}
             <p className='flex gap-1'>
-              {bookmarks === null ? 0 : formatStats(bookmarks?.length)}
+              {bookmarks === null ? 0 : formatStats(bookmarksCount)}
               <span className='hidden md:block'>bookmarks</span>
             </p>
           </div>

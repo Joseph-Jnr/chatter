@@ -41,7 +41,20 @@ const Bookmarks = () => {
             ) : (
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
                 {bookmarksData?.map((bookmark: any) => (
-                  <FeedCard key={bookmark.id} {...bookmark} />
+                  <FeedCard
+                    key={bookmark.id}
+                    imageUrl={bookmark?.posts?.imageUrl}
+                    title={bookmark?.posts?.title}
+                    excerpt={bookmark?.posts?.excerpt}
+                    likes={bookmark?.posts?.likes}
+                    comments={bookmark?.posts?.comments}
+                    bookmarks={bookmark?.posts?.bookmarks}
+                    views={bookmark?.posts?.views}
+                    slug={bookmark?.posts?.slug}
+                    duration={bookmark?.posts?.duration}
+                    created_at={bookmark?.posts?.created_at}
+                    {...bookmark}
+                  />
                 ))}
               </div>
             )}

@@ -7,27 +7,36 @@ import { IconTemplate } from '@tabler/icons-react'
 import EmptyState from '@/components/EmptyState'
 import { useParams } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { GetUser } from '@/services/apis'
+import { FollowUser, GetUser } from '@/services/apis'
 import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton'
 import { useState } from 'react'
-
-const stats = [
-  { value: '34K', label: 'Followers' },
-  { value: '187', label: 'Follows' },
-  { value: '1.6K', label: 'Posts' },
-]
+import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
+import FeedCard from '@/components/Feed/FeedCard'
+import formatStats from '@/services/formatStats'
 
 const User = () => {
   const { user } = useParams<{ user: string; item: string }>()
   const [isFollowing, setIsFollowing] = useState(false)
 
   //Fetching user info
-  const { data: userData, isFetching } = useQuery({
+  const {
+    data: userData,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['userData'],
     queryFn: () => GetUser(user),
   })
 
   const userInfo = userData?.data
+  const userId = userData?.data?.author?.id
+  console.log(userInfo)
+
+  const stats = [
+    { value: formatStats(userInfo?.followers?.length), label: 'Followers' },
+    { value: formatStats(userInfo?.following?.length), label: 'Follows' },
+    { value: formatStats(userInfo?.posts?.length), label: 'Posts' },
+  ]
 
   const items = stats.map((stat) => (
     <div key={stat.label}>
@@ -40,6 +49,17 @@ const User = () => {
     </div>
   ))
 
+  const handleFollow = async () => {
+    try {
+      const res = await FollowUser(userId)
+      setIsFollowing(true)
+      refetch()
+      console.log(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <AppLayout>
       <Card withBorder padding='xl' radius='md'>
@@ -50,21 +70,25 @@ const User = () => {
             {userInfo && (
               <>
                 <Avatar
-                  src={userInfo?.imageUrl}
+                  src={userInfo?.author?.imageUrl}
                   size={80}
                   radius={80}
                   mx='auto'
                 />
                 <div className='text-center'>
                   <Text ta='center' fz='lg' fw={500} mt='sm'>
-                    <span className='capitalize'>{userInfo?.first_name}</span>{' '}
-                    <span className='capitalize'>{userInfo?.last_name}</span>
+                    <span className='capitalize'>
+                      {userInfo?.author?.first_name}
+                    </span>{' '}
+                    <span className='capitalize'>
+                      {userInfo?.author?.last_name}
+                    </span>
                   </Text>
                   <Text className='text-sm' mb={'md'}>
-                    @{userInfo?.user_name}
+                    @{userInfo?.author?.user_name}
                   </Text>
                   <Text ta='center' className='capitalize' fz='sm' c='dimmed'>
-                    {userInfo?.role}
+                    {userInfo?.author?.role}
                   </Text>
                 </div>
                 <Group mt='md' justify='center' gap={30}>
@@ -77,8 +101,9 @@ const User = () => {
                   mx='auto'
                   size='md'
                   variant='default'
+                  onClick={handleFollow}
                 >
-                  Follow
+                  {isFollowing ? 'Unfollow' : 'Follow'}
                 </Button>
               </>
             )}
@@ -87,21 +112,38 @@ const User = () => {
       </Card>
 
       <div className='posts mt-20'>
-        {/* <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'></div> */}
         <div>
           <Title order={4} mb={50} className={classes.user_header}>
             Posts
           </Title>
         </div>
-        <EmptyState icon={<IconTemplate size={40} />} title='No Post yet' />
-        {/* <div className='empty-state flex flex-col items-center gap-3 my-16'>
-          <div
-            className={`${classes.icon} w-20 h-20 rounded-full flex justify-center items-center`}
-          >
-            <IconTemplate size={40} />
+        {isFetching ? (
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
+            {[...Array(2)].map((_, index) => (
+              <FeedsSkeleton key={index} />
+            ))}
           </div>
-          <h3 className='font-semibold'>No post</h3>
-        </div> */}
+        ) : (
+          <>
+            {userInfo && userInfo.posts && userInfo.posts.length < 1 ? (
+              <EmptyState
+                icon={<IconTemplate size={40} />}
+                title='No post yet'
+              />
+            ) : (
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
+                {userInfo?.posts?.map((feed: any) => (
+                  <FeedCard
+                    key={feed.id}
+                    refetch={refetch}
+                    author={userInfo?.author}
+                    {...feed}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </AppLayout>
   )

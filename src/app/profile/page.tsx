@@ -41,11 +41,10 @@ const Profile = () => {
   const refetch = fetchingData?.refetch
   const [isUploading, setIsUploading] = useState(false)
 
-  formatStats()
   const stats = [
-    { value: userData?.followers?.length, label: 'Followers' },
-    { value: userData?.following?.length, label: 'Follows' },
-    { value: userData?.posts?.length, label: 'Posts' },
+    { value: formatStats(userData?.followers?.length), label: 'Followers' },
+    { value: formatStats(userData?.following?.length), label: 'Follows' },
+    { value: formatStats(userData?.posts?.length), label: 'Posts' },
   ]
 
   const items = stats.map((stat) => (
@@ -113,6 +112,8 @@ const Profile = () => {
       }
     }
   }
+
+  console.log(userData)
 
   return (
     <AppLayout title='My Profile'>

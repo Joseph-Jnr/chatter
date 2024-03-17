@@ -66,6 +66,7 @@ const CommentForm = ({ postId, refetch }: CommentFormProps) => {
         label='Leave a comment'
         placeholder='Write something...'
         classNames={{ input: inputClass.input }}
+        autosize
         {...form.getInputProps('comment')}
       />
       <div className='mt-4'>

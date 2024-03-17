@@ -79,6 +79,7 @@ const Register = () => {
           title: 'Registration Successful!',
           message: 'Enjoy the experience.',
         })
+        router.push('/sign-in')
       } else {
         notifications.show({
           icon: (
@@ -90,7 +91,6 @@ const Register = () => {
           message: res?.message,
         })
       }
-      router.push('/sign-in')
     } catch (error) {
       console.log(error)
       notifications.show({

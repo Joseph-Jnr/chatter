@@ -8,13 +8,10 @@ import { CFollowerPayload, CProfilePayload } from './user.types'
  * @param  {CProfilePayload} payload
  * @returns Promise
  */
-export const FollowUser = async (
-  userId: string,
-  payload: CFollowerPayload
-): Promise<any> => {
+export const FollowUser = async (userId: string): Promise<any> => {
   try {
     const url = `/followers/follow/${userId}`
-    const res = await axios.post(url, payload)
+    const res = await axios.post(url)
     return res.data
   } catch (err) {
     throw err

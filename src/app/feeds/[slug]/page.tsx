@@ -42,15 +42,26 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
+import { useUser } from '@/context/useUser'
 
 const FeedDetail = () => {
-  const [isLiked, setIsLiked] = useState(false)
-  const [isBookmarked, setIsBookmarked] = useState(false)
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
+  const notificationProps = {
+    icon: checkIcon,
+    withCloseButton: false,
+    color: 'teal',
+    className: 'mt-10 w-fit mx-auto',
+  }
+  const [isLiked, setIsLiked] = useState(false)
+  let [likesCount, setLikesCount] = useState(0)
+  const [isBookmarked, setIsBookmarked] = useState(false)
+  let [bookmarksCount, setBookmarksCount] = useState(0)
   const [opened, { open, close }] = useDisclosure(false)
   const router = useRouter()
   const { slug } = useParams<{ slug: string; item: string }>()
   const [postId, setPostId] = useState('')
+  const currentUser = useUser()
+  const currentUserId = currentUser?.userInfo?.id
 
   // Get post ID from slug
   const GetPostIdFromSlug = async (slug: string) => {
@@ -85,55 +96,68 @@ const FeedDetail = () => {
     }
   }, [postId])
 
-  const {
-    data: postDetail,
-    isFetching,
-    refetch,
-  } = useQuery({
+  const { data: postDetail, isFetching } = useQuery({
     queryKey: ['postDetail', postId],
     queryFn: () => GetSinglePost(postId),
   })
-
   const postDetailData = postDetail?.data
 
   //Check likes status
+  const getLikesCount =
+    postDetailData && postDetailData.likes && postDetailData.likes.length
   useEffect(() => {
     if (
       postDetailData &&
       postDetailData.likes &&
       postDetailData.likes.length > 0
     ) {
-      setIsLiked(true)
+      // Check if any like has the current user's ID
+      const hasUserLiked = postDetailData.likes.some(
+        (like: any) => like.userId === currentUserId
+      )
+      setIsLiked(hasUserLiked)
+      setLikesCount(getLikesCount)
     }
-  }, [postDetailData])
+  }, [postDetailData, currentUserId])
 
   //Check bookmark status
+  const getBookmarksCount =
+    postDetailData && postDetailData.likes && postDetailData.bookmarks.length
   useEffect(() => {
     if (
       postDetailData &&
       postDetailData.bookmarks &&
       postDetailData.bookmarks.length > 0
     ) {
-      setIsBookmarked(true)
+      // Check if any bookmark has the current user's ID
+      const hasUserBookmarked = postDetailData.bookmarks.some(
+        (bookmark: any) => bookmark.userId === currentUserId
+      )
+      setIsBookmarked(hasUserBookmarked)
+      setBookmarksCount(getBookmarksCount)
     }
-  }, [postDetailData])
+  }, [postDetailData, currentUserId])
 
   const likeAction = async () => {
     if (isAuthenticated) {
       try {
         if (isLiked) {
-          // If already liked, remove the like
-          await UnLikePost(postId)
-          refetch()
           setIsLiked(false)
+          setLikesCount(likesCount - 1)
+          await UnLikePost(postId)
         } else {
-          // If not liked, add a new like
-          await LikePost(postId)
-          refetch()
           setIsLiked(true)
+          setLikesCount(likesCount + 1)
+          await LikePost(postId)
         }
       } catch (error) {
-        console.error('Error toggling like:', error)
+        console.error('Error toggling like:', error) // If there's an error, revert the changes in the UI
+        if (isLiked) {
+          setLikesCount(likesCount + 1)
+        } else {
+          setLikesCount(likesCount - 1)
+        }
+        setIsLiked(!isLiked)
       }
     } else {
       open()
@@ -144,26 +168,32 @@ const FeedDetail = () => {
     if (isAuthenticated) {
       try {
         if (isBookmarked) {
-          // If already bookmarked, delete the bookmark
-          await DeleteBookmark(postId)
-          refetch()
           setIsBookmarked(false)
+          setBookmarksCount(bookmarksCount - 1)
+          notifications.show({
+            ...notificationProps,
+            message: 'Bookmark removed',
+          })
+          const res = await DeleteBookmark(postId)
+          console.log(res)
         } else {
-          // If not bookmarked, add a new bookmark
-          await BookmarkPost({ postId: postId })
-          refetch()
           setIsBookmarked(true)
+          setBookmarksCount(bookmarksCount + 1)
+          notifications.show({
+            ...notificationProps,
+            message: 'Saved to bookmarks',
+          })
+          const res = await BookmarkPost({ postId: postId })
+          console.log(res)
         }
-        // Show notification
-        notifications.show({
-          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
-          withCloseButton: false,
-          color: 'teal',
-          message: isBookmarked ? 'Bookmark removed' : 'Saved to bookmarks',
-          className: 'mt-10 w-fit mx-auto',
-        })
       } catch (error) {
         console.error('Error toggling bookmark:', error)
+        if (isBookmarked) {
+          setBookmarksCount(bookmarksCount + 1)
+        } else {
+          setBookmarksCount(bookmarksCount - 1)
+        }
+        setIsBookmarked(!isBookmarked)
       }
     } else {
       open()
@@ -229,7 +259,7 @@ const FeedDetail = () => {
               dangerouslySetInnerHTML={{ __html: postDetailData?.content }}
             />
 
-            <div className='tags-area flex gap-3 mt-10'>
+            <div className='tags-area flex flex-wrap gap-3 mt-10'>
               {postDetailData?.tags?.map((tag: any) => (
                 <Pill key={tag} bg='gray' className={classes.tags} size='lg'>
                   #{...tag}
@@ -249,7 +279,7 @@ const FeedDetail = () => {
                     <IconHeart size={18} stroke={1} />
                   )}
                   <p className='flex gap-1'>
-                    {formatStats(postDetailData?.likes?.length)}{' '}
+                    {formatStats(likesCount)}{' '}
                     <span className='hidden md:block'>likes</span>
                   </p>
                 </div>
@@ -264,7 +294,7 @@ const FeedDetail = () => {
                     <IconBookmark size={18} stroke={1} />
                   )}
                   <p className='flex gap-1'>
-                    {formatStats(postDetailData?.bookmarks?.length)}{' '}
+                    {formatStats(bookmarksCount)}{' '}
                     <span className='hidden md:block'>bookmarks</span>
                   </p>
                 </div>
