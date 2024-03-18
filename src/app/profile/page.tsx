@@ -22,7 +22,6 @@ import {
   IconTemplate,
   IconUserEdit,
 } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
 import formatStats from '@/services/formatStats'
 import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton'
 import { useUser, useFetching } from '@/context/useUser'
@@ -34,7 +33,6 @@ import { IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 
 const Profile = () => {
-  const router = useRouter()
   const userData = useUser()
   const fetchingData = useFetching()
   const isFetching = fetchingData?.isFetching
@@ -221,7 +219,8 @@ const Profile = () => {
         ) : (
           <Tooltip label='Create new post'>
             <Box
-              onClick={() => router.push('/feeds/create')}
+              component={'a'}
+              href='/feeds/create'
               w={50}
               h={50}
               className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'

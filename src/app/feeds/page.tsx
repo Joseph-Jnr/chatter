@@ -2,17 +2,13 @@
 
 import FeedCard from '@/components/Feed/FeedCard'
 import AppLayout from '@/layout/AppLayout'
-import feeds from '@/services/feedsMock'
 import { Affix, Box, Skeleton, Tooltip } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { GetPosts } from '@/services/apis'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
 
 const Feeds = () => {
-  const router = useRouter()
-
   //Fetching posts
   const {
     data: posts,
@@ -51,7 +47,8 @@ const Feeds = () => {
             ) : (
               <Tooltip label='Create new post'>
                 <Box
-                  onClick={() => router.push('/feeds/create')}
+                  component={'a'}
+                  href='/feeds/create'
                   w={50}
                   h={50}
                   className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'

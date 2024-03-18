@@ -24,7 +24,6 @@ import classes from '@/styles/InputStyle.module.css'
 import genClass from '@/styles/General.module.css'
 import Link from 'next/link'
 import { isAuthenticated } from '@/utils/Auth'
-import people from '@/services/peopleMock'
 import { useState } from 'react'
 import { SearchChatter } from '@/services/apis'
 import Image from 'next/image'
@@ -88,7 +87,6 @@ const Header = ({ openNav, onClick }: any) => {
     try {
       const res = await SearchChatter(value)
       setSearchResults(res.data)
-      console.log(res.data)
     } catch (err) {
       console.error('Error searching:', err)
     } finally {
@@ -170,14 +168,20 @@ const Header = ({ openNav, onClick }: any) => {
                   <>
                     {searchResults?.users?.map((person) => (
                       <Link key={person.id} href={`/${person.user_name}`}>
-                        <div className='flex-col items-center' key={person.id}>
+                        <div
+                          className='flex flex-col items-center text-center'
+                          key={person.id}
+                        >
                           <Avatar
                             src={person.imageUrl}
                             radius={120}
                             className='mb-2'
                             mx='auto'
                           />
-                          <p className='text-xs'>{person.user_name}</p>
+                          <Title order={6} className='capitalize'>
+                            {person.first_name} {person.last_name}
+                          </Title>
+                          <p className='text-xs'>@{person.user_name}</p>
                         </div>
                       </Link>
                     ))}
@@ -195,7 +199,7 @@ const Header = ({ openNav, onClick }: any) => {
                     ))}
                   </>
                 ) : (
-                  <Text>No search results found</Text>
+                  <Text fz={14}>No person found</Text>
                 )}
               </div>
             </Box>
@@ -213,16 +217,17 @@ const Header = ({ openNav, onClick }: any) => {
               searchResults.posts &&
               searchResults.posts.length > 0 ? (
                 <ScrollArea mah={150}>
-                  <div className='flex flex-col gap-5 mb-5'>
+                  <div className='flex flex-col mb-5'>
                     {searchResults?.posts?.map((post) => (
-                      <Link key={post?.id} href={`/feeds/${post.slug}`}>
+                      <Link
+                        key={post?.id}
+                        href={`/feeds/${post.slug}`}
+                        className={genClass.post_result}
+                      >
                         <div className='flex-col gap-2'>
                           <Title lineClamp={1} order={6}>
                             {post.title}
                           </Title>
-                          {/* <Text c={'dimmed'} fz={12} className='text-xs'>
-                        {post.author}
-                      </Text> */}
                         </div>
                       </Link>
                     ))}
@@ -235,7 +240,7 @@ const Header = ({ openNav, onClick }: any) => {
                   ))}
                 </div>
               ) : (
-                <Text>No search results found</Text>
+                <Text fz={14}>No post found</Text>
               )}
             </Box>
           </>

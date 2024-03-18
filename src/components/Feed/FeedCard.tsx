@@ -230,7 +230,11 @@ const FeedCard = ({
           <Text fz='sm' className='w-full' lineClamp={2} mt={10} mb={30}>
             {excerpt}
           </Text>
-          <Image src={imageUrl} className='rounded-xl h-[400px]' alt='image' />
+          <Image
+            src={imageUrl}
+            className='rounded-xl h-auto lg:h-[400px]'
+            alt='image'
+          />
         </div>
 
         <div className='flex items-center justify-between text-xs '>

@@ -11,13 +11,9 @@ import {
 } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
 import classes from '@/styles/UserButton.module.css'
-import { useRouter } from 'next/navigation'
-import { GetProfile } from '@/services/apis'
-import { useQuery } from '@tanstack/react-query'
 import { useUser, useFetching } from '@/context/useUser'
 
 export function UserButton() {
-  const router = useRouter()
   const userData = useUser()
   const fetchingData = useFetching()
   const isFetching = fetchingData?.isFetching
@@ -27,10 +23,7 @@ export function UserButton() {
       {isFetching ? (
         <Skeleton height={70} radius={'md'} />
       ) : (
-        <UnstyledButton
-          className={classes.user}
-          onClick={() => router.push('/profile')}
-        >
+        <UnstyledButton className={classes.user} component='a' href='/profile'>
           <Group>
             <Avatar src={userData?.userInfo?.imageUrl} radius='xl' />
 

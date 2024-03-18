@@ -65,3 +65,13 @@
     var(--mantine-color-dark-6)
   );
 }
+
+.post_result {
+  @apply p-2 rounded;
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
+  }
+}

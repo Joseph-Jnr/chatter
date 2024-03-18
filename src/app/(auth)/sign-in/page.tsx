@@ -155,11 +155,7 @@ const SignIn = () => {
 
           <Text ta='center' mt='md'>
             Don&apos;t have an account?{' '}
-            <Anchor<'div'>
-              c='#543EE0'
-              fw={700}
-              onClick={() => router.push('/register')}
-            >
+            <Anchor<'a'> c='#543EE0' fw={700} href='/register'>
               Register
             </Anchor>
           </Text>
