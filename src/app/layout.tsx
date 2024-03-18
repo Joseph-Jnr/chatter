@@ -39,6 +39,8 @@ export const metadata: Metadata = {
   },
 }
 
+const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -58,7 +60,7 @@ export default function RootLayout({
           <UserProvider>
             <Notifications position='top-center' />
             <NextTopLoader color='#543ee0' showSpinner={false} />
-            <GoogleOAuthProvider clientId='962813123148-daa01cipki4vspu15sdgk5jghr6rj7k2.apps.googleusercontent.com'>
+            <GoogleOAuthProvider clientId={`${googleClientId}`}>
               <Box maw={1850} mx='auto'>
                 {children}
               </Box>

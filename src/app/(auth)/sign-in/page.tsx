@@ -83,19 +83,14 @@ const SignIn = () => {
 
   /* Google Auth */
   const login = useGoogleLogin({
-    /* onSuccess: (tokenResponse) => {
-      console.log(tokenResponse)
-    }, */
     onSuccess: async (response) => {
       try {
-        const res = await axios.get(
-          'https://www.googleapis.com/oauth2/v3/userinfo',
-          {
-            headers: {
-              Authorization: `Bearer ${response.access_token}`,
-            },
-          }
-        )
+        const endpoint = process.env.NEXT_PUBLIC_GOOGLE_SIGN_IN_ENDPOINT
+        const res = await axios.get(`${endpoint}`, {
+          headers: {
+            Authorization: `Bearer ${response.access_token}`,
+          },
+        })
         console.log(res)
       } catch (err) {
         console.log(err)

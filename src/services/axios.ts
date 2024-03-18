@@ -15,7 +15,7 @@ const getAuthToken = (): string | null => {
 const token = getAuthToken()
 
 const instance = axios.create({
-  baseURL: 'https://chatter-production-e8a9.up.railway.app/api/v1',
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
   headers: {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
