@@ -56,6 +56,7 @@ const FeedDetail = () => {
   let [likesCount, setLikesCount] = useState(0)
   const [isBookmarked, setIsBookmarked] = useState(false)
   let [bookmarksCount, setBookmarksCount] = useState(0)
+  const [userBookmarkId, setUserBookmarkId] = useState(null)
   const [opened, { open, close }] = useDisclosure(false)
   const router = useRouter()
   const { slug } = useParams<{ slug: string; item: string }>()
@@ -135,6 +136,16 @@ const FeedDetail = () => {
       )
       setIsBookmarked(hasUserBookmarked)
       setBookmarksCount(getBookmarksCount)
+
+      // Find the bookmark ID of the current user if they have bookmarked
+      if (hasUserBookmarked) {
+        const userBookmark = postDetailData.bookmarks.find(
+          (bookmark: any) => bookmark.userId === currentUserId
+        )
+        setUserBookmarkId(userBookmark.id)
+      } else {
+        setUserBookmarkId(null)
+      }
     }
   }, [postDetailData, currentUserId])
 
@@ -167,14 +178,14 @@ const FeedDetail = () => {
   const bookmarkAction = async () => {
     if (isAuthenticated) {
       try {
-        if (isBookmarked) {
+        if (isBookmarked && userBookmarkId) {
           setIsBookmarked(false)
           setBookmarksCount(bookmarksCount - 1)
           notifications.show({
             ...notificationProps,
             message: 'Bookmark removed',
           })
-          const res = await DeleteBookmark(postId)
+          const res = await DeleteBookmark(userBookmarkId)
           console.log(res)
         } else {
           setIsBookmarked(true)
@@ -249,7 +260,7 @@ const FeedDetail = () => {
             <div className='my-10'>
               <img
                 src={postDetailData?.imageUrl}
-                className='rounded-lg'
+                className='rounded-lg w-full'
                 alt='image'
               />
             </div>

@@ -153,3 +153,15 @@ export const GetSinglePost = async (postId: string) => {
     throw err
   }
 }
+
+// Get trending posts
+export const GetTrendingPosts = async () => {
+  try {
+    const url = '/post/tranding'
+    const res = await axios.get(url)
+    return res.data
+  } catch (err) {
+    console.log(err)
+    throw err
+  }
+}

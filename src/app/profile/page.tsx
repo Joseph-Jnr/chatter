@@ -27,10 +27,11 @@ import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton'
 import { useUser, useFetching } from '@/context/useUser'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
 import EmptyState from '@/components/EmptyState'
-import { UpdateProfilePicture } from '@/services/apis'
+import { GetPosts, UpdateProfilePicture } from '@/services/apis'
 import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 const Profile = () => {
   const userData = useUser()
@@ -38,10 +39,21 @@ const Profile = () => {
   const isFetching = fetchingData?.isFetching
   const refetch = fetchingData?.refetch
   const [isUploading, setIsUploading] = useState(false)
+  const userId = userData?.userInfo?.id
+
+  //Fetching posts
+  const { data: posts } = useQuery({
+    queryKey: ['posts'],
+    queryFn: GetPosts,
+  })
+  const allPosts = posts?.data
+  const userPosts = userId
+    ? allPosts?.filter((post: any) => post.authorId === userId)
+    : []
 
   const stats = [
     { value: formatStats(userData?.followers?.length), label: 'Followers' },
-    { value: formatStats(userData?.following?.length), label: 'Follows' },
+    { value: formatStats(userData?.following?.length), label: 'Following' },
     { value: formatStats(userData?.posts?.length), label: 'Posts' },
   ]
 
@@ -191,7 +203,7 @@ const Profile = () => {
           </div>
         ) : (
           <>
-            {userData && userData.posts && userData.posts.length < 1 ? (
+            {userPosts?.length < 1 ? (
               <EmptyState
                 icon={<IconTemplate size={40} />}
                 title='You do not have any post yet'
@@ -199,7 +211,7 @@ const Profile = () => {
               />
             ) : (
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
-                {userData?.posts?.map((feed: any) => (
+                {userPosts?.map((feed: any) => (
                   <FeedCard
                     key={feed.id}
                     refetch={refetch}

@@ -1,10 +1,9 @@
 /* eslint-disable no-useless-catch */
 import axios from '@/services/axios'
-import { CFollowerPayload, CProfilePayload } from './user.types'
+import { CProfilePayload } from './user.types'
 
 /**
  * Description: Send data to add a new follower
- * @param  {CFollowerPayload} payload
  * @param  {CProfilePayload} payload
  * @returns Promise
  */
@@ -17,13 +16,10 @@ export const FollowUser = async (userId: string): Promise<any> => {
     throw err
   }
 }
-export const UnfollowUser = async (
-  userId: string,
-  payload: CFollowerPayload
-): Promise<any> => {
+export const UnfollowUser = async (userId: string): Promise<any> => {
   try {
     const url = `/followers/unfollow/${userId}`
-    const res = await axios.delete(url, { data: payload })
+    const res = await axios.delete(url)
     return res.data
   } catch (err) {
     throw err

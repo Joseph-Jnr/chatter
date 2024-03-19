@@ -1,6 +1,6 @@
-/* // middleware.ts
+// middleware.ts
 
-import type { NextRequest } from 'next/server'
+/*import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const currentUser = request.cookies.get('currentUser')?.value
@@ -35,3 +35,22 @@ export const config = {
  */
 
 export function middleware() {}
+
+
+/* import { NextResponse } from 'next/server'
+import { isAuthenticated } from './utils/Auth'
+
+export function middleware(request: NextResponse) {
+  const user = isAuthenticated
+
+  if (!user) {
+    return NextResponse.redirect(new URL('/sign-in', request.url))
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/profile', '/analytics', '/category'],
+}
+ */

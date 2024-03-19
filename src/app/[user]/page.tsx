@@ -1,22 +1,42 @@
 'use client'
 
-import { Card, Avatar, Text, Group, Button, Title } from '@mantine/core'
+import {
+  Card,
+  Avatar,
+  Text,
+  Group,
+  Button,
+  Title,
+  rem,
+  Loader,
+} from '@mantine/core'
 import classes from '@/styles/General.module.css'
 import AppLayout from '@/layout/AppLayout'
 import { IconTemplate } from '@tabler/icons-react'
 import EmptyState from '@/components/EmptyState'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
-import { FollowUser, GetUser } from '@/services/apis'
+import { FollowUser, GetPosts, GetUser, UnfollowUser } from '@/services/apis'
 import ProfileSkeleton from '@/components/Skeletons/ProfileSkeleton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
 import FeedCard from '@/components/Feed/FeedCard'
 import formatStats from '@/services/formatStats'
+import { notifications } from '@mantine/notifications'
+import { IconCheck } from '@tabler/icons-react'
 
 const User = () => {
+  const router = useRouter()
   const { user } = useParams<{ user: string; item: string }>()
-  const [isFollowing, setIsFollowing] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
+  const notificationProps = {
+    icon: checkIcon,
+    withCloseButton: false,
+    color: 'teal',
+    className: 'mt-10 w-fit mx-auto',
+  }
 
   //Fetching user info
   const {
@@ -30,11 +50,28 @@ const User = () => {
 
   const userInfo = userData?.data
   const userId = userData?.data?.author?.id
-  console.log(userInfo)
+  const followingStatus = userData?.data?.followingStatus
+
+  //Fetching posts
+  const { data: posts } = useQuery({
+    queryKey: ['posts'],
+    queryFn: GetPosts,
+  })
+  const allPosts = posts?.data
+  const userPosts = userId
+    ? allPosts?.filter((post: any) => post.authorId === userId)
+    : []
+
+  useEffect(() => {
+    // Redirect to homepage if userInfo is not available after fetching
+    if (!isFetching && !userInfo) {
+      router.push('/feeds')
+    }
+  }, [isFetching, userInfo])
 
   const stats = [
     { value: formatStats(userInfo?.followers?.length), label: 'Followers' },
-    { value: formatStats(userInfo?.following?.length), label: 'Follows' },
+    { value: formatStats(userInfo?.following?.length), label: 'Following' },
     { value: formatStats(userInfo?.posts?.length), label: 'Posts' },
   ]
 
@@ -50,11 +87,26 @@ const User = () => {
   ))
 
   const handleFollow = async () => {
+    setIsSubmitting(true)
     try {
-      const res = await FollowUser(userId)
-      setIsFollowing(true)
-      refetch()
-      console.log(res.data)
+      if (followingStatus === 'follow' || followingStatus === 'follow back') {
+        notifications.show({
+          ...notificationProps,
+          message: 'You are now following this user',
+        })
+        await FollowUser(userId)
+        setIsSubmitting(false)
+        refetch()
+      } else if (followingStatus === 'unfollow') {
+        setIsSubmitting(true)
+        notifications.show({
+          ...notificationProps,
+          message: 'You have unfollowed this user',
+        })
+        await UnfollowUser(userId)
+        setIsSubmitting(false)
+        refetch()
+      }
     } catch (error) {
       console.log(error)
     }
@@ -97,13 +149,18 @@ const User = () => {
                 <Button
                   w={{ base: '100%', sm: 'fit-content' }}
                   radius='md'
+                  tt={'capitalize'}
                   mt='xl'
                   mx='auto'
                   size='md'
                   variant='default'
                   onClick={handleFollow}
                 >
-                  {isFollowing ? 'Unfollow' : 'Follow'}
+                  {isSubmitting ? (
+                    <Loader color='#543ee0' size={20} />
+                  ) : (
+                    `${followingStatus}`
+                  )}
                 </Button>
               </>
             )}
@@ -125,20 +182,15 @@ const User = () => {
           </div>
         ) : (
           <>
-            {userInfo && userInfo.posts && userInfo.posts.length < 1 ? (
+            {userPosts?.length < 1 ? (
               <EmptyState
                 icon={<IconTemplate size={40} />}
                 title='No post yet'
               />
             ) : (
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-10'>
-                {userInfo?.posts?.map((feed: any) => (
-                  <FeedCard
-                    key={feed.id}
-                    refetch={refetch}
-                    author={userInfo?.author}
-                    {...feed}
-                  />
+                {userPosts?.map((feed: any) => (
+                  <FeedCard key={feed.id} refetch={refetch} {...feed} />
                 ))}
               </div>
             )}

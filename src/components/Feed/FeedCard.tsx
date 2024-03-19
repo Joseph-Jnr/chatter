@@ -53,6 +53,7 @@ interface Likes {
 }
 
 interface Bookmarks {
+  id: any
   postId: string
 }
 
@@ -92,6 +93,7 @@ const FeedCard = ({
   let [likesCount, setLikesCount] = useState(0)
   const [isBookmarked, setIsBookmarked] = useState(false)
   let [bookmarksCount, setBookmarksCount] = useState(0)
+  const [userBookmarkId, setUserBookmarkId] = useState(null)
   const router = useRouter()
   const userData = useUser()
   const userId = String(userData?.userInfo?.id)
@@ -117,6 +119,16 @@ const FeedCard = ({
       )
       setIsBookmarked(hasUserBookmarked)
       setBookmarksCount(getBookmarksCount)
+
+      // Find the bookmark ID of the current user if they have bookmarked
+      if (hasUserBookmarked) {
+        const userBookmark = bookmarks.find(
+          (bookmark: any) => bookmark.userId === userId
+        )
+        setUserBookmarkId(userBookmark?.id)
+      } else {
+        setUserBookmarkId(null)
+      }
     }
   }, [bookmarks, userId])
 
@@ -133,14 +145,12 @@ const FeedCard = ({
         if (isLiked) {
           setIsLiked(false)
           setLikesCount(likesCount - 1)
-          const res = await UnLikePost(id)
-          console.log(res)
+          await UnLikePost(id)
         } else {
           // If not liked, add a new like
           setIsLiked(true)
           setLikesCount(likesCount + 1)
-          const res = await LikePost(id)
-          console.log(res)
+          await LikePost(id)
         }
       } catch (error) {
         console.error('Error toggling like:', error)
@@ -159,15 +169,14 @@ const FeedCard = ({
   const bookmarkAction = async () => {
     if (isAuthenticated) {
       try {
-        if (isBookmarked) {
+        if (isBookmarked && userBookmarkId) {
           setIsBookmarked(false)
           setBookmarksCount(bookmarksCount - 1)
           notifications.show({
             ...notificationProps,
             message: 'Bookmark removed',
           })
-          const res = await DeleteBookmark(id)
-          console.log(res)
+          await DeleteBookmark(userBookmarkId)
         } else {
           // If not bookmarked, add a new bookmark
           setIsBookmarked(true)
@@ -176,8 +185,7 @@ const FeedCard = ({
             ...notificationProps,
             message: 'Saved to bookmarks',
           })
-          const res = await BookmarkPost({ postId: id })
-          console.log(res)
+          await BookmarkPost({ postId: id })
         }
       } catch (error) {
         console.error('Error toggling bookmark:', error)

@@ -19,25 +19,33 @@ import { useQuery } from '@tanstack/react-query'
 import classes from '@/styles/General.module.css'
 
 interface FollowerCardProps {
-  name: string
-  username: string
-  image: any
+  first_name: string
+  last_name: string
+  user_name: string
+  imageUrl: any
+  action?: string
 }
 
-const FollowerCard = ({ name, username, image }: FollowerCardProps) => {
+const FollowerCard = ({
+  first_name,
+  last_name,
+  user_name,
+  imageUrl,
+  action,
+}: FollowerCardProps) => {
   return (
     <div className='flex justify-between mb-10'>
       <div className='flex gap-4'>
-        <Avatar src={image} radius='xl' />
+        <Avatar src={imageUrl} radius='xl' />
 
         <div style={{ flex: 1 }}>
           <Text size='sm' fw={500}>
-            {name}
+            {first_name} {last_name}
           </Text>
 
           <Box w={150}>
             <Text truncate='end' c='dimmed' fz={12}>
-              {username}
+              {user_name}
             </Text>
           </Box>
         </div>
@@ -64,6 +72,7 @@ const Friends = () => {
     queryFn: GetAllFollowing,
   })
   const followingData = following?.data
+  console.log(followingData)
 
   return (
     <AppLayout title='Friends'>
