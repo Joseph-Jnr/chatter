@@ -79,7 +79,18 @@ const FeedDetail = () => {
     }
   }
 
-  GetPostIdFromSlug(slug)
+  useEffect(() => {
+    const getPostId = async () => {
+      try {
+        const postId = await GetPostIdFromSlug(slug)
+        setPostId(postId)
+      } catch (error) {
+        console.error('Error fetching post ID:', error)
+      }
+    }
+
+    getPostId()
+  }, [slug])
 
   // Update views count
   useEffect(() => {
@@ -271,7 +282,7 @@ const FeedDetail = () => {
 
             <div className='tags-area flex flex-wrap gap-3 mt-10'>
               {postDetailData?.tags?.map((tag: any) => (
-                <Pill key={tag} bg='gray' className={classes.tags} size='lg'>
+                <Pill key={tag} className={classes.tags} size='lg'>
                   #{...tag}
                 </Pill>
               ))}

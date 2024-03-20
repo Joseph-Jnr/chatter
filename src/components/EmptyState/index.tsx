@@ -15,7 +15,7 @@ const EmptyState = ({ icon, title, description }: EmptyStateProps) => {
       >
         {icon}
       </div>
-      <h3 className='font-semibold'>{title}</h3>
+      <h3 className='font-semibold text-center'>{title}</h3>
 
       <Text c={'dimmed'} className='text-sm text-center'>
         {description}
