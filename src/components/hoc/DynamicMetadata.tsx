@@ -1,9 +1,8 @@
 import Head from 'next/head'
 
-const withMetadata =
-  (Component: any) =>
-  ({ postDetailData, slug, ...props }: any) => {
-    const WrappedComponent = (props: any) => (
+const withMetadata = (Component: any) => {
+  const WrappedComponent = ({ postDetailData, slug, ...props }: any) => {
+    return (
       <>
         <Head>
           <title>{postDetailData?.title || 'Chatter'}</title>
@@ -40,12 +39,14 @@ const withMetadata =
         <Component {...props} />
       </>
     )
-
-    WrappedComponent.displayName = `withMetadata(${
-      Component.displayName || Component.name
-    })`
-
-    return WrappedComponent
   }
+
+  // Set display name for better React dev tools support
+  WrappedComponent.displayName = `withMetadata(${
+    Component.displayName || Component.name || 'Component'
+  })`
+
+  return WrappedComponent
+}
 
 export default withMetadata
