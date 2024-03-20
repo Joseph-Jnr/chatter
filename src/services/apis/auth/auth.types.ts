@@ -6,10 +6,16 @@ export type CLoginPayload = {
 export type CRegisterPayload = {
   first_name: string
   last_name: string
-  role: string
   email: string
   user_name: string
   password: string
+}
+
+export type CGoogleAuthPayload = {
+  first_name: string
+  last_name: string
+  email: string
+  user_name: string
 }
 
 export type CVerifyOtpPayload = {

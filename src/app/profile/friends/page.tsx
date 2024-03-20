@@ -40,13 +40,13 @@ const FollowerCard = ({
         <Avatar src={imageUrl} radius='xl' />
 
         <div style={{ flex: 1 }}>
-          <Text size='sm' fw={500}>
+          <Text size='sm' tt={'capitalize'} fw={500}>
             {first_name} {last_name}
           </Text>
 
           <Box w={150}>
             <Text truncate='end' c='dimmed' fz={12}>
-              {user_name}
+              @{user_name}
             </Text>
           </Box>
         </div>
@@ -66,6 +66,7 @@ const Friends = () => {
     queryFn: GetAllFollowers,
   })
   const followersData = followers?.data
+  console.log('Followers: ', followersData)
 
   //Fetching following
   const { data: following } = useQuery({
@@ -73,7 +74,7 @@ const Friends = () => {
     queryFn: GetAllFollowing,
   })
   const followingData = following?.data
-  console.log(followingData)
+  console.log('Following: ', followingData)
 
   return (
     <AppLayout title='Friends'>
@@ -113,7 +114,13 @@ const Friends = () => {
                   />
                 ) : (
                   followersData?.map((follower: any) => (
-                    <FollowerCard key={follower.id} {...follower} />
+                    <FollowerCard
+                      key={follower.id}
+                      first_name={follower.followers[0].first_name}
+                      last_name={follower.followers[0].last_name}
+                      user_name={follower.followers[0].user_name}
+                      imageUrl={follower.followers[0].imageUrl}
+                    />
                   ))
                 )}
               </>
@@ -139,7 +146,13 @@ const Friends = () => {
                   />
                 ) : (
                   followingData?.map((follower: any) => (
-                    <FollowerCard key={follower.id} {...follower} />
+                    <FollowerCard
+                      key={follower.id}
+                      first_name={follower.following[0].first_name}
+                      last_name={follower.following[0].last_name}
+                      user_name={follower.following[0].user_name}
+                      imageUrl={follower.following[0].imageUrl}
+                    />
                   ))
                 )}
               </>

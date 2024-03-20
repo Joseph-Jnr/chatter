@@ -45,10 +45,8 @@ const SignIn = () => {
   const [googlePayload, setGooglePayload] = useState({
     first_name: '',
     last_name: '',
-    role: '',
     email: '',
     user_name: '',
-    password: '',
   })
 
   function removeSpacesAndToLower(str: string) {

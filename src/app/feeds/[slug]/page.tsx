@@ -43,6 +43,7 @@ import { useQuery } from '@tanstack/react-query'
 import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
 import { useUser } from '@/context/useUser'
+import withMetadata from '@/components/hoc/DynamicMetadata'
 
 const FeedDetail = () => {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
@@ -366,4 +367,4 @@ const FeedDetail = () => {
   )
 }
 
-export default FeedDetail
+export default withMetadata(FeedDetail)

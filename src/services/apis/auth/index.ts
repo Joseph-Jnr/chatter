@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import axios from '@/services/axios'
 import {
+  CGoogleAuthPayload,
   CLoginPayload,
   CRegisterPayload,
   CVerifyOtpPayload,
@@ -10,6 +11,7 @@ import {
  * Description: Send authentication data
  * @param  {CLoginPayload} payload
  * @param  {CRegisterPayload} payload
+ * @param  {CGoogleAuthPayload} payload
  * @param  {CVerifyOtpPayload} payload
  * @returns Promise
  */
@@ -31,7 +33,7 @@ export const AuthRegister = async (payload: CRegisterPayload): Promise<any> => {
     throw err
   }
 }
-export const AuthGoogle = async (payload: CRegisterPayload): Promise<any> => {
+export const AuthGoogle = async (payload: CGoogleAuthPayload): Promise<any> => {
   try {
     const url = '/user/google/register'
     const res = await axios.post(url, payload)

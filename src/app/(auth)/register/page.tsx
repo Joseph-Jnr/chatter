@@ -28,7 +28,7 @@ import { IconAlertHexagon, IconCheck, IconX } from '@tabler/icons-react'
 const schema = yup.object().shape({
   first_name: yup.string().required('This field is required'),
   last_name: yup.string().required('This field is required'),
-  role: yup.string().required('This field is required'),
+  //role: yup.string().required('This field is required'),
   email: yup
     .string()
     .required('Enter email address')
@@ -49,7 +49,6 @@ const Register = () => {
     initialValues: {
       first_name: '',
       last_name: '',
-      role: '',
       email: '',
       user_name: '',
       password: '',
@@ -135,7 +134,7 @@ const Register = () => {
               {...form.getInputProps('last_name')}
             />
           </Group>
-          <Select
+          {/* <Select
             label='You are joining as?'
             placeholder='Choose status'
             data={['Reader', 'Author']}
@@ -147,7 +146,7 @@ const Register = () => {
             size='sm'
             classNames={{ input: inputClass.input, option: inputClass.option }}
             {...form.getInputProps('role')}
-          />
+          /> */}
           <Group>
             <TextInput
               label='Email address'
