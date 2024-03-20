@@ -3,6 +3,7 @@
 import EmptyState from '@/components/EmptyState'
 import FeedCard from '@/components/Feed/FeedCard'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 import AppLayout from '@/layout/AppLayout'
 import { GetTrendingPosts } from '@/services/apis'
 import { IconTrendingUp } from '@tabler/icons-react'
@@ -48,4 +49,4 @@ const Trending = () => {
   )
 }
 
-export default Trending
+export default CheckAuthStatus(Trending)

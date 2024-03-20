@@ -3,6 +3,7 @@
 import EmptyState from '@/components/EmptyState'
 import FeedCard from '@/components/Feed/FeedCard'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 import { useUser } from '@/context/useUser'
 import AppLayout from '@/layout/AppLayout'
 import { GetAllBookmarks, GetPosts } from '@/services/apis'
@@ -63,4 +64,4 @@ const Bookmarks = () => {
   )
 }
 
-export default Bookmarks
+export default CheckAuthStatus(Bookmarks)

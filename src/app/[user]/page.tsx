@@ -24,6 +24,7 @@ import FeedCard from '@/components/Feed/FeedCard'
 import formatStats from '@/services/formatStats'
 import { notifications } from '@mantine/notifications'
 import { IconCheck } from '@tabler/icons-react'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 
 const User = () => {
   const router = useRouter()
@@ -201,4 +202,4 @@ const User = () => {
   )
 }
 
-export default User
+export default CheckAuthStatus(User)

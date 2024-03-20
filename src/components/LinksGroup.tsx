@@ -20,6 +20,7 @@ interface LinksGroupProps {
   initiallyOpened?: boolean
   navLink?: any
   links?: { label: string; link: string }[]
+  onLogout?: () => void
 }
 
 const LinksGroup = ({
@@ -28,6 +29,7 @@ const LinksGroup = ({
   initiallyOpened,
   navLink,
   links,
+  onLogout,
 }: LinksGroupProps) => {
   const router = useRouter()
   const currentPath = usePathname()
@@ -35,11 +37,20 @@ const LinksGroup = ({
   const hasLinks = Array.isArray(links)
   const [opened, setOpened] = useState(initiallyOpened || false)
   const handleClick = () => {
-    if (hasLinks) {
+    if (label === 'Log out') {
+      if (onLogout) {
+        onLogout() // Call onLogout function if provided
+      }
+    } else if (hasLinks) {
       setOpened((o) => !o)
     } else {
       router.push(navLink)
     }
+    /* if (hasLinks) {
+      setOpened((o) => !o)
+    } else {
+      router.push(navLink)
+    } */
   }
   const items = (hasLinks ? links : []).map((link) => (
     <Text<'a'>

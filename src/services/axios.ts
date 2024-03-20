@@ -4,33 +4,61 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios'
 
-// Function to retrieve the bearer token from local storage
-const getAuthToken = (): string | null => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('chatterAuthToken')
-  }
-  return null
-}
-
-const token = getAuthToken()
-
 const instance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  },
 })
 
 instance.interceptors.request.use(
-  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => config,
+  async (
+    config: InternalAxiosRequestConfig
+  ): Promise<InternalAxiosRequestConfig> => {
+    const getAuthTokenFromLS = localStorage.getItem('chatterAuthToken')
+
+    if (getAuthTokenFromLS) {
+      config.headers['Authorization'] = `Bearer ${getAuthTokenFromLS}`
+    } else {
+      delete config.headers['Authorization']
+    }
+
+    return config
+  },
   (error: AxiosError): Promise<AxiosError> => Promise.reject(error)
 )
 
-const successHandler = (response: AxiosResponse): AxiosResponse => response
-const errorHandler = (error: AxiosError | Error): Promise<AxiosError> =>
-  Promise.reject(error)
+instance.interceptors.response.use(
+  async (response: AxiosResponse): Promise<AxiosResponse> => response,
+  async (error: AxiosError): Promise<AxiosError> => {
+    if (error.response?.status === 401) {
+      const refreshToken = localStorage.getItem('chatterRefreshToken')
+      const accessToken = localStorage.getItem('chatterAuthToken')
 
-instance.interceptors.response.use(successHandler, errorHandler)
+      if (refreshToken && accessToken) {
+        try {
+          const refreshResponse = await axios.post(
+            `${process.env.NEXT_PUBLIC_BASE_URL}`,
+            { refresh: refreshToken }
+          )
+
+          const newAuthToken = refreshResponse?.data?.token
+
+          if (newAuthToken) {
+            localStorage.setItem('chatterAuthToken', newAuthToken)
+
+            // Retry the original request with the new access token
+            if (error.config) {
+              error.config.headers['Authorization'] = `Bearer ${newAuthToken}`
+              return axios.request(error.config)
+            }
+          }
+        } catch (refreshError) {
+          // Handle refresh token failure
+          console.error('Failed to refresh access token:', refreshError)
+        }
+      }
+    }
+
+    return Promise.reject(error)
+  }
+)
 
 export default instance

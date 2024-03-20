@@ -36,7 +36,6 @@ export const config = {
 
 export function middleware() {}
 
-
 /* import { NextResponse } from 'next/server'
 import { isAuthenticated } from './utils/Auth'
 

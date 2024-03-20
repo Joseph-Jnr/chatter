@@ -28,7 +28,7 @@ export function UserButton() {
             <Avatar src={userData?.userInfo?.imageUrl} radius='xl' />
 
             <div style={{ flex: 1 }}>
-              <Text size='sm' fw={500}>
+              <Text size='sm' tt={'capitalize'} fw={500}>
                 {userData?.userInfo?.first_name} {userData?.userInfo?.last_name}
               </Text>
 

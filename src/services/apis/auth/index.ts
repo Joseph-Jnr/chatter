@@ -31,6 +31,16 @@ export const AuthRegister = async (payload: CRegisterPayload): Promise<any> => {
     throw err
   }
 }
+export const AuthGoogle = async (payload: CRegisterPayload): Promise<any> => {
+  try {
+    const url = '/user/google/register'
+    const res = await axios.post(url, payload)
+    return res.data
+  } catch (err) {
+    throw err
+  }
+}
+
 export const VerifyOtp = async (payload: CVerifyOtpPayload): Promise<any> => {
   try {
     const url = '/otp-verification'

@@ -17,6 +17,7 @@ import {
 import { IconUsers, IconUsersGroup } from '@tabler/icons-react'
 import { useQuery } from '@tanstack/react-query'
 import classes from '@/styles/General.module.css'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 
 interface FollowerCardProps {
   first_name: string
@@ -150,4 +151,4 @@ const Friends = () => {
   )
 }
 
-export default Friends
+export default CheckAuthStatus(Friends)

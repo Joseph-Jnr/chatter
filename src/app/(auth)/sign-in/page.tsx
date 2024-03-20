@@ -24,11 +24,11 @@ import { yupResolver } from 'mantine-form-yup-resolver'
 import * as yup from 'yup'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
-import { IconX } from '@tabler/icons-react'
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google'
+import { IconCheck, IconX } from '@tabler/icons-react'
+import { GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
-import { Login } from '@/services/apis'
+import { AuthGoogle, Login } from '@/services/apis'
 import { useState } from 'react'
 
 const schema = yup.object().shape({
@@ -42,6 +42,19 @@ const schema = yup.object().shape({
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const [googlePayload, setGooglePayload] = useState({
+    first_name: '',
+    last_name: '',
+    role: '',
+    email: '',
+    user_name: '',
+    password: '',
+  })
+
+  function removeSpacesAndToLower(str: string) {
+    // Remove spaces and convert to lowercase using replace and toLowerCase methods
+    return str.replace(/\s/g, '').toLowerCase()
+  }
 
   const form = useForm({
     initialValues: {
@@ -60,13 +73,17 @@ const SignIn = () => {
     try {
       const res = await Login(values)
       console.log(res)
+
+      notifications.show({
+        icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        withCloseButton: false,
+        color: 'green',
+        message: 'Authentication Successful.',
+      })
+
+      // Set token and log user in
       localStorage.setItem('chatterAuthToken', res?.data)
       router.push('/feeds')
-
-      /* cookies().set('currentUser', JSON.stringify(res?.data), {
-        maxAge: 3600,
-        path: '/',
-      }) */
     } catch (error) {
       console.log(error)
       notifications.show({
@@ -91,7 +108,36 @@ const SignIn = () => {
             Authorization: `Bearer ${response.access_token}`,
           },
         })
-        console.log(res)
+
+        if (res.data) {
+          const user_name = removeSpacesAndToLower(res.data.name)
+
+          setGooglePayload({
+            ...googlePayload,
+            first_name: res.data.given_name,
+            last_name: res.data.family_name,
+            email: res.data.email,
+            user_name: user_name,
+          })
+        }
+        console.log('Received data:', res.data)
+        console.log('Send this payload: ', googlePayload)
+
+        // Send user values gotten from google to the backend endpoint
+        const res2 = await AuthGoogle(googlePayload)
+        console.log('Response from AuthGoogle:', res2)
+        if (res2.success === false) {
+          notifications.show({
+            icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+            withCloseButton: false,
+            color: 'red',
+            title: 'Authentication failed!',
+            message: `${res2.message}`,
+          })
+        } else {
+          localStorage.setItem('chatterAuthToken', res2?.data?.token)
+          router.push('/feeds')
+        }
       } catch (err) {
         console.log(err)
       }

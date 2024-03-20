@@ -58,6 +58,12 @@ const SideNav = ({ isAuthenticated }: any) => {
     }
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('chatterAuthToken')
+    // Redirect to logout page
+    router.push('/sign-in')
+  }
+
   const mockdata = [
     createLinksGroup({
       label: 'Overview',
@@ -83,7 +89,11 @@ const SideNav = ({ isAuthenticated }: any) => {
 
     { label: 'Friends', navLink: '/profile/friends', icon: IconUsers },
     { label: 'Analytics', navLink: '/analytics', icon: IconChartBar },
-    { label: 'Log out', navLink: '/sign-in', icon: IconLogout },
+    {
+      label: 'Log out',
+      onLogout: handleLogout,
+      icon: IconLogout,
+    },
   ]
 
   const links = mockdata.map((item) => (

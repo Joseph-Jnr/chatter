@@ -37,6 +37,7 @@ import { CreateNewPost } from '@/services/apis'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
 import { useUser } from '@/context/useUser'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 
 const schema = yup.object().shape({
   title: yup.string().required('Title is required'),
@@ -62,6 +63,20 @@ const CreateFeed = () => {
   const userId = useUser()
 
   const authorId = String(userId?.userInfo?.id)
+  const currentUserRole = userId?.userInfo?.role
+
+  useEffect(() => {
+    if (currentUserRole && currentUserRole !== 'Author') {
+      notifications.show({
+        icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+        withCloseButton: false,
+        color: 'red',
+        message:
+          'You do not have the permission to create a post. Please login as an Author.',
+      })
+      router.push('/feeds')
+    }
+  }, [userId, currentUserRole])
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file)
@@ -156,7 +171,6 @@ const CreateFeed = () => {
       router.push('/feeds')
     } catch (error) {
       console.log(error)
-
       notifications.show({
         icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
         withCloseButton: false,
@@ -286,4 +300,4 @@ const CreateFeed = () => {
   )
 }
 
-export default CreateFeed
+export default CheckAuthStatus(CreateFeed)

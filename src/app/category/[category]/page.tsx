@@ -10,8 +10,9 @@ import { GetPosts } from '@/services/apis'
 import { useEffect, useState } from 'react'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
 import EmptyState from '@/components/EmptyState'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 
-const Categroy = () => {
+const Category = () => {
   const { category } = useParams<{ category: string; item: string }>()
   const capitalizedCategory =
     category.charAt(0).toUpperCase() + category.slice(1)
@@ -74,4 +75,4 @@ const Categroy = () => {
   )
 }
 
-export default Categroy
+export default CheckAuthStatus(Category)

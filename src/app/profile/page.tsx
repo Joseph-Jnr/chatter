@@ -32,6 +32,7 @@ import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 
 const Profile = () => {
   const userData = useUser()
@@ -169,7 +170,7 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className='text-center'>
-                  <Text fz='lg' fw={500} mt='sm'>
+                  <Text fz='lg' tt={'capitalize'} fw={500} mt='sm'>
                     {userData?.userInfo?.first_name}{' '}
                     {userData?.userInfo?.last_name}
                   </Text>
@@ -225,27 +226,29 @@ const Profile = () => {
         )}
       </div>
 
-      <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
-        {isFetching ? (
-          <Skeleton circle height={54} />
-        ) : (
-          <Tooltip label='Create new post'>
-            <Box
-              component={'a'}
-              href='/feeds/create'
-              w={50}
-              h={50}
-              className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'
-              c={'white'}
-              bg={'#543ee0'}
-            >
-              <IconPlus size={25} stroke={1.5} />
-            </Box>
-          </Tooltip>
-        )}
-      </Affix>
+      {userData?.userInfo?.role === 'Author' && (
+        <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
+          {isFetching ? (
+            <Skeleton circle height={54} />
+          ) : (
+            <Tooltip label='Create new post'>
+              <Box
+                component={'a'}
+                href='/feeds/create'
+                w={50}
+                h={50}
+                className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'
+                c={'white'}
+                bg={'#543ee0'}
+              >
+                <IconPlus size={25} stroke={1.5} />
+              </Box>
+            </Tooltip>
+          )}
+        </Affix>
+      )}
     </AppLayout>
   )
 }
 
-export default Profile
+export default CheckAuthStatus(Profile)

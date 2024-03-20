@@ -28,6 +28,7 @@ import { useState } from 'react'
 import { SearchChatter } from '@/services/apis'
 import Image from 'next/image'
 import { SearchIcon } from '@/assets'
+import { useUser } from '@/context/useUser'
 
 interface Post {
   id: string
@@ -67,7 +68,12 @@ interface SearchResultProps {
 
 const Header = ({ openNav, onClick }: any) => {
   const [opened, { open, close }] = useDisclosure(false)
+  const [searchResults, setSearchResults] = useState<SearchResultProps>()
+  const [searchValue, setSearchValue] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />
+  const userData = useUser()
+  const currentUserId = userData?.userInfo?.id
 
   const { colorScheme } = useMantineColorScheme()
   const theme = useMantineTheme()
@@ -76,11 +82,6 @@ const Header = ({ openNav, onClick }: any) => {
     colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
 
   // Search implementation
-
-  const [searchResults, setSearchResults] = useState<SearchResultProps>()
-  const [searchValue, setSearchValue] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-
   const handleSearch = async (value: string) => {
     setSearchValue(value)
     setIsLoading(true)
@@ -167,7 +168,15 @@ const Header = ({ openNav, onClick }: any) => {
                 searchResults.users.length > 0 ? (
                   <>
                     {searchResults?.users?.map((person) => (
-                      <Link key={person.id} href={`/${person.user_name}`}>
+                      <Link
+                        key={person.id}
+                        href={
+                          person.id === currentUserId
+                            ? `/profile`
+                            : `/${person.user_name}`
+                        }
+                        className={person.id === currentUserId ? 'hidden' : ''}
+                      >
                         <div
                           className='flex flex-col items-center text-center'
                           key={person.id}

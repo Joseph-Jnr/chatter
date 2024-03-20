@@ -1,2 +1,2 @@
 // Auth.ts
-export const isAuthenticated = true
+export const isAuthenticated = !!localStorage.getItem('chatterAuthToken')

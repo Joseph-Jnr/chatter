@@ -1,6 +1,7 @@
 'use client'
 
 import AnalyticsSkeleton from '@/components/Skeletons/AnalyticsSkeleton'
+import CheckAuthStatus from '@/components/hoc/CheckAuth'
 import { UserData, useFetching, useUser } from '@/context/useUser'
 import AppLayout from '@/layout/AppLayout'
 import formatStats from '@/services/formatStats'
@@ -114,4 +115,4 @@ const Analytics = () => {
   )
 }
 
-export default Analytics
+export default CheckAuthStatus(Analytics)
