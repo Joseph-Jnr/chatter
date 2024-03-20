@@ -61,8 +61,10 @@ const SignIn = () => {
   const handleSubmit = async (values: any) => {
     setIsSubmitting(true)
     try {
+      setIsLoggingIn(true)
       const res = await Login(values)
 
+      setIsLoggingIn(false)
       notifications.show({
         icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
         withCloseButton: false,
