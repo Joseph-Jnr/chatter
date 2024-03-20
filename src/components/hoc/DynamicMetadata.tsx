@@ -3,7 +3,7 @@ import Head from 'next/head'
 const withMetadata =
   (Component: any) =>
   ({ postDetailData, slug, ...props }: any) => {
-    return (
+    const WrappedComponent = (props: any) => (
       <>
         <Head>
           <title>{postDetailData?.title || 'Chatter'}</title>
@@ -40,6 +40,12 @@ const withMetadata =
         <Component {...props} />
       </>
     )
+
+    WrappedComponent.displayName = `withMetadata(${
+      Component.displayName || Component.name
+    })`
+
+    return WrappedComponent
   }
 
 export default withMetadata
