@@ -12,6 +12,7 @@ import {
   Group,
   rem,
   Loader,
+  LoadingOverlay,
 } from '@mantine/core'
 import classes from '@/styles/AuthStyle.module.css'
 import inputClass from '@/styles/InputStyle.module.css'
@@ -29,7 +30,8 @@ import { GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import axios from 'axios'
 import { AuthGoogle, Login } from '@/services/apis'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import extractUsernameFromEmail from '@/utils/helpers'
 
 const schema = yup.object().shape({
   email: yup
@@ -41,21 +43,8 @@ const schema = yup.object().shape({
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
   const router = useRouter()
-  const [googlePayload, setGooglePayload] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    user_name: '',
-    imageUrl: '',
-  })
-
-  function extractUsernameFromEmail(email: string) {
-    // Split the email by "@" symbol
-    const parts = email.split('@')
-    // Return the first part of the split array, which is the username
-    return parts[0]
-  }
 
   const form = useForm({
     initialValues: {
@@ -73,7 +62,6 @@ const SignIn = () => {
     setIsSubmitting(true)
     try {
       const res = await Login(values)
-      console.log(res)
 
       notifications.show({
         icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
@@ -103,6 +91,13 @@ const SignIn = () => {
   const login = useGoogleLogin({
     onSuccess: async (response) => {
       try {
+        let googlePayload = {
+          first_name: '',
+          last_name: '',
+          email: '',
+          user_name: '',
+          imageUrl: '',
+        }
         const endpoint = process.env.NEXT_PUBLIC_GOOGLE_SIGN_IN_ENDPOINT
         const res = await axios.get(`${endpoint}`, {
           headers: {
@@ -113,22 +108,31 @@ const SignIn = () => {
         if (res.data) {
           const user_name = extractUsernameFromEmail(res.data.email)
 
-          setGooglePayload({
-            ...googlePayload,
+          // Convert image to base64
+          const base64Image: string = await fetch(res.data.picture)
+            .then((res) => res.blob())
+            .then(
+              (blob) =>
+                new Promise((resolve) => {
+                  const reader = new FileReader()
+                  reader.onloadend = () => resolve(reader.result as string)
+                  reader.readAsDataURL(blob)
+                })
+            )
+          googlePayload = {
             first_name: res.data.given_name,
             last_name: res.data.family_name,
             email: res.data.email,
             user_name: user_name,
-            imageUrl: res.data.picture,
-          })
+            imageUrl: base64Image,
+          }
         }
-        console.log('Received data:', res.data)
-        console.log('Send this payload: ', googlePayload)
 
         // Send user values gotten from google to the backend endpoint
+        setIsLoggingIn(true)
         const res2 = await AuthGoogle(googlePayload)
-        console.log('Response from AuthGoogle:', res2)
         if (res2.success === false) {
+          setIsLoggingIn(false)
           notifications.show({
             icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
             withCloseButton: false,
@@ -137,6 +141,13 @@ const SignIn = () => {
             message: `${res2.message}`,
           })
         } else {
+          setIsLoggingIn(false)
+          notifications.show({
+            icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+            withCloseButton: false,
+            color: 'green',
+            message: 'Authentication Successful.',
+          })
           localStorage.setItem('chatterAuthToken', res2?.data?.token)
           router.push('/feeds')
         }
@@ -149,6 +160,12 @@ const SignIn = () => {
 
   return (
     <AuthContainer>
+      <LoadingOverlay
+        visible={isLoggingIn}
+        zIndex={1000}
+        overlayProps={{ radius: 'sm', blur: 2 }}
+        loaderProps={{ color: '#543ee0', type: 'bars' }}
+      />
       <div className={classes.wrapper}>
         <Paper className={`h-screen ${classes.form}`} radius={0} p={30}>
           <div className='flex'>

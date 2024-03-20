@@ -12,7 +12,7 @@ const AuthContainer = ({ children }: { children: React.ReactNode }) => {
     colorScheme === 'dark' ? theme.colors.gray[5] : theme.colors.dark[8]
 
   return (
-    <Box bg={bg} c={color}>
+    <Box bg={bg} className='relative' c={color}>
       {children}
     </Box>
   )
