@@ -28,7 +28,6 @@ import { isAuthenticated } from '@/utils/Auth'
 import { useDisclosure } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { useParams, useRouter } from 'next/navigation'
-import { IconMoodPuzzled } from '@tabler/icons-react'
 import Comment from '@/components/Feed/Comment'
 import {
   BookmarkPost,
@@ -342,8 +341,6 @@ const FeedDetail = () => {
         }}
       >
         <div className='flex flex-col items-center'>
-          <IconMoodPuzzled color='red' size={60} />
-
           <Title c={color} my={5} order={3}>
             Ooops!
           </Title>

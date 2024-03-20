@@ -32,6 +32,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import ChButton from '@/components/Buttons/ChButton'
 import { useQuery } from '@tanstack/react-query'
 import { GetProfile } from '@/services/apis'
+import Image from 'next/image'
+import { AuthImg } from '@/assets'
 
 const SideNav = ({ isAuthenticated }: any) => {
   const currentPath = usePathname()
@@ -132,16 +134,12 @@ const SideNav = ({ isAuthenticated }: any) => {
           </ScrollArea>
         </>
       ) : (
-        <Card my={100} padding='lg' radius='md' className='text-center'>
+        <Card padding='lg' radius='md' className='text-center'>
           <div className='flex justify-center'>
-            <IconExclamationCircle color='orange' size={60} />
+            <Image src={AuthImg} alt='auth' />
           </div>
 
-          <Title c={color} my={5} order={3}>
-            Access Restricted
-          </Title>
-
-          <Text size='sm' mb={40} c='dimmed'>
+          <Text size='sm' mb={10} className='text-center' c='dimmed'>
             Login or create an account to access all features of Chatter.
           </Text>
 
