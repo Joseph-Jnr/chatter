@@ -7,7 +7,7 @@ const CheckAuthStatus = (WrappedComponent: React.FC<any>) => {
     const router = useRouter()
 
     useEffect(() => {
-      if (!isAuthenticated) {
+      if (!isAuthenticated()) {
         router.push('/sign-in')
       }
     }, [])

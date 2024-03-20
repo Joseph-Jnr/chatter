@@ -63,20 +63,6 @@ const CreateFeed = () => {
   const userId = useUser()
 
   const authorId = String(userId?.userInfo?.id)
-  const currentUserRole = userId?.userInfo?.role
-
-  useEffect(() => {
-    if (currentUserRole && currentUserRole !== 'Author') {
-      notifications.show({
-        icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
-        withCloseButton: false,
-        color: 'red',
-        message:
-          'You do not have the permission to create a post. Please login as an Author.',
-      })
-      router.push('/feeds')
-    }
-  }, [userId, currentUserRole])
 
   const previews = files.map((file, index) => {
     const imageUrl = URL.createObjectURL(file)

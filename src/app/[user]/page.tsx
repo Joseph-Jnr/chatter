@@ -137,11 +137,8 @@ const User = () => {
                       {userInfo?.author?.last_name}
                     </span>
                   </Text>
-                  <Text className='text-sm' mb={'md'}>
+                  <Text className='text-sm' mb={'md'} c={'dimmed'}>
                     @{userInfo?.author?.user_name}
-                  </Text>
-                  <Text ta='center' className='capitalize' fz='sm' c='dimmed'>
-                    {userInfo?.author?.role}
                   </Text>
                 </div>
                 <Group mt='md' justify='center' gap={30}>

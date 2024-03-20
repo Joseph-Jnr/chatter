@@ -8,10 +8,8 @@ import { useQuery } from '@tanstack/react-query'
 import { GetPosts } from '@/services/apis'
 import FeedsSkeleton from '@/components/Skeletons/FeedsSkeleton'
 import CheckAuthStatus from '@/components/hoc/CheckAuth'
-import { useUser } from '@/context/useUser'
 
 const Feeds = () => {
-  const userData = useUser()
   //Fetching posts
   const {
     data: posts,
@@ -45,27 +43,25 @@ const Feeds = () => {
             </div>
           </div>
 
-          {userData?.userInfo?.role === 'Author' && (
-            <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
-              {isFetching ? (
-                <Skeleton circle height={54} />
-              ) : (
-                <Tooltip label='Create new post'>
-                  <Box
-                    component={'a'}
-                    href='/feeds/create'
-                    w={50}
-                    h={50}
-                    className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'
-                    c={'white'}
-                    bg={'#543ee0'}
-                  >
-                    <IconPlus size={25} stroke={1.5} />
-                  </Box>
-                </Tooltip>
-              )}
-            </Affix>
-          )}
+          <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
+            {isFetching ? (
+              <Skeleton circle height={54} />
+            ) : (
+              <Tooltip label='Create new post'>
+                <Box
+                  component={'a'}
+                  href='/feeds/create'
+                  w={50}
+                  h={50}
+                  className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'
+                  c={'white'}
+                  bg={'#543ee0'}
+                >
+                  <IconPlus size={25} stroke={1.5} />
+                </Box>
+              </Tooltip>
+            )}
+          </Affix>
         </>
       </AppLayout>
     </>

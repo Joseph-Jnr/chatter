@@ -16,6 +16,7 @@ export type CGoogleAuthPayload = {
   last_name: string
   email: string
   user_name: string
+  imageUrl: string
 }
 
 export type CVerifyOtpPayload = {

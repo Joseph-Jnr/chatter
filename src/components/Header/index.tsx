@@ -99,7 +99,7 @@ const Header = ({ openNav, onClick }: any) => {
     <>
       <Burger opened={openNav} onClick={onClick} hiddenFrom='sm' size='sm' />
       <Logo root='/feeds' />
-      {isAuthenticated && (
+      {isAuthenticated() && (
         <>
           <TextInput
             leftSectionPointerEvents='none'

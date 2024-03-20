@@ -47,11 +47,14 @@ const SignIn = () => {
     last_name: '',
     email: '',
     user_name: '',
+    imageUrl: '',
   })
 
-  function removeSpacesAndToLower(str: string) {
-    // Remove spaces and convert to lowercase using replace and toLowerCase methods
-    return str.replace(/\s/g, '').toLowerCase()
+  function extractUsernameFromEmail(email: string) {
+    // Split the email by "@" symbol
+    const parts = email.split('@')
+    // Return the first part of the split array, which is the username
+    return parts[0]
   }
 
   const form = useForm({
@@ -108,7 +111,7 @@ const SignIn = () => {
         })
 
         if (res.data) {
-          const user_name = removeSpacesAndToLower(res.data.name)
+          const user_name = extractUsernameFromEmail(res.data.email)
 
           setGooglePayload({
             ...googlePayload,
@@ -116,6 +119,7 @@ const SignIn = () => {
             last_name: res.data.family_name,
             email: res.data.email,
             user_name: user_name,
+            imageUrl: res.data.picture,
           })
         }
         console.log('Received data:', res.data)
@@ -205,20 +209,6 @@ const SignIn = () => {
             mt='xl'
             my='lg'
           />
-
-          {/* <div className='flex justify-center'>
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                const decodedResponse = jwtDecode(
-                  credentialResponse?.credential
-                )
-                console.log(decodedResponse)
-              }}
-              onError={() => {
-                console.log('Login failed')
-              }}
-            />
-          </div> */}
 
           <Group grow mb='md' mt='md'>
             <GoogleButton onClick={() => login()} radius='xl'>

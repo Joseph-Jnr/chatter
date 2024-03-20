@@ -43,7 +43,6 @@ import { useQuery } from '@tanstack/react-query'
 import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
 import { useUser } from '@/context/useUser'
-import withMetadata from '@/components/hoc/DynamicMetadata'
 
 const FeedDetail = () => {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
@@ -151,7 +150,7 @@ const FeedDetail = () => {
   }, [postDetailData, currentUserId])
 
   const likeAction = async () => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       try {
         if (isLiked) {
           setIsLiked(false)
@@ -177,7 +176,7 @@ const FeedDetail = () => {
   }
 
   const bookmarkAction = async () => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       try {
         if (isBookmarked && userBookmarkId) {
           setIsBookmarked(false)
@@ -323,7 +322,7 @@ const FeedDetail = () => {
           </>
         )}
 
-        {isAuthenticated && (
+        {isAuthenticated() && (
           <div className='comment-section mt-16'>
             <Comment postId={postId} />
           </div>
@@ -367,4 +366,4 @@ const FeedDetail = () => {
   )
 }
 
-export default withMetadata(FeedDetail)
+export default FeedDetail

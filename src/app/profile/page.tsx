@@ -174,11 +174,8 @@ const Profile = () => {
                     {userData?.userInfo?.first_name}{' '}
                     {userData?.userInfo?.last_name}
                   </Text>
-                  <Text className='text-sm' mb={'md'}>
+                  <Text className='text-sm' mb={'md'} c={'dimmed'}>
                     @{userData?.userInfo?.user_name}
-                  </Text>
-                  <Text className='capitalize' fz='sm' c='dimmed'>
-                    {userData?.userInfo?.role}
                   </Text>
                 </div>
                 <Group mt='md' justify='center' gap={30}>
@@ -226,27 +223,25 @@ const Profile = () => {
         )}
       </div>
 
-      {userData?.userInfo?.role === 'Author' && (
-        <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
-          {isFetching ? (
-            <Skeleton circle height={54} />
-          ) : (
-            <Tooltip label='Create new post'>
-              <Box
-                component={'a'}
-                href='/feeds/create'
-                w={50}
-                h={50}
-                className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'
-                c={'white'}
-                bg={'#543ee0'}
-              >
-                <IconPlus size={25} stroke={1.5} />
-              </Box>
-            </Tooltip>
-          )}
-        </Affix>
-      )}
+      <Affix zIndex={10} position={{ bottom: 40, right: 20 }}>
+        {isFetching ? (
+          <Skeleton circle height={54} />
+        ) : (
+          <Tooltip label='Create new post'>
+            <Box
+              component={'a'}
+              href='/feeds/create'
+              w={50}
+              h={50}
+              className='rounded-full cursor-pointer flex items-center justify-center shadow-xl'
+              c={'white'}
+              bg={'#543ee0'}
+            >
+              <IconPlus size={25} stroke={1.5} />
+            </Box>
+          </Tooltip>
+        )}
+      </Affix>
     </AppLayout>
   )
 }

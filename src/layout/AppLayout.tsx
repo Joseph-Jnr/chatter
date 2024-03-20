@@ -57,7 +57,7 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
         <Group
           h='100%'
           className={`flex items-center ${
-            isAuthenticated ? 'justify-between' : ''
+            isAuthenticated() ? 'justify-between' : ''
           }`}
           px='md'
         >
@@ -65,7 +65,7 @@ const AppLayout = ({ children, title }: AppLayoutProps) => {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p='md'>
-        <SideNav isAuthenticated={isAuthenticated} />
+        <SideNav isAuthenticated={isAuthenticated()} />
       </AppShell.Navbar>
       <AppShell.Main c={color} bg={bg} pb={100}>
         <Title order={2} mb={30}>

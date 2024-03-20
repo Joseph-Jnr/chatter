@@ -140,7 +140,7 @@ const FeedCard = ({
   // Like implementation
 
   const likeAction = async () => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       try {
         if (isLiked) {
           setIsLiked(false)
@@ -167,7 +167,7 @@ const FeedCard = ({
   }
 
   const bookmarkAction = async () => {
-    if (isAuthenticated) {
+    if (isAuthenticated()) {
       try {
         if (isBookmarked && userBookmarkId) {
           setIsBookmarked(false)
