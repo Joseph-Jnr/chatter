@@ -55,11 +55,14 @@ const Editor = ({ onContentChange }: EditorProps) => {
         formData
       )
 
+      console.log('Cloudinary response: ', res)
+
       if (res.data) {
         setIsUploading(false)
         const data = res.data
         const imageUrl = data.secure_url
 
+        console.log('Image url: ', imageUrl)
         if (imageUrl && editor) {
           editor.chain().focus().setImage({ src: imageUrl }).run()
         }
