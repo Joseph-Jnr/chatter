@@ -7,6 +7,7 @@ import {
   Pill,
   Text,
   Title,
+  TypographyStylesProvider,
   rem,
   useMantineColorScheme,
   useMantineTheme,
@@ -275,10 +276,12 @@ const FeedDetail = () => {
               />
             </div>
 
-            <div
-              className='content'
-              dangerouslySetInnerHTML={{ __html: postDetailData?.content }}
-            />
+            <TypographyStylesProvider>
+              <div
+                className='content'
+                dangerouslySetInnerHTML={{ __html: postDetailData?.content }}
+              />
+            </TypographyStylesProvider>
 
             <div className='tags-area flex flex-wrap gap-3 mt-10'>
               {postDetailData?.tags?.map((tag: any) => (

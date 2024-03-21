@@ -184,11 +184,20 @@ const CreateFeed = () => {
         </div>
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <div className='grid grid-cols-1 gap-10 md:gap-20'>
-            <div className='textarea'>
-              <Editor
-                onContentChange={handleContentChange}
-                {...form.getInputProps('content')}
+            <div>
+              <TextInput
+                label='Title'
+                placeholder='Your post title...'
+                mb={'md'}
+                classNames={{ input: classes.input }}
+                {...form.getInputProps('title')}
               />
+              <div className='textarea'>
+                <Editor
+                  onContentChange={handleContentChange}
+                  {...form.getInputProps('content')}
+                />
+              </div>
             </div>
 
             <Card withBorder radius='md' className='aux-input p-5'>
@@ -197,11 +206,6 @@ const CreateFeed = () => {
               </Title>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
                 <div className='inputs'>
-                  <TextInput
-                    label='Title'
-                    classNames={{ input: classes.input }}
-                    {...form.getInputProps('title')}
-                  />
                   <Textarea
                     label='Excerpt'
                     autosize
