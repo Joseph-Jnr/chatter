@@ -58,6 +58,7 @@ export const metadata: Metadata = {
   generator: 'Next.js',
   manifest: '/manifest.json',
   keywords: ['Chatter', 'chatter', 'chatter app'],
+  themeColor: [{ media: '(prefers-color-scheme: dark)', color: '#fff' }],
   viewport:
     'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover',
   icons: [
