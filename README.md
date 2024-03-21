@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Chatter
 
-## Getting Started
+Chatter is a multi-functional platform where authors and readers can access their own content. Users can read posts, interact with posts by liking, bookmarking, and commenting, search for people and posts, and follow other users.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Post Interactions**: Users can like, bookmark, and comment on posts.
+- **Search Functionality**: Users can search for people and posts within the platform.
+- **User Following**: Users can follow other users to stay updated on their content.
+- **Analytics**: Authenticated users have access to analytics showing their activity, post views, likes/shares/bookmarks, etc.
+- **Responsive Design**: The application is built with responsiveness in mind to ensure optimal user experience across devices.
+- **PWA Support**: The application is fully installable as a PWA (Progressive Web Application), allowing users to add it to their home screen and always access it wothout any hassle.
+- **Theme Toggle**: The app has a theme toggle that switches the color theme of the application between light and dark mode.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js**: A React framework for building server-side rendered and static web applications.
+- **Typescript**: A statically typed superset of JavaScript that enhances code quality and developer productivity.
+- **Mantine UI**: A React component library for building modern and accessible user interfaces.
+- **Axios**: A promise-based HTTP client for making requests to external APIs.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Project URL
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[https://chatter-appx.vercel.app](https://chatter-appx.vercel.app)

@@ -77,6 +77,7 @@ const SignIn = () => {
       router.push('/feeds')
     } catch (error) {
       console.log(error)
+      setIsLoggingIn(false)
       notifications.show({
         icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
         withCloseButton: false,
@@ -86,6 +87,7 @@ const SignIn = () => {
       })
     } finally {
       setIsSubmitting(false)
+      setIsLoggingIn(false)
     }
   }
 
