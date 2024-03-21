@@ -1,7 +1,20 @@
-//import withPWA from 'next-pwa'
-
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+
+import withPWAInit from '@ducanh2912/next-pwa'
+
+const withPWA = withPWAInit({
+  dest: 'public',
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  swcMinify: true,
+  disable: false,
+  workboxOptions: {
+    disableDevLogs: true,
+  },
+})
+
+export default withPWA({
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
@@ -14,16 +27,4 @@ const nextConfig = {
       },
     ],
   },
-}
-
-// Configuration object tells the next-pwa plugin
-import createNextPWA from 'next-pwa'
-const withPWA = createNextPWA({
-  dest: 'public', // Destination directory for the PWA files
-  disable: process.env.NODE_ENV === 'development', // Disable PWA in development mode
-  register: true, // Register the PWA service worker
-  skipWaiting: true, // Skip waiting for service worker activation
 })
-
-// Export the combined configuration for Next.js with PWA support
-export default withPWA(nextConfig)

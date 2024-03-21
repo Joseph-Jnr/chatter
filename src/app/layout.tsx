@@ -9,7 +9,7 @@ import theme from '@/theme'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 import AppBody from '@/layout/AppBody'
 import { UserProvider } from '@/context/useUser'
 import NextTopLoader from 'nextjs-toploader'
@@ -19,25 +19,7 @@ const jakarta = Plus_Jakarta_Sans({
   style: 'normal',
   subsets: ['latin'],
 })
-/* 
-export const metadata: Metadata = {
-  title: 'Chatter',
-  description:
-    'A home for writers and readers. Unleash the power of words, connect with like-minded readers and writers.',
-  openGraph: {
-    type: 'website',
-    url: 'https://chatter-appx.vercel.app',
-    title: 'Chatter',
-    description:
-      'A multi-functional platform where authors and readers can have access to their own content.',
-    siteName: 'Chatter',
-    images: [
-      {
-        url: 'https://drive.google.com/uc?export=view&id=1M3tNb1zfdzn-_rB7Jy1EWWVpZufSiQnZ',
-      },
-    ],
-  },
-} */
+
 export const metadata: Metadata = {
   title: 'Chatter',
   description:
@@ -65,6 +47,10 @@ export const metadata: Metadata = {
     { rel: 'apple-touch-icon', url: '../../public/assets/png/logo.png' },
     { rel: 'icon', url: '../../public/assets/png/logo.png' },
   ],
+}
+
+export const viewport: Viewport = {
+  themeColor: '#543ee0',
 }
 
 const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID
