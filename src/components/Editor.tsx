@@ -4,6 +4,9 @@ import { RichTextEditor, Link } from '@mantine/tiptap'
 import { useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { createLowlight } from 'lowlight'
+import ts from 'highlight.js/lib/languages/typescript'
 import Image from '@tiptap/extension-image'
 import { IconPhoto } from '@tabler/icons-react'
 import { useState } from 'react'
@@ -23,14 +26,29 @@ const notificationProps = {
   message: 'Something went wrong. Try again',
 }
 
+const lowlight = createLowlight()
+
+// register languages that you are planning to use
+lowlight.register({ ts })
+
+function escapeHtml(unsafe: string) {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 const Editor = ({ onContentChange }: EditorProps) => {
   const [isUploading, setIsUploading] = useState(false)
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ codeBlock: false }),
       Link,
       Image,
+      CodeBlockLowlight.configure({ lowlight }),
       Placeholder.configure({ placeholder: 'Your post content...' }),
     ],
   })
@@ -87,7 +105,17 @@ const Editor = ({ onContentChange }: EditorProps) => {
 
   editor?.on('update', () => {
     const contentHTML = editor.getHTML()
-    onContentChange(contentHTML)
+    const highlightedHTML = contentHTML.replace(
+      /<pre><code class="language-typescript">([\s\S]*?)<\/code><\/pre>/g,
+      (match, p1) => {
+        const escapedHTML = escapeHtml(p1)
+        return `<pre><code class="language-typescript">${lowlight.highlight(
+          'typescript',
+          escapedHTML
+        )}</code></pre>`
+      }
+    )
+    onContentChange(highlightedHTML)
   })
 
   return (
@@ -109,7 +137,7 @@ const Editor = ({ onContentChange }: EditorProps) => {
               <RichTextEditor.Strikethrough />
               <RichTextEditor.ClearFormatting />
               <RichTextEditor.Highlight />
-              <RichTextEditor.Code />
+              <RichTextEditor.CodeBlock />
             </RichTextEditor.ControlsGroup>
 
             <RichTextEditor.ControlsGroup>

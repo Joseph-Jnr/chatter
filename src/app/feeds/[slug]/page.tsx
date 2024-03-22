@@ -93,26 +93,29 @@ const FeedDetail = () => {
     getPostId()
   }, [slug])
 
-  // Update views count
-  useEffect(() => {
-    // Check if postId is not empty
-    if (postId) {
-      // Call UpdateViews to update the views count
-      UpdateViewsCount(postId)
-        .then(() => {
-          console.log('Views count updated successfully')
-        })
-        .catch((error) => {
-          console.error('Error updating views count:', error)
-        })
-    }
-  }, [postId])
-
   const { data: postDetail, isFetching } = useQuery({
     queryKey: ['postDetail', postId],
     queryFn: () => GetSinglePost(postId),
   })
   const postDetailData = postDetail?.data
+
+  // Update views count
+  useEffect(() => {
+    // Update views count only if the viewer is not the author
+    if (currentUserId !== postDetailData?.authorId) {
+      // Check if postId is not empty
+      if (postId) {
+        // Call UpdateViews to update the views count
+        UpdateViewsCount(postId)
+          .then(() => {
+            console.log('Views count updated successfully')
+          })
+          .catch((error) => {
+            console.error('Error updating views count:', error)
+          })
+      }
+    }
+  }, [postId, postDetailData])
 
   //Check likes status
   const getLikesCount =

@@ -9,7 +9,7 @@ Chatter is a multi-functional platform where authors and readers can access thei
 - **User Following**: Users can follow other users to stay updated on their content.
 - **Analytics**: Authenticated users have access to analytics showing their activity, post views, likes/shares/bookmarks, etc.
 - **Responsive Design**: The application is built with responsiveness in mind to ensure optimal user experience across devices.
-- **PWA Support**: The application is fully installable as a PWA (Progressive Web Application), allowing users to add it to their home screen and always access it wothout any hassle.
+- **PWA Support**: The application is fully installable as a PWA (Progressive Web Application), allowing users to add it to their home screen and always access it without any hassle.
 - **Theme Toggle**: The app has a theme toggle that switches the color theme of the application between light and dark mode.
 
 ## Technologies Used

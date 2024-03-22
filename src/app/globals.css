@@ -160,3 +160,21 @@
   background-color: #6b56f156;
   backdrop-filter: blur(4px);
 }
+
+.syntax-highlighted-content {
+  color: #333; /* Default text color */
+}
+
+.syntax-highlighted-content .hljs-comment {
+  color: #6a737d; /* Comment color */
+}
+
+.syntax-highlighted-content .hljs-keyword {
+  color: #d73a49; /* Keyword color */
+}
+
+.syntax-highlighted-content .hljs-string {
+  color: #032f62; /* String color */
+}
+
+/* Add more styles for other syntax elements as needed */

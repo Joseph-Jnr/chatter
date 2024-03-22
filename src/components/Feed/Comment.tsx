@@ -23,7 +23,7 @@ const Comment = ({ postId }: CommentProps) => {
 
   return (
     <Card>
-      <ScrollArea className='max-h-[400px]' h={200}>
+      <ScrollArea mah={500} mih={'auto'}>
         <div className='mb-10'>
           {comments?.map((comment: any) => (
             <div key={comment.id} className='mb-10'>
