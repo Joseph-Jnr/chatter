@@ -51,7 +51,6 @@ import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
 import { useUser } from '@/context/useUser'
 import { IconBrandWhatsapp } from '@tabler/icons-react'
-import MetaData from '@/components/Metadata'
 
 const FeedDetail = () => {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
@@ -263,15 +262,6 @@ const FeedDetail = () => {
 
   return (
     <AppLayout>
-      <MetaData
-        title={postDetailData?.title}
-        description={postDetailData?.excerpt}
-        keywords={keywords}
-        type='product'
-        imageUrl={postDetailData?.imageUrl}
-        canonicalUrl={feedUrl}
-      />
-
       <div className='md:mx-40'>
         {isFetching ? (
           <SingleFeedSkeleton />
