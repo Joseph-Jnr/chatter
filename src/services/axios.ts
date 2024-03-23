@@ -12,12 +12,14 @@ instance.interceptors.request.use(
   async (
     config: InternalAxiosRequestConfig
   ): Promise<InternalAxiosRequestConfig> => {
-    const getAuthTokenFromLS = localStorage.getItem('chatterAuthToken')
+    if (typeof window !== 'undefined') {
+      const getAuthTokenFromLS = localStorage.getItem('chatterAuthToken')
 
-    if (getAuthTokenFromLS) {
-      config.headers['Authorization'] = `Bearer ${getAuthTokenFromLS}`
-    } else {
-      delete config.headers['Authorization']
+      if (getAuthTokenFromLS) {
+        config.headers['Authorization'] = `Bearer ${getAuthTokenFromLS}`
+      } else {
+        delete config.headers['Authorization']
+      }
     }
 
     return config
