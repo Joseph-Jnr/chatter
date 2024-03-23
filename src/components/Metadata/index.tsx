@@ -4,14 +4,16 @@ interface MetadataProps {
   title: string
   description: string
   keywords: string
+  type: string
   imageUrl: string
   canonicalUrl: string
 }
 
-const Metadata = ({
+const MetaData = ({
   title,
   description,
   keywords,
+  type,
   imageUrl,
   canonicalUrl,
 }: MetadataProps) => {
@@ -24,11 +26,11 @@ const Metadata = ({
       <meta property='og:description' content={description} />
       <meta property='og:image' content={imageUrl} />
       <meta property='og:url' content={canonicalUrl} />
-      <meta property='og:type' content='product' />
+      <meta property='og:type' content={type} />
       <meta property='og:site_name' content='Chatter' />
       <link rel='canonical' href={canonicalUrl} />
     </Head>
   )
 }
 
-export default Metadata
+export default MetaData

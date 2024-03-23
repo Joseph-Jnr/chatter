@@ -13,6 +13,7 @@ import { Metadata, Viewport } from 'next'
 import AppBody from '@/layout/AppBody'
 import { UserProvider } from '@/context/useUser'
 import NextTopLoader from 'nextjs-toploader'
+import MetaData from '@/components/Metadata'
 
 const jakarta = Plus_Jakarta_Sans({
   weight: ['400', '500', '700'],
@@ -21,22 +22,6 @@ const jakarta = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Chatter',
-  description:
-    'A home for writers and readers. Unleash the power of words, connect with like-minded readers and writers.',
-  openGraph: {
-    type: 'website',
-    url: 'https://chatter-appx.vercel.app',
-    title: 'Chatter',
-    description:
-      'A multi-functional platform where authors and readers can have access to their own content.',
-    siteName: 'Chatter',
-    images: [
-      {
-        url: 'https://drive.google.com/uc?export=view&id=1M3tNb1zfdzn-_rB7Jy1EWWVpZufSiQnZ',
-      },
-    ],
-  },
   generator: 'Next.js',
   manifest: '/manifest.json',
   keywords: ['Chatter', 'chatter', 'chatter app'],
@@ -76,6 +61,14 @@ export default function RootLayout({
             <NextTopLoader color='#543ee0' showSpinner={false} />
             <GoogleOAuthProvider clientId={`${googleClientId}`}>
               <Box maw={1850} mx='auto'>
+                <MetaData
+                  title='Unleash the power of words'
+                  imageUrl='https://drive.google.com/uc?export=view&id=1M3tNb1zfdzn-_rB7Jy1EWWVpZufSiQnZ'
+                  canonicalUrl='https://chatter-appx.vercel.app'
+                  type='website'
+                  description='A multi-functional platform where authors and readers can have access to their own content.'
+                  keywords='chatter, chatter app, Chatter'
+                />
                 {children}
               </Box>
             </GoogleOAuthProvider>
