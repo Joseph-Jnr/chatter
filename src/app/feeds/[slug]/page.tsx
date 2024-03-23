@@ -3,6 +3,8 @@
 import AppLayout from '@/layout/AppLayout'
 import {
   Avatar,
+  CopyButton,
+  Menu,
   Modal,
   Pill,
   Text,
@@ -16,7 +18,12 @@ import classes from '@/styles/General.module.css'
 import {
   IconBook,
   IconBookmarkFilled,
+  IconBrandFacebook,
+  IconBrandX,
+  IconExternalLink,
   IconHeartFilled,
+  IconLink,
+  IconShare2,
 } from '@tabler/icons-react'
 import ChButton from '@/components/Buttons/ChButton'
 import { IconHeart } from '@tabler/icons-react'
@@ -43,6 +50,8 @@ import { useQuery } from '@tanstack/react-query'
 import FormatDate from '@/components/FormatDate'
 import SingleFeedSkeleton from '@/components/Skeletons/SingleFeedSkeleton'
 import { useUser } from '@/context/useUser'
+import { IconBrandWhatsapp } from '@tabler/icons-react'
+import Metadata from '@/components/Metadata'
 
 const FeedDetail = () => {
   const checkIcon = <IconCheck style={{ width: rem(20), height: rem(20) }} />
@@ -57,6 +66,7 @@ const FeedDetail = () => {
   const [isBookmarked, setIsBookmarked] = useState(false)
   let [bookmarksCount, setBookmarksCount] = useState(0)
   const [userBookmarkId, setUserBookmarkId] = useState(null)
+  const [keywords, setKeywords] = useState('')
   const [opened, { open, close }] = useDisclosure(false)
   const router = useRouter()
   const { slug } = useParams<{ slug: string; item: string }>()
@@ -225,6 +235,26 @@ const FeedDetail = () => {
     }
   }
 
+  // Join tags array into a string separated by commas
+  useEffect(() => {
+    if (postDetailData && postDetailData.tags) {
+      const keywordsString = postDetailData.tags.join(', ')
+      setKeywords(keywordsString)
+    }
+  }, [postDetailData])
+
+  // Social media urls
+  const feedUrl = `https://chatter-appx.vercel.app/feeds/${slug}`
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+    `*${postDetailData && postDetailData.title}*\n\n${
+      postDetailData && postDetailData.excerpt
+    }\n${feedUrl}`
+  )}`
+  const facebookUrl = `http://www.facebook.com/sharer.php?u=${feedUrl}`
+  const twitterUrl = `https://twitter.com/intent/tweet?url=${feedUrl}&text=${
+    postDetailData && postDetailData.title
+  }&hashtags=chatter`
+
   const { colorScheme, setColorScheme } = useMantineColorScheme()
   const theme = useMantineTheme()
 
@@ -233,6 +263,14 @@ const FeedDetail = () => {
 
   return (
     <AppLayout>
+      <Metadata
+        title={postDetailData?.title}
+        description={postDetailData?.excerpt}
+        keywords={keywords}
+        imageUrl={postDetailData?.imageUrl}
+        canonicalUrl={feedUrl}
+      />
+
       <div className='md:mx-40'>
         {isFetching ? (
           <SingleFeedSkeleton />
@@ -333,6 +371,108 @@ const FeedDetail = () => {
                     <span className='hidden md:block'>views</span>
                   </p>
                 </div>
+
+                <Menu
+                  transitionProps={{
+                    transition: 'rotate-right',
+                    duration: 150,
+                  }}
+                  shadow='md'
+                  width={200}
+                >
+                  <Menu.Target>
+                    <div className='flex items-center cursor-pointer gap-1'>
+                      <IconShare2 size={18} stroke={1} />
+                      <p className='flex gap-1'>
+                        <span className='hidden md:block'>Share post</span>
+                      </p>
+                    </div>
+                  </Menu.Target>
+
+                  <Menu.Dropdown>
+                    <CopyButton
+                      value={`https://chatter-appx.vercel.app/feeds/${slug}`}
+                      timeout={2000}
+                    >
+                      {({ copied, copy }) => (
+                        <Menu.Item
+                          onClick={copy}
+                          closeMenuOnClick={false}
+                          leftSection={
+                            copied ? (
+                              <IconCheck
+                                color='green'
+                                style={{ width: rem(16) }}
+                              />
+                            ) : (
+                              <IconLink
+                                style={{ width: rem(14), height: rem(14) }}
+                              />
+                            )
+                          }
+                        >
+                          {copied ? 'Copied' : 'Copy link'}
+                        </Menu.Item>
+                      )}
+                    </CopyButton>
+                    <Menu.Divider />
+
+                    <Menu.Label>Social media</Menu.Label>
+                    <Menu.Item
+                      component='a'
+                      href={whatsappUrl}
+                      target='_blank'
+                      leftSection={
+                        <IconBrandWhatsapp
+                          color='green'
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                      rightSection={
+                        <IconExternalLink
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                    >
+                      Whatsapp
+                    </Menu.Item>
+                    <Menu.Item
+                      component='a'
+                      href={twitterUrl}
+                      target='_blank'
+                      leftSection={
+                        <IconBrandX
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                      rightSection={
+                        <IconExternalLink
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                    >
+                      Twitter
+                    </Menu.Item>
+                    <Menu.Item
+                      component='a'
+                      href={facebookUrl}
+                      target='_blank'
+                      leftSection={
+                        <IconBrandFacebook
+                          color='blue'
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                      rightSection={
+                        <IconExternalLink
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                    >
+                      Facebook
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
               </div>
             </div>
           </>
