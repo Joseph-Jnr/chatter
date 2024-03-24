@@ -380,7 +380,7 @@ const FeedDetail = () => {
                     </div>
                   </Menu.Target>
 
-                  <Menu.Dropdown>
+                  <Menu.Dropdown className='rounded-xl'>
                     <CopyButton
                       value={`https://chatter-appx.vercel.app/feeds/${slug}`}
                       timeout={2000}

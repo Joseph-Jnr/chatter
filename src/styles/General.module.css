@@ -70,6 +70,14 @@
   );
 }
 
+.editor_list ul {
+  list-style: disc;
+}
+
+.editor_list ol {
+  list-style-type: decimal;
+}
+
 .post_result {
   @apply p-2 rounded;
   @mixin hover {

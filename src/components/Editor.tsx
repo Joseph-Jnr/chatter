@@ -14,6 +14,7 @@ import axios from 'axios'
 import { notifications } from '@mantine/notifications'
 import { IconX } from '@tabler/icons-react'
 import { LoadingOverlay, rem } from '@mantine/core'
+import classes from '@/styles/General.module.css'
 
 interface EditorProps {
   onContentChange: (content: string) => void
@@ -128,7 +129,7 @@ const Editor = ({ onContentChange }: EditorProps) => {
           loaderProps={{ color: '#543ee0', type: 'bars' }}
         />
 
-        <RichTextEditor editor={editor}>
+        <RichTextEditor editor={editor} className={classes.editor_list}>
           <RichTextEditor.Toolbar sticky stickyOffset={60}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
